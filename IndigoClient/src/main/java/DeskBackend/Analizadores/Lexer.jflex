@@ -1,6 +1,6 @@
 /*primer sección: imports*/
-package Backend.Analizadores;
-import Backend.Entidades.Token;
+/*package Backend.Analizadores;
+import Backend.Entidades.Token;*/
 
 %%
 /*segunda sección: settings*/
@@ -10,7 +10,7 @@ import Backend.Entidades.Token;
 %line
 %column
 
-comilla = \"
+//comilla = \"
 letra = [a-zA-Z]
 numero = [0-9]
 
@@ -30,9 +30,9 @@ identificador =  (\$|_|-)({letra}|{numero}|_|-|\$)*
     //si el token es null, entonces no envíes aunque en realidad el que sucediera esto, indica que hay un error de sintazis xD
     boolean estaEnYYINITIAL = true;//para qué era esto??? :v :| xD aaah, es para saber si al estar en alfa#, se debe dar el # que le representa ó el # del token con el que coincide... xD
     boolean sonConsultas = false;//esto es para saber si se debe entrar a valores, cuando se encuentre una " y antes de ella : xD
-    Token tokenAnterior;
+/*    Token tokenAnterior;
 
-/*    private Symbol simbolo(int tipo) {
+    private Symbol simbolo(int tipo) {
         return simbolo(tipo, "");//puesto que no veo que tenga razón de ser xD
     }
 
@@ -95,7 +95,10 @@ identificador =  (\$|_|-)({letra}|{numero}|_|-|\$)*
 
 <YYINITIAL>{
     \"                                                     {estaEnYYINITIAL = false;/*(tokenAnterior.darLexema().equals(":") && !sonConsultas)?*/yybegin(VALORES)/*:return simbolo(COMILLA)*/;}//no se si vaya a funcionar por la falta del ; en la llamada al método, sino entonces si crealo a parte y luego de definir la gramática ingresas en el parámetro de tipo, el # que le corresponde xD        
-    "!" | ">" | "<" | "=" | "<>" | "<=" | ">="             {(sonConsultas = true)?yybegin(VALORES):/*return simbolo(yytext().equals("!")?ADMIRACION:(yytext().equals(">")?MAYOR:(yytext().equals("<")?MENOR:(yytext().equals("=")?IGUAL:(yytext().equals("<>")?DIFERENTE:(yytext().equals("<=")?MENORIGUAL:MAYORIGUAL))))))*/;} 
+    "!" | ">" | "<" | "=" | "<>" | "<=" | ">="             {if(sonConsultas == true)
+                                                            yybegin(VALORES);
+                                                            else
+                                                            /*return simbolo(yytext().equals("!")?ADMIRACION:(yytext().equals(">")?MAYOR:(yytext().equals("<")?MENOR:(yytext().equals("=")?IGUAL:(yytext().equals("<>")?DIFERENTE:(yytext().equals("<=")?MENORIGUAL:MAYORIGUAL))))))*/;} 
     //  {comilla}(~{comilla})         {}/*SERÁ EIMINADA XD, porque sé que la solución SÍ funciona xD*/
 
    <VALORES>{//NO necestio concatenar, porque sé que cuando en la gramática reciba más de un superalfa# es porque terminó su clasificación debido a un caracter no definido en su regla, lo más probable, un tipo de espacio en blanco xD
