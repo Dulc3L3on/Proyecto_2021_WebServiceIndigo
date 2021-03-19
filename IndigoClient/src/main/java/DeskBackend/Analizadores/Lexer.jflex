@@ -22,7 +22,7 @@ USER = "CREAR" | "USUARIO" |  "MODIFICAR" | "ELIMINAR" | "LOGIN"
 COMPONENTES = "AGREGAR" | "COMPONENTE"
 ALINEACION = "CENTRO" | "IZQUIERDA" | "DERECHA" | "JUSTIFICAR"
 FORMULARIO = "NUEVO" | "FORMULARIO" 
-CLASE_COMPONENTE = "CAMPO" | "TEXTO" | "AREA" | "CHECKBOX" | "RADIO" | "FICHERO" | "IMAGEN" | "COMBO" | "BOTON"
+CLASE_COMPONENTE = "CHECKBOX" | "RADIO" | "FICHERO" | "IMAGEN" | "COMBO" | "BOTON"
 REQUERIDO = "SI" | "NO"
 
 identificador =  (\$|_|-)({letra}|{numero}|_|-|\$)*
@@ -52,17 +52,17 @@ identificador =  (\$|_|-)({letra}|{numero}|_|-|\$)*
     private int darTipoAlfaNum(){
         if(estaEnYYINITIAL){
             if(yytext().equalsIgnoreCase("ini")){
-                return 0;//el # de ini
+                return 2;//el # de ini
             }
             else if(yytext().equalsIgnoreCase("solicitud")){
-                return 0;//el # de solicitud
+                return 3;//el # de solicitud
             }else if(yytext().equalsIgnoreCase("solicitudes")){
-                return 0;//el # de solicitudes
+                return 4;//el # de solicitudes
             }else if(yytext().equalsIgnoreCase("fin")){//puesto que pueden haber más formas entonces por eso sí especifico xD
-                return 0;//el # de fin
+                return 5;//el # de fin
             }
         }
-        return 0;//aquí el # que corresponde al alfa#
+        return 60;//aquí el # que corresponde al alfa#
     }
     
 %}
@@ -85,7 +85,7 @@ identificador =  (\$|_|-)({letra}|{numero}|_|-|\$)*
 <YYINITIAL, VALORES> {REQUERIDO}                                                     {return simbolo(TIPOREQUERIDO, "Requerimiento");}
                                                                                          /*(yytext().equals("SI")?SI:NO)*/
 <YYINITIAL> "AND" | "OR" | "NOT"                                                     {return simbolo(yytext().equals("AND")?AND:(yytext().equals("OR")?OR:NOT));}//AQUÍ SE deberá add Consultas al <>
-<YYINITIAL> "ID" | "CLASE" | "INDICE" | "VISIBLE" | "ALINEACION" | "REQUERIDO" |"OPCIONES" | "FILAS" | "COLUMNAS" | "URL"    {return simbolo(yytext().equals("ID")?ID:(yytext().equals("CLASE")?CLASE:(yytext().equals("INDICE")?INDICE:(yytext().equals("VISIBLE")?VISIBLE:(yytext().equals("ALINEACION")?ALINEACION:(yytext().equals("REQUERDIDO")?REQUERIDO:(yytext().equals("OPCIONES")?OPCIONES:(yytext().equals("FILAS")?FILAS:(yytext().equals("COLUMNAS")?COLUMNAS:URL)))))))));}
+<YYINITIAL> "ID" | "CAMPO" |"CLASE" | "AREA" | "INDICE" | "TEXTO" | "VISIBLE" | "ALINEACION" | "REQUERIDO" |"OPCIONES" | "FILAS" | "COLUMNAS" | "URL"    {return simbolo(yytext().equals("ID")?ID:(yytext().equals("CAMPO")?CAMPO:(yytext().equals("CLASE")?CLASE:(yytext().equals("AREA")?AREA:(yytext().equals("INDICE")?INDICE:(yytext().equals("TEXTO")?TEXTO:(yytext().equals("VISIBLE")?VISIBLE:(yytext().equals("ALINEACION")?ALINEACION:(yytext().equals("REQUERIDO")?REQUERIDO:(yytext().equals("OPCIONES")?OPCIONES:(yytext().equals("FILAS")?FILAS:(yytext().equals("COLUMNAS")?COLUMNAS:URL))))))))))));}
 <YYINITIAL> "PASSWORD" | "FECHA" | "CREACION" | "ANTIGUO" | "MODIFICACION" | "TITULO" | "NOMBRE" | "TEMA" {return simbolo(yytext().equals("PASSWORD")?PASSWORD:(yytext().equals("FECHA")?FECHA:(yytext().equals("CREACION")?CREACION:(yytext().equals("ANTIGUO")?ANTIGUO:(yytext().equals("MODIFICACION")?MODIFICACION:(yytext().equals("TITULO")?TITULO:(yytext().equals("NOMBRE")?NOMBRE:TEMA)))))));}
 <YYINITIAL, VALORES> "DARK" | "STANDAR" | "PINK"                                     {return simbolo(TIPOTEMA, "Tipo Tema");}
                                                                                         /*(yytext().equals("DARK")?DARK:(yytext().equals("STANDAR")?STANDAR:PINK))*/
@@ -93,7 +93,7 @@ identificador =  (\$|_|-)({letra}|{numero}|_|-|\$)*
 <YYINITIAL> "ini" | "solicitud" | "solicitudes" | "fin"                              {return simbolo(yytext().equals("ini")?INI:(yytext().equals("solicitud")?SOLICITUD:(yytext().equals("solicitudes")?SOLICITUDES:FIN)));}
 //simbolos; no sé si vaya a dar problema el hecho de que en algunas expresiones regulares, se encuentren símbolos que corresponde a palabras reservadas, es decir, no se si el Lex, va a tomar cada uno de esos simbolos como palraba reservada aunque se encuentre en medio,o en cualquier parte de la palrba que tb contiene los demás caracteres permitidos por la expre... si si, entonce te tocará pensar, por eso debes apresurarte!!!        
 <YYINITIAL>  "_"  | ":" | "->" | "," | "-"                                           {return simbolo(yytext().equals("_")?GUIONBAJO:(yytext().equals(":")?DOSPUNTOS:(yytext().equals("->")?ASIGNAR:(yytext().equals(",")?COMA:MENOS))));}
-<YYINITIAL> "[" | "]" | "{" | "}" | "(" | ")"                                        {return simbolo(yytext().equals("[")?APERTURAANGULAR:(yytext().equals("]")?CIERREANGULAR:(yytext().equals("{")?APERTURALLAVE:(yytext().equals("}")?CIERRELLAVE:(yytext().equals("(")?APERTURAPARENTESIS:CIERREPARENTESIS)))));}
+<YYINITIAL> "[" | "]" | "{" | "}"                                                    {return simbolo(yytext().equals("[")?APERTURAANGULAR:(yytext().equals("]")?CIERREANGULAR:(yytext().equals("{")?APERTURALLAVE:CIERRELLAVE)));}//agergo los () solo porque al final de cuentas están permitidos, pero en este conjunto Lexer-Parser que se encarga de leer la entrada del user, no se requieren como una palabra reservada pues no se usa explicitamente en gramática alguna, solo en el e alfa#...
 
 <YYINITIAL>{
     \"                                                     {estaEnYYINITIAL = false; 

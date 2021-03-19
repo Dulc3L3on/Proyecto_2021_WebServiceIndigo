@@ -1,56 +1,60 @@
 package DeskBackend.Analizadores;
 import java_cup.runtime.*;
-import Backend.Entidades.Token;
+import DeskBackend.Entidades.Token;
 
 class Parser_Indigo;
 
 parser code{:
 
-    public parser_Figuras (Lexer lexer){//a menos que lo sobreescribas, no es necesario colocarlo, puesto que ya existe este cnstrc y además el lexer hereda de Scanner...
+    public Parser_Indigo (Lexer lexer){//a menos que lo sobreescribas, no es necesario colocarlo, puesto que ya existe este cnstrc y además el lexer hereda de Scanner...
         super(lexer);        
     }
 
     protected int error_sync_size() {//este es para cb el # de tokens que el parser requiere para recuperarse de los errores
 		return 1;
-	}
+    }
 :}
 
 terminal INI, SOLICITUD, SOLICITUDES, FIN;
-terminal CREDENCIALES, PARAMETROS, CREAR, USUARIO, MODIFICAR, ELIMINAR, LOGIN, AGREGAR, COMPONENTE, NUEVO, FORMULARIO, TIPOREQUERIDO, ID, CAMPO, CLASE, INDICE, VISIBLE, ALINEACION, REQUERIDO, OPCIONES, FILAS, COLUMNAS, URL, PASSWORD, FECHA, CREACION, ANTIGUO, MODIFICACION, TITULO, NOMBRE, TEMA;
-terminal GUIONBAJO, DOSPUNTOS, ASIGNAR, COMA, MENOS, APERTURAANGULAR, CIERREANGULAR, APERTURALLAVE, CIERRELLAVE, APERTURAPARENTESIS, CIERREPARENTESIS, COMILLA, ADMIRACION, MAYOR, MENOR, IGUAL, DIFERENTE, MENORIGUAL, MAYORIGUAL, SEPARADOR;
+terminal CREDENCIALES, PARAMETROS, CREAR, USUARIO, MODIFICAR, ELIMINAR, LOGIN, AGREGAR, COMPONENTE, NUEVO, FORMULARIO, TIPOREQUERIDO, ID, CAMPO, TEXTO, AREA, CLASE, INDICE, VISIBLE, ALINEACION, REQUERIDO, OPCIONES, FILAS, COLUMNAS, URL, PASSWORD, FECHA, CREACION, ANTIGUO, MODIFICACION, TITULO, NOMBRE, TEMA;
+terminal GUIONBAJO, DOSPUNTOS, ASIGNAR, COMA, MENOS, APERTURAANGULAR, CIERREANGULAR, APERTURALLAVE, CIERRELLAVE, COMILLA, ADMIRACION, MAYOR, MENOR, IGUAL, DIFERENTE, MENORIGUAL, MAYORIGUAL, SEPARADOR;
 terminal NUMERO, FORMATOFECHA, IDENTIFICADOR, ALFANUMERICO;//Recuerda que identificador es el nombre que reciben las "variables" e ID es la palabra reservada que indica que el valor del parámetro que se encontrara es un identificador xD
 terminal TIPOTEMA;
 terminal TIPOCLASE;
 terminal TIPOALINEACION;
 terminal CONSULTAR, DATOS, SELECT, TO, FORM, WHERE, CONSULTAS, CONSULTA, AND, OR, NOT;
 
-non terminal p, cuerpo, Cuerpo, opciones, Serie_Creacion, Serie_ModifUser, Serie_EliUser, Serie_Nuevo_Form, Serie_EliForm, Serie_ModifForm, Serie_AddComp, Serie_EliComp, Serie_ModifComp, b_user, b_form, b_comp, b_sqf, SerieCreacion, serie_creacion, Param_Creacion, param_creacion, SerieModificacionUser, serie_modif_user, Param_Modif, param_modif, SerieEliUser, serie_eli_user, param_eli, Param_Login, param_login, SerieNuevoForm, serie_nuevo_form, Param_Nuevo_Form, param_nuevo_form, SerieEliForm, serie_eli_form, param_eli_form, SerieModifForm, serie_modif_form, Param_Modif_Form, param_modif_form, SerieAddComp, serie_add_comp, Param_Add_Comp, param_add_comp, cadena, items, SerieEliComp, serie_eli_comp, Param_Eli_Comp, param_eli_comp, SerieModifComp, serie_modif_comp, Param_Modif_Comp, param_modif_comp, Serie_Consultas, serie_consultas, cuerpo_consultas, bloque_sqf, identificacion, cuerpo_consulta, seleccion, condicion, Condicion, comparacion, negacion, logico, relacional, valor;
+non terminal p, cuerpo, Cuerpo, opciones, b_user, b_form, b_comp, b_sqf, SerieCreacionUser, serie_creacion, ParamCreacion, param_creacion, SerieModifUser, serie_modif_user, ParamModifUser, param_modif_user, SerieEliUser, serie_eli_user, param_eli, ParamLogin, param_login, SerieNuevoForm, serie_nuevo_form, Param_Nuevo_Form, param_nuevo_form, SerieEliForm, serie_eli_form, param_eli_form, SerieModifForm, serie_modif_form, Param_Modif_Form, param_modif_form, SerieAddComp, serie_add_comp, Param_Add_Comp, param_add_comp, tipoComponente, cadena, items, SerieEliComp, serie_eli_comp, Param_Eli_Comp, param_eli_comp, SerieModifComp, serie_modif_comp, Param_Modif_Comp, param_modif_comp, Serie_Consultas, serie_consultas, cuerpo_consultas, bloque_sqf, identificacion, cuerpo_consulta, seleccion, condicion, Condicion, comparacion, negacion, logico, relacional, valor;
 
 /*precedencia? hasta donde sé no es necesario que incluya eso :v xD*/
 
 start with p;
 
-p ::= MENOR ADMIRACION INI GUIONBAJO SOLICITUDES MAYOR cuerpo Cuerpo MENOR ADMIRACION FIN GUIONBAJO SOLICITUDES MAYOR
+p ::= MENOR ADMIRACION INI GUIONBAJO SOLICITUDES MAYOR Cuerpo MENOR ADMIRACION FIN GUIONBAJO SOLICITUDES MAYOR
     | cuerpo
     ;
 
 cuerpo ::= MENOR ADMIRACION INI GUIONBAJO SOLICITUD opciones MENOR FIN GUIONBAJO SOLICITUD ADMIRACION MAYOR
         ;
 
-Cuerpo ::= cuerpo Cuerpo
-        | cuerpo
-        ;
+Cuerpo ::= Cuerpo cuerpo
+         | cuerpo
+         ;
 
-opciones ::= COMILLA CREAR GUIONBAJO USUARIO COMILLA MAYOR APERTURALLAVE b_user Serie_Creacion CIERREANGULAR CIERRELLAVE
-           | COMILLA MODIFICAR GUIONBAJO USUARIO COMILLA MAYOR APERTURALLAVE b_user Serie_ModifUser CIERREANGULAR CIERRELLAVE
-           | COMILLA ELIMINAR GUIONBAJO USUARIO COMILLA MAYOR APERTURALLAVE b_user Serie_EliUser CIERREANGULAR CIERRELLAVE
-           | COMILLA LOGIN GUIONBAJO USUARIO COMILLA MAYOR APERTURALLAVE b_user Param_Login CIERREANGULAR CIERRELLAVE
-           | COMILLA NUEVO GUIONBAJO FORMULARIO COMILLA MAYOR APERTURALLAVE b_form Serie_Nuevo_Form CIERREANGULAR CIERRELLAVE
-           | COMILLA ELIMINAR GUIONBAJO FORMULARIO COMILLA MAYOR APERTURALLAVE b_form Serie_EliForm CIERREANGULAR CIERRELLAVE
-           | COMILLA MODIFICAR GUIONBAJO FORMULARIO COMILLA MAYOR APERTURALLAVE b_form Serie_ModifComp CIERREANGULAR CIERRELLAVE
-           | COMILLA AGREGAR GUIONBAJO COMPONENTE COMILLA MAYOR APERTURALLAVE b_comp Serie_AddComp CIERREANGULAR CIERRELLAVE
-           | COMILLA ELIMINAR GUIONBAJO COMPONENTE COMILLA MAYOR APERTURALLAVE b_comp Serie_EliComp CIERREANGULAR CIERRELLAVE
-           | COMILLA MODIFICAR GUIONBAJO COMPONENTE COMILLA MAYOR APERTURALLAVE b_comp Serie_ModifComp CIERREANGULAR CIERRELLAVE
+/*Cuerpo ::= cuerpo Cuerpo
+        | cuerpo
+        ;*/
+
+opciones ::= COMILLA CREAR GUIONBAJO USUARIO COMILLA MAYOR APERTURALLAVE b_user SerieCreacionUser CIERREANGULAR CIERRELLAVE
+           | COMILLA MODIFICAR GUIONBAJO USUARIO COMILLA MAYOR APERTURALLAVE b_user SerieModifUser CIERREANGULAR CIERRELLAVE
+           | COMILLA ELIMINAR GUIONBAJO USUARIO COMILLA MAYOR APERTURALLAVE b_user SerieEliUser CIERREANGULAR CIERRELLAVE
+           | COMILLA LOGIN GUIONBAJO USUARIO COMILLA MAYOR APERTURALLAVE b_user ParamLogin CIERREANGULAR CIERRELLAVE
+           | COMILLA NUEVO GUIONBAJO FORMULARIO COMILLA MAYOR APERTURALLAVE b_form SerieNuevoForm CIERREANGULAR CIERRELLAVE
+           | COMILLA ELIMINAR GUIONBAJO FORMULARIO COMILLA MAYOR APERTURALLAVE b_form SerieEliForm CIERREANGULAR CIERRELLAVE
+           | COMILLA MODIFICAR GUIONBAJO FORMULARIO COMILLA MAYOR APERTURALLAVE b_form SerieModifForm CIERREANGULAR CIERRELLAVE
+           | COMILLA AGREGAR GUIONBAJO COMPONENTE COMILLA MAYOR APERTURALLAVE b_comp SerieAddComp CIERREANGULAR CIERRELLAVE
+           | COMILLA ELIMINAR GUIONBAJO COMPONENTE COMILLA MAYOR APERTURALLAVE b_comp SerieEliComp CIERREANGULAR CIERRELLAVE
+           | COMILLA MODIFICAR GUIONBAJO COMPONENTE COMILLA MAYOR APERTURALLAVE b_comp SerieModifComp CIERREANGULAR CIERRELLAVE
            | COMILLA CONSULTAR GUIONBAJO DATOS COMILLA MAYOR APERTURALLAVE b_sqf CIERRELLAVE
            ;
 
@@ -66,14 +70,14 @@ b_comp ::= COMILLA PARAMETROS GUIONBAJO COMPONENTE COMILLA DOSPUNTOS APERTURAANG
 b_sqf ::= COMILLA CONSULTAS COMILLA MAYOR APERTURAANGULAR Serie_Consultas CIERREANGULAR
         ;
 
-Serie_Creacion ::= serie_creacion Serie_Creacion
+SerieCreacionUser ::= serie_creacion SerieCreacionUser
                  | serie_creacion
                  ;
 
-serie_creacion ::= APERTURALLAVE Param_Creacion CIERRELLAVE
+serie_creacion ::= APERTURALLAVE ParamCreacion CIERRELLAVE
                  ;
 
-Param_Creacion ::= param_creacion COMA param_creacion COMA param_creacion
+ParamCreacion ::= param_creacion COMA param_creacion COMA param_creacion
                  | param_creacion COMA param_creacion
                  ;
 
@@ -81,17 +85,24 @@ param_creacion ::= param_login
                  | COMILLA FECHA GUIONBAJO CREACION COMILLA DOSPUNTOS FORMATOFECHA
                  ;
 
-Param_Modif ::= param_modif COMA Param_Modif
-              | param_modif
+SerieModifUser ::= serie_modif_user SerieModifUser
+                 | serie_modif_user
+                 ;
+
+serie_modif_user ::= APERTURALLAVE ParamModifUser CIERRELLAVE
+                   ;
+
+ParamModifUser ::= param_modif_user COMA ParamModifUser
+              | param_modif_user
               ;
 
-param_modif ::= COMILLA USUARIO GUIONBAJO ANTIGUO COMILLA DOSPUNTOS ALFANUMERICO
+param_modif_user ::= COMILLA USUARIO GUIONBAJO ANTIGUO COMILLA DOSPUNTOS ALFANUMERICO
               | COMILLA USUARIO GUIONBAJO NUEVO COMILLA DOSPUNTOS ALFANUMERICO
               | COMILLA NUEVO GUIONBAJO PASSWORD COMILLA DOSPUNTOS ALFANUMERICO
               | COMILLA FECHA GUIONBAJO MODIFICACION COMILLA DOSPUNTOS FORMATOFECHA
               ;
 
-Serie_EliUser ::= serie_eli_user Serie_EliUser
+SerieEliUser ::= serie_eli_user SerieEliUser
                 | serie_eli_user
                 ;
 
@@ -101,14 +112,14 @@ serie_eli_user ::= APERTURALLAVE param_eli CIERRELLAVE
 param_eli ::= COMILLA USUARIO COMILLA DOSPUNTOS ALFANUMERICO
             ;
 
-Param_Login ::= param_login COMA param_login
+ParamLogin ::= param_login COMA param_login
               ;
 
 param_login ::= COMILLA USUARIO COMILLA DOSPUNTOS ALFANUMERICO
               | COMILLA PASSWORD COMILLA DOSPUNTOS ALFANUMERICO
               ;
 
-Serie_Nuevo_Form ::= serie_nuevo_form Serie_Nuevo_Form
+SerieNuevoForm ::= serie_nuevo_form SerieNuevoForm
                    | serie_nuevo_form
                    ;
 
@@ -128,7 +139,7 @@ param_nuevo_form ::= COMILLA ID COMILLA DOSPUNTOS IDENTIFICADOR
                    | COMILLA FECHA GUIONBAJO CREACION COMILLA DOSPUNTOS FORMATOFECHA
                    ;
 
-Serie_EliForm ::= serie_eli_form Serie_EliForm
+SerieEliForm ::= serie_eli_form SerieEliForm
                 | serie_eli_form
                 ;
 
@@ -138,7 +149,7 @@ serie_eli_form ::= APERTURALLAVE param_eli_form CIERRELLAVE
 param_eli_form ::= COMILLA ID COMILLA DOSPUNTOS IDENTIFICADOR
                 ;
 
-Serie_ModifForm ::= serie_modif_form Serie_ModifForm
+SerieModifForm ::= serie_modif_form SerieModifForm
                   | serie_modif_form
                   ;
 
@@ -155,7 +166,7 @@ param_modif_form ::= COMILLA ID COMILLA DOSPUNTOS IDENTIFICADOR
                    | COMILLA TEMA COMILLA DOSPUNTOS TIPOTEMA
                    ;
 
-Serie_AddComp ::= serie_add_comp Serie_AddComp
+SerieAddComp ::= serie_add_comp SerieAddComp
                 | serie_add_comp
                 ;
 
@@ -169,7 +180,7 @@ Param_Add_Comp ::= param_add_comp COMA Param_Add_Comp
 param_add_comp ::= COMILLA ID COMILLA DOSPUNTOS IDENTIFICADOR
                  | COMILLA NOMBRE GUIONBAJO CAMPO COMILLA DOSPUNTOS ALFANUMERICO
                  | COMILLA FORMULARIO COMILLA DOSPUNTOS IDENTIFICADOR
-                 | COMILLA CLASE COMILLA DOSPUNTOS TIPOCLASE
+                 | COMILLA CLASE COMILLA DOSPUNTOS tipoComponente
                  | COMILLA TEXTO GUIONBAJO VISIBLE COMILLA DOSPUNTOS cadena
                  | COMILLA ALINEACION COMILLA DOSPUNTOS TIPOALINEACION
                  | COMILLA REQUERIDO COMILLA DOSPUNTOS TIPOREQUERIDO
@@ -179,6 +190,11 @@ param_add_comp ::= COMILLA ID COMILLA DOSPUNTOS IDENTIFICADOR
                  | COMILLA URL COMILLA DOSPUNTOS ALFANUMERICO
                  ;
 
+tipoComponente ::= TIPOCLASE
+                 | CAMPO GUIONBAJO TEXTO
+                 | AREA GUIONBAJO TEXTO
+                 ;//NOTA: si hacer esto te diera problemas con lo que habías pensado hacer para las axn, entonces en el jflex, add las palrbas completas de las clase en la calse "calse_componente" xD, y aquí eli este NT y vuelve a coloca ren la producción en lugar de tipoComponente TIPOCLASE, puesto que por el cb en el jflex, englobará a la palabra completa... xD
+
 cadena ::= ALFANUMERICO cadena
          | ALFANUMERICO
          ;
@@ -187,7 +203,7 @@ items ::= ALFANUMERICO SEPARADOR items
         | ALFANUMERICO
         ;
 
-Serie_EliComp ::= serie_eli_comp Serie_EliComp
+SerieEliComp ::= serie_eli_comp SerieEliComp
                 | serie_eli_comp
                 ;
 
@@ -201,7 +217,7 @@ param_eli_comp ::= COMILLA ID COMILLA DOSPUNTOS IDENTIFICADOR
                  | COMILLA FORMULARIO COMILLA DOSPUNTOS IDENTIFICADOR
                  ;
 
-Serie_ModifComp ::= serie_modif_comp Serie_ModifComp 
+SerieModifComp ::= serie_modif_comp SerieModifComp 
                   | serie_modif_comp
                   ;
 
@@ -223,7 +239,7 @@ serie_consultas ::= cuerpo_consultas COMA serie_consultas
                   | cuerpo_consultas
                   ;
 
-cuerpo_consultas ::= COMILLA CONSULTA MENOS NUMERO DOSPUNTOS COMILLA b_sqf COMILLA
+cuerpo_consultas ::= COMILLA CONSULTA MENOS NUMERO DOSPUNTOS COMILLA bloque_sqf COMILLA
                    ;
 
 bloque_sqf ::= SELECT TO FORM ASIGNAR identificacion cuerpo_consulta
@@ -241,7 +257,7 @@ seleccion ::= ALFANUMERICO COMA seleccion
             | ALFANUMERICO
             ;
 
-condicion ::= APERTURAANGULAR negacion comparacion Condicion
+condicion ::= WHERE APERTURAANGULAR negacion comparacion Condicion
             ;
 
 Condicion ::= logico comparacion Condicion
