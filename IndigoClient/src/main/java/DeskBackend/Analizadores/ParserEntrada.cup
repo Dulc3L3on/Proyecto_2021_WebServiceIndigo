@@ -1,10 +1,10 @@
-package Backend.Analizadores;
+package DeskBackend.Analizadores;
 import java_cup.runtime.*;
 import Backend.Entidades.Token;
 
 class Parser_Indigo;
 
-parser code:{
+parser code{:
 
     public parser_Figuras (Lexer lexer){//a menos que lo sobreescribas, no es necesario colocarlo, puesto que ya existe este cnstrc y además el lexer hereda de Scanner...
         super(lexer);        
@@ -16,15 +16,15 @@ parser code:{
 :}
 
 terminal INI, SOLICITUD, SOLICITUDES, FIN;
-terminal CREDENCIALES, PARAMETROS, CREAR, USUARIO, MODIFICAR, ELIMINAR, LOGIN, AGREGAR, COMPONENTE, NUEVO, FORMULARIO, TIPOREQUERIMIENTO, SI, NO, ID, CLASE, INDICE, VISIBLE, ALINEACION, REQUERIDO, OPCIONES, FILAS, COLUMNAS, URL, PASSWORD, FECHA, CREACION, ANTIGUO, MODIFICACION, TITULO, NOMBRE, TEMA;
+terminal CREDENCIALES, PARAMETROS, CREAR, USUARIO, MODIFICAR, ELIMINAR, LOGIN, AGREGAR, COMPONENTE, NUEVO, FORMULARIO, TIPOREQUERIDO, ID, CAMPO, CLASE, INDICE, VISIBLE, ALINEACION, REQUERIDO, OPCIONES, FILAS, COLUMNAS, URL, PASSWORD, FECHA, CREACION, ANTIGUO, MODIFICACION, TITULO, NOMBRE, TEMA;
 terminal GUIONBAJO, DOSPUNTOS, ASIGNAR, COMA, MENOS, APERTURAANGULAR, CIERREANGULAR, APERTURALLAVE, CIERRELLAVE, APERTURAPARENTESIS, CIERREPARENTESIS, COMILLA, ADMIRACION, MAYOR, MENOR, IGUAL, DIFERENTE, MENORIGUAL, MAYORIGUAL, SEPARADOR;
 terminal NUMERO, FORMATOFECHA, IDENTIFICADOR, ALFANUMERICO;//Recuerda que identificador es el nombre que reciben las "variables" e ID es la palabra reservada que indica que el valor del parámetro que se encontrara es un identificador xD
-terminal TIPOTEMA, DARK, STANDAR, PINK;
-terminal TIPOCLASE, CAMPO, TEXTO, AREA, CHECKBOX, RADIO, FICHERO, IMAGEN, COMBO, BOTON;
-terminal TIPOALINEACION, CENTRO, IZQUIERDA, DERECHA, JUSTIFICAR;
+terminal TIPOTEMA;
+terminal TIPOCLASE;
+terminal TIPOALINEACION;
 terminal CONSULTAR, DATOS, SELECT, TO, FORM, WHERE, CONSULTAS, CONSULTA, AND, OR, NOT;
 
-non terminal p, cuerpo, Cuerpo, opciones, Serie_Creacion, Serie_ModifUser, Serie_EliUser, Serie_Nuevo_Form, Serie_EliForm, Serie_ModifForm, Serie_AddComp, Serie_EliComp, Serie_ModifComp, b_user, b_form, b_comp, b_sqf, SerieCreacion, serie_creacion, Param_Creacion, param_creacion, SerieModificacionUser, serie_modif_user, Param_Modif, param_modif, SerieEliUser, serie_eli_user, param_eli, Param_Login, param_login, SerieNuevoForm, serie_nuevo_form, Param_Nuevo_Form, param_nuevo_form SerieEliForm, serie_eli_form, param_eli_form, SerieModifForm, serie_modif_form, Param_Modif_Form, param_modif_form, SerieAddComp, serie_add_comp, Param_Add_Comp, param_add_comp, cadena, items, SerieEliComp, serie_eli_comp, Param_Eli_Comp, param_eli_comp, SerieModifComp, serie_modif_comp, Param_Modif_Comp, param_modif_comp, Serie_Consultas, serie_consultas, cuerpo_consultas, bloque_sqf, identificacion, cuerpo_consulta, seleccion, condicion, Condicion, comparacion, negacion, logico, relacional, valor;
+non terminal p, cuerpo, Cuerpo, opciones, Serie_Creacion, Serie_ModifUser, Serie_EliUser, Serie_Nuevo_Form, Serie_EliForm, Serie_ModifForm, Serie_AddComp, Serie_EliComp, Serie_ModifComp, b_user, b_form, b_comp, b_sqf, SerieCreacion, serie_creacion, Param_Creacion, param_creacion, SerieModificacionUser, serie_modif_user, Param_Modif, param_modif, SerieEliUser, serie_eli_user, param_eli, Param_Login, param_login, SerieNuevoForm, serie_nuevo_form, Param_Nuevo_Form, param_nuevo_form, SerieEliForm, serie_eli_form, param_eli_form, SerieModifForm, serie_modif_form, Param_Modif_Form, param_modif_form, SerieAddComp, serie_add_comp, Param_Add_Comp, param_add_comp, cadena, items, SerieEliComp, serie_eli_comp, Param_Eli_Comp, param_eli_comp, SerieModifComp, serie_modif_comp, Param_Modif_Comp, param_modif_comp, Serie_Consultas, serie_consultas, cuerpo_consultas, bloque_sqf, identificacion, cuerpo_consulta, seleccion, condicion, Condicion, comparacion, negacion, logico, relacional, valor;
 
 /*precedencia? hasta donde sé no es necesario que incluya eso :v xD*/
 
@@ -42,16 +42,16 @@ Cuerpo ::= cuerpo Cuerpo
         ;
 
 opciones ::= COMILLA CREAR GUIONBAJO USUARIO COMILLA MAYOR APERTURALLAVE b_user Serie_Creacion CIERREANGULAR CIERRELLAVE
-           | COMILLA MODIFICAR GUIONBAJO USUARIO COMILLA APERTURALLAVE b_user Serie_ModifUser CIERREANGULAR CIERRELLAVE
-           | COMILLA ELIMINAR GUIONBAJO USUARIO COMILLA APERTURALLAVE b_user Serie_EliUser CIERREANGULAR CIERRELLAVE
-           | COMILLA LOGIN GUIONBAJO USUARIO COMILLA APERTURALLAVE b_user Param_Login CIERREANGULAR CIERRELLAVE
-           | COMILLA NUEVO GUIONBAJO FORMULARIO COMILLA APERTURALLAVE b_form Serie_Nuevo_Form CIERREANGULAR CIERRELLAVE
-           | COMILLA ELIMINAR GUIONBAJO FORMULARIO COMILLA APERTURALLAVE b_form Serie_EliForm CIERREANGULAR CIERRELLAVE
-           | COMILLA MODIFICAR GUIONBAJO FORMULARIO COMILLA APERTURALLAVE b_form Serie_ModifComp CIERREANGULAR CIERRELLAVE
-           | COMILLA AGREGAR GUIONBAJO COMPONENTE COMILLA APERTURALLAVE b_comp Serie_AddComp CIERREANGULAR CIERRELLAVE
-           | COMILLA ELIMINAR GUIONBAJO COMPONENTE COMILLA APERTURALLAVE b_comp Serie_EliComp CIERREANGULAR CIERRELLAVE
-           | COMILLA MODIFICAR GUIONBAJO COMPONENTE COMILLA APERTURALLAVE b_comp Serie_ModifComp CIERREANGULAR CIERRELLAVE
-           | COMILLA CONSULTAR GUIONBAJO DATOS COMILLA APERTURALLAVE b_sqf CIERRELLAVE
+           | COMILLA MODIFICAR GUIONBAJO USUARIO COMILLA MAYOR APERTURALLAVE b_user Serie_ModifUser CIERREANGULAR CIERRELLAVE
+           | COMILLA ELIMINAR GUIONBAJO USUARIO COMILLA MAYOR APERTURALLAVE b_user Serie_EliUser CIERREANGULAR CIERRELLAVE
+           | COMILLA LOGIN GUIONBAJO USUARIO COMILLA MAYOR APERTURALLAVE b_user Param_Login CIERREANGULAR CIERRELLAVE
+           | COMILLA NUEVO GUIONBAJO FORMULARIO COMILLA MAYOR APERTURALLAVE b_form Serie_Nuevo_Form CIERREANGULAR CIERRELLAVE
+           | COMILLA ELIMINAR GUIONBAJO FORMULARIO COMILLA MAYOR APERTURALLAVE b_form Serie_EliForm CIERREANGULAR CIERRELLAVE
+           | COMILLA MODIFICAR GUIONBAJO FORMULARIO COMILLA MAYOR APERTURALLAVE b_form Serie_ModifComp CIERREANGULAR CIERRELLAVE
+           | COMILLA AGREGAR GUIONBAJO COMPONENTE COMILLA MAYOR APERTURALLAVE b_comp Serie_AddComp CIERREANGULAR CIERRELLAVE
+           | COMILLA ELIMINAR GUIONBAJO COMPONENTE COMILLA MAYOR APERTURALLAVE b_comp Serie_EliComp CIERREANGULAR CIERRELLAVE
+           | COMILLA MODIFICAR GUIONBAJO COMPONENTE COMILLA MAYOR APERTURALLAVE b_comp Serie_ModifComp CIERREANGULAR CIERRELLAVE
+           | COMILLA CONSULTAR GUIONBAJO DATOS COMILLA MAYOR APERTURALLAVE b_sqf CIERRELLAVE
            ;
 
 b_user ::= COMILLA CREDENCIALES GUIONBAJO USUARIO COMILLA DOSPUNTOS APERTURAANGULAR 
@@ -63,7 +63,7 @@ b_form ::= COMILLA PARAMETROS GUIONBAJO FORMULARIO COMILLA DOSPUNTOS APERTURAANG
 b_comp ::= COMILLA PARAMETROS GUIONBAJO COMPONENTE COMILLA DOSPUNTOS APERTURAANGULAR 
         ;
 
-b_sqf ::= COMILLA CONSULTAS COMILLA DOSPUNTOS APERTURAANGULAR Serie_Consultas CIERREANGULAR
+b_sqf ::= COMILLA CONSULTAS COMILLA MAYOR APERTURAANGULAR Serie_Consultas CIERREANGULAR
         ;
 
 Serie_Creacion ::= serie_creacion Serie_Creacion
@@ -172,7 +172,7 @@ param_add_comp ::= COMILLA ID COMILLA DOSPUNTOS IDENTIFICADOR
                  | COMILLA CLASE COMILLA DOSPUNTOS TIPOCLASE
                  | COMILLA TEXTO GUIONBAJO VISIBLE COMILLA DOSPUNTOS cadena
                  | COMILLA ALINEACION COMILLA DOSPUNTOS TIPOALINEACION
-                 | COMILLA REQUERIDO COMILLA DOSPUNTOS TIPOREQUERIMIENTO
+                 | COMILLA REQUERIDO COMILLA DOSPUNTOS TIPOREQUERIDO
                  | COMILLA OPCIONES COMILLA DOSPUNTOS items
                  | COMILLA FILAS COMILLA DOSPUNTOS NUMERO
                  | COMILLA COLUMNAS COMILLA DOSPUNTOS NUMERO                 
@@ -197,8 +197,8 @@ serie_eli_comp ::= APERTURALLAVE Param_Eli_Comp CIERRELLAVE
 Param_Eli_Comp ::= param_eli_comp COMA param_eli_comp
                  ;
 
-param_eli_comp ::= COMILLA ID COMILLA DOSPUNTOS COMILLA IDENTIFICADOR COMILLA
-                 | COMILLA FORMULARIO COMILLA DOSPUNTOS COMILLA IDENTIFICADOR COMILLA
+param_eli_comp ::= COMILLA ID COMILLA DOSPUNTOS IDENTIFICADOR 
+                 | COMILLA FORMULARIO COMILLA DOSPUNTOS IDENTIFICADOR
                  ;
 
 Serie_ModifComp ::= serie_modif_comp Serie_ModifComp 
@@ -214,6 +214,7 @@ Param_Modif_Comp ::= param_modif_comp COMA Param_Modif_Comp
 
 param_modif_comp ::= param_add_comp
                    | COMILLA INDICE COMILLA DOSPUNTOS NUMERO
+                   ;
 
 Serie_Consultas ::= APERTURALLAVE serie_consultas CIERRELLAVE
                   ;

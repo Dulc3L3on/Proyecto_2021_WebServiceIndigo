@@ -1,4 +1,4 @@
-package Backend.Entidades;
+package DeskBackend.Entidades;
 
 import java.io.Serializable;
 

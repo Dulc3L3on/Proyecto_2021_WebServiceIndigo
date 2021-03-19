@@ -661,7 +661,7 @@ class Lexer implements java_cup.runtime.Scanner {
     //si el token es null, entonces no envíes aunque en realidad el que sucediera esto, indica que hay un error de sintazis xD
     boolean estaEnYYINITIAL = true;//para qué era esto??? :v :| xD aaah, es para saber si al estar en alfa#, se debe dar el # que le representa ó el # del token con el que coincide... xD
     boolean sonConsultas = false;//esto es para saber si se debe entrar a valores, cuando se encuentre una " y antes de ella : xD
-    Token tokenAnterior;
+   Token tokenAnterior;
 
     private Symbol simbolo(int tipo) {
         return simbolo(tipo, "");//puesto que no veo que tenga razón de ser xD
@@ -1159,7 +1159,7 @@ class Lexer implements java_cup.runtime.Scanner {
             // fall through
           case 35: break;
           case 11:
-            { return simbolo(yytext().equals("ID")?ID:(yytext().equals("CLASE")?CLASE:(yytext().equals("INDICE")?INDICE:(yytext().equals("VISIBLE")?VISIBLE:(yytext().equals("ALINEACION")?ALINEACION:(yytext().equals("REQUERDIDO")?REQUERIDO:(yytext().equals("OPCIONES")?OPCIONES:(yytext().equals("FILAS")?FILAS:(yytext().equals("COLUMNAS")?COLUMNAS:URL)))))))));
+            { /*return simbolo(yytext().equals("ID")?ID:(yytext().equals("CLASE")?CLASE:(yytext().equals("INDICE")?INDICE:(yytext().equals("VISIBLE")?VISIBLE:(yytext().equals("ALINEACION")?ALINEACION:(yytext().equals("REQUERDIDO")?REQUERIDO:(yytext().equals("OPCIONES")?OPCIONES:(yytext().equals("FILAS")?FILAS:(yytext().equals("COLUMNAS")?COLUMNAS:URL)))))))));*/
             }
             // fall through
           case 36: break;
@@ -1194,7 +1194,7 @@ class Lexer implements java_cup.runtime.Scanner {
             // fall through
           case 42: break;
           case 18:
-            { return simbolo(yytext().equals("PASSWORD")?PASSWORD:(yytext().equals("FECHA")?FECHA:(yytext().equals("CREACION")?CREACION:(yytext().equals("ANTIGUO")?ANTIGUO:(yytext().equals("MODIFICACION")?MODIFICACION:(yytext().equals("TITULO")?TITULO:(yytext().equals("NOMBRE")?NOMBRE:TEMA)))))));
+            { /*return simbolo(yytext().equals("PASSWORD")?PASSWORD:(yytext().equals("FECHA")?FECHA:(yytext().equals("CREACION")?CREACION:(yytext().equals("ANTIGUO")?ANTIGUO:(yytext().equals("MODIFICACION")?MODIFICACION:(yytext().equals("TITULO")?TITULO:(yytext().equals("NOMBRE")?NOMBRE:TEMA)))))));*/
             }
             // fall through
           case 43: break;
