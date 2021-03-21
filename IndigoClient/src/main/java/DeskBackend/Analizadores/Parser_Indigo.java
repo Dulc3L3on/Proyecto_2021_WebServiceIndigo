@@ -32,7 +32,7 @@ public class Parser_Indigo extends java_cup.runtime.lr_parser {
   /** Production table. */
   protected static final short _production_table[][] = 
     unpackFromStrings(new String[] {
-    "\000\206\000\002\002\004\000\002\002\017\000\002\002" +
+    "\000\206\000\002\002\004\000\002\002\020\000\002\002" +
     "\003\000\002\003\016\000\002\004\004\000\002\004\003" +
     "\000\002\005\015\000\002\005\015\000\002\005\015\000" +
     "\002\005\015\000\002\005\015\000\002\005\015\000\002" +
@@ -81,7 +81,7 @@ public class Parser_Indigo extends java_cup.runtime.lr_parser {
   /** Parse-action table. */
   protected static final short[][] _action_table = 
     unpackFromStrings(new String[] {
-    "\000\u01d9\000\004\065\005\001\002\000\004\002\uffff\001" +
+    "\000\u01da\000\004\065\005\001\002\000\004\002\uffff\001" +
     "\002\000\004\063\010\001\002\000\004\002\007\001\002" +
     "\000\004\002\001\001\002\000\004\004\011\001\002\000" +
     "\004\051\012\001\002\000\006\005\014\006\013\001\002" +
@@ -318,13 +318,14 @@ public class Parser_Indigo extends java_cup.runtime.lr_parser {
     "\001\002\000\006\013\u016b\041\u016c\001\002\000\004\054" +
     "\u01ca\001\002\000\004\062\u01c8\001\002\000\004\057\uffd8" +
     "\001\002\000\004\061\u01cd\001\002\000\004\065\ufff8\001" +
-    "\002\000\004\065\u01d0\001\002\000\004\065\ufffc\001\002" +
-    "\000\004\063\u01db\001\002\000\004\065\u01d3\001\002\000" +
-    "\004\065\ufffd\001\002\000\004\063\u01d4\001\002\000\006" +
-    "\004\u01d6\007\u01d5\001\002\000\004\051\u01d8\001\002\000" +
-    "\004\051\u01d7\001\002\000\004\005\014\001\002\000\004" +
-    "\006\u01d9\001\002\000\004\064\u01da\001\002\000\004\002" +
-    "\000\001\002\000\004\004\u01d6\001\002" });
+    "\002\000\004\065\u01d0\001\002\000\004\065\u01d0\001\002" +
+    "\000\004\063\u01d1\001\002\000\004\004\u01d2\001\002\000" +
+    "\004\051\u01d3\001\002\000\004\005\014\001\002\000\004" +
+    "\065\ufffc\001\002\000\004\065\u01d7\001\002\000\004\065" +
+    "\ufffd\001\002\000\004\063\u01d8\001\002\000\006\004\u01d2" +
+    "\007\u01d9\001\002\000\004\051\u01da\001\002\000\004\006" +
+    "\u01db\001\002\000\004\064\u01dc\001\002\000\004\002\000" +
+    "\001\002" });
 
   /** Access to parse-action table. */
   public short[][] action_table() {return _action_table;}
@@ -332,7 +333,7 @@ public class Parser_Indigo extends java_cup.runtime.lr_parser {
   /** <code>reduce_goto</code> table. */
   protected static final short[][] _reduce_table = 
     unpackFromStrings(new String[] {
-    "\000\u01d9\000\006\002\005\003\003\001\001\000\002\001" +
+    "\000\u01da\000\006\002\005\003\003\001\001\000\002\001" +
     "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
     "\000\002\001\001\000\002\001\001\000\002\001\001\000" +
     "\002\001\001\000\004\005\015\001\001\000\002\001\001" +
@@ -492,11 +493,12 @@ public class Parser_Indigo extends java_cup.runtime.lr_parser {
     "\001\000\006\025\u01c6\026\u01c8\001\001\000\002\001\001" +
     "\000\002\001\001\000\002\001\001\000\004\026\u01ca\001" +
     "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
-    "\000\006\003\u01ce\004\u01d0\001\001\000\002\001\001\000" +
-    "\002\001\001\000\004\003\u01d1\001\001\000\002\001\001" +
+    "\000\004\003\u01ce\001\001\000\006\003\u01d3\004\u01d4\001" +
+    "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
+    "\000\002\001\001\000\002\001\001\000\004\003\u01d5\001" +
+    "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
     "\000\002\001\001\000\002\001\001\000\002\001\001\000" +
-    "\002\001\001\000\002\001\001\000\002\001\001\000\002" +
-    "\001\001\000\002\001\001\000\002\001\001" });
+    "\002\001\001" });
 
   /** Access to <code>reduce_goto</code> table. */
   public short[][] reduce_table() {return _reduce_table;}
@@ -584,11 +586,11 @@ class CUP$Parser_Indigo$actions {
           return CUP$Parser_Indigo$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 1: // p ::= MENOR ADMIRACION INI GUIONBAJO SOLICITUDES MAYOR Cuerpo MENOR ADMIRACION FIN GUIONBAJO SOLICITUDES MAYOR 
+          case 1: // p ::= MENOR ADMIRACION INI GUIONBAJO SOLICITUDES MAYOR cuerpo Cuerpo MENOR ADMIRACION FIN GUIONBAJO SOLICITUDES MAYOR 
             {
               Object RESULT =null;
 
-              CUP$Parser_Indigo$result = parser.getSymbolFactory().newSymbol("p",0, ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.elementAt(CUP$Parser_Indigo$top-12)), ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()), RESULT);
+              CUP$Parser_Indigo$result = parser.getSymbolFactory().newSymbol("p",0, ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.elementAt(CUP$Parser_Indigo$top-13)), ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()), RESULT);
             }
           return CUP$Parser_Indigo$result;
 

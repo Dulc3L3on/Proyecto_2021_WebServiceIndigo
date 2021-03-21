@@ -30,7 +30,7 @@ non terminal p, cuerpo, Cuerpo, opciones, b_user, b_form, b_comp, b_sqf, SerieCr
 
 start with p;
 
-p ::= MENOR ADMIRACION INI GUIONBAJO SOLICITUDES MAYOR Cuerpo MENOR ADMIRACION FIN GUIONBAJO SOLICITUDES MAYOR
+p ::= MENOR ADMIRACION INI GUIONBAJO SOLICITUDES MAYOR cuerpo Cuerpo MENOR ADMIRACION FIN GUIONBAJO SOLICITUDES MAYOR
     | cuerpo
     ;
 
