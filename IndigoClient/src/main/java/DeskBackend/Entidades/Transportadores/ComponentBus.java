@@ -12,7 +12,7 @@ import java.util.LinkedList;
  * @author phily
  */
 public class ComponentBus {
-     
+    private String tipoAccion = null;
     private String ID = null;
     private String nombreCampo = null;
     private String formulario = null;
@@ -26,7 +26,11 @@ public class ComponentBus {
     private int numeroColumnas = 0;
     private String URL = null;
     
-    public void establecerID(String elID){
+    public void establecerTipoAccion(String laAccion){
+        tipoAccion = laAccion;
+    }
+    
+    public void establecerIDComponente(String elID){
         ID = elID;
     }
     
@@ -34,7 +38,7 @@ public class ComponentBus {
         nombreCampo = elNombreCampo;
     }
     
-    public void establecerFormulario(String elIDFormulario){
+    public void establecerIDFormulario(String elIDFormulario){
         formulario = elIDFormulario;
     }
     
@@ -72,6 +76,10 @@ public class ComponentBus {
     
     public void establecerURL(String laURL){
         URL = laURL;
+    }
+    
+    public String darTipoAccion(){
+        return tipoAccion;
     }
     
     public String darID(){

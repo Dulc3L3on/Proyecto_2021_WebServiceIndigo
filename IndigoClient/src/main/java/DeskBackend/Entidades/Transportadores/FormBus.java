@@ -10,12 +10,17 @@ package DeskBackend.Entidades.Transportadores;
  * @author phily
  */
 public class FormBus {
+    private String tipoAccion = null;
     private String ID = null;
     private String titulo = null;
     private String nombre = null;
     private String tema = null;
     private String creador = null;
     private String fecha = null;
+    
+    public void establecerTipoAccion(String laAccion){
+        tipoAccion = laAccion;
+    }
     
     public void establecerID(String elID){
         ID = elID;
@@ -39,6 +44,10 @@ public class FormBus {
     
     public void establecerFecha(String laFecha){
         fecha = laFecha;
+    }
+    
+    public String darTipoAccion(){
+        return tipoAccion;
     }
     
     public String darID(){

@@ -32,7 +32,7 @@ public class UserBus {
         password = thePassword;
     }   
     
-    public void establecerFecha(String laFecha){
+    public void establecerFecha(String laFecha){//basta con esto, puesto que sin importar que tipo de acción sea, solo se requerirá un campo fecha xD
         fecha = laFecha;
     }
     
