@@ -5,6 +5,8 @@
  */
 package Frontend;
 
+import DeskBackend.Entidades.Herramientas.EnchancerForEditor;
+import DeskBackend.Entidades.Manejadores.Procesador;
 import java.awt.Color;
 
 /**
@@ -13,7 +15,8 @@ import java.awt.Color;
  */
 public class IndigoTextEditor extends javax.swing.JFrame {
     private Color colorFondo = new Color(86,87,88);
-     
+    private EnchancerForEditor embellecedor;
+    private Procesador procesador;
     
     /**
      * Creates new form IndigoTextEditor
@@ -21,6 +24,7 @@ public class IndigoTextEditor extends javax.swing.JFrame {
     public IndigoTextEditor() {
         initComponents();
         //this.getContentPane().setBackground(colorFondo);
+        embellecedor = new EnchancerForEditor(EditArea, areaNumeracion, barraPosicion);
     }
 
     /**
@@ -37,19 +41,26 @@ public class IndigoTextEditor extends javax.swing.JFrame {
         EditArea = new javax.swing.JTextArea();
         PanelErrores = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        listadoErrores = new javax.swing.JList<>();
         jLabel1 = new javax.swing.JLabel();
-        FIlasColumnas = new javax.swing.JTextField();
+        barraPosicion = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
+        IniciarSesion = new javax.swing.JLabel();
+        BloqueFormulario = new javax.swing.JLabel();
+        BloqueConsultas = new javax.swing.JLabel();
+        cerrarSesion = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        areaNumeracion = new javax.swing.JTextArea();
+        AgregarComponente = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
-        jMenuItem4 = new javax.swing.JMenuItem();
+        item_Guardar = new javax.swing.JMenuItem();
+        itemAbrir = new javax.swing.JMenuItem();
+        itemRevisar = new javax.swing.JMenuItem();
+        item_Cerrar = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
-        jMenuItem5 = new javax.swing.JMenuItem();
-        jMenuItem6 = new javax.swing.JMenuItem();
+        item_UserManual = new javax.swing.JMenuItem();
+        item_AboutUs = new javax.swing.JMenuItem();
 
         Opciones.setForeground(new java.awt.Color(210, 217, 223));
         Opciones.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -69,17 +80,22 @@ public class IndigoTextEditor extends javax.swing.JFrame {
         EditArea.setRows(5);
         EditArea.setTabSize(4);
         EditArea.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        EditArea.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                EditAreaMouseReleased(evt);
+            }
+        });
+        EditArea.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                EditAreaKeyReleased(evt);
+            }
+        });
         jScrollPane1.setViewportView(EditArea);
 
-        jList1.setBackground(new java.awt.Color(149, 153, 168));
-        jList1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jList1.setFont(new java.awt.Font("Ubuntu", 0, 17)); // NOI18N
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane2.setViewportView(jList1);
+        listadoErrores.setBackground(new java.awt.Color(149, 153, 168));
+        listadoErrores.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        listadoErrores.setFont(new java.awt.Font("Ubuntu", 0, 17)); // NOI18N
+        jScrollPane2.setViewportView(listadoErrores);
 
         jLabel1.setBackground(new java.awt.Color(205, 205, 205));
         jLabel1.setFont(new java.awt.Font("Sawasdee", 1, 19)); // NOI18N
@@ -107,55 +123,109 @@ public class IndigoTextEditor extends javax.swing.JFrame {
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 852, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        FIlasColumnas.setEditable(false);
-        FIlasColumnas.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        FIlasColumnas.setText("Fila:0  Columna: 0");
-        FIlasColumnas.setPreferredSize(new java.awt.Dimension(129, 32));
-        FIlasColumnas.addActionListener(new java.awt.event.ActionListener() {
+        barraPosicion.setEditable(false);
+        barraPosicion.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        barraPosicion.setText("Fila:0  Columna: 0");
+        barraPosicion.setPreferredSize(new java.awt.Dimension(129, 32));
+        barraPosicion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                FIlasColumnasActionPerformed(evt);
+                barraPosicionActionPerformed(evt);
             }
         });
 
         jLabel2.setFont(new java.awt.Font("Bitstream Vera Sans Mono", 1, 18)); // NOI18N
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Indigo_EditorRecortado.png"))); // NOI18N
 
+        IniciarSesion.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        IniciarSesion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconoLogin.png"))); // NOI18N
+        IniciarSesion.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                IniciarSesionMouseClicked(evt);
+            }
+        });
+
+        BloqueFormulario.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        BloqueFormulario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconoformulario.png"))); // NOI18N
+        BloqueFormulario.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                BloqueFormularioMouseClicked(evt);
+            }
+        });
+
+        BloqueConsultas.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        BloqueConsultas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconoConsulta.png"))); // NOI18N
+        BloqueConsultas.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                BloqueConsultasMouseClicked(evt);
+            }
+        });
+
+        cerrarSesion.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        cerrarSesion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconoLogout.png"))); // NOI18N
+        cerrarSesion.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cerrarSesionMouseClicked(evt);
+            }
+        });
+
+        jScrollPane4.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPane4.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+
+        areaNumeracion.setEditable(false);
+        areaNumeracion.setColumns(20);
+        areaNumeracion.setFont(new java.awt.Font("Ubuntu", 1, 17)); // NOI18N
+        areaNumeracion.setRows(5);
+        jScrollPane4.setViewportView(areaNumeracion);
+
+        AgregarComponente.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        AgregarComponente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconoAddElemento.png"))); // NOI18N
+        AgregarComponente.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                AgregarComponenteMouseClicked(evt);
+            }
+        });
+
         jMenu1.setText("File");
 
-        jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconoRealDisquete.png"))); // NOI18N
-        jMenuItem1.setText("     Guardar");
-        jMenuItem1.setOpaque(true);
-        jMenu1.add(jMenuItem1);
+        item_Guardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconoRealDisquete.png"))); // NOI18N
+        item_Guardar.setText("     Guardar");
+        item_Guardar.setOpaque(true);
+        jMenu1.add(item_Guardar);
 
-        jMenuItem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconoPequenioAbrir.png"))); // NOI18N
-        jMenuItem2.setText("     Abrir");
-        jMenuItem2.setOpaque(true);
-        jMenu1.add(jMenuItem2);
+        itemAbrir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconoPequenioAbrir.png"))); // NOI18N
+        itemAbrir.setText("     Abrir");
+        itemAbrir.setOpaque(true);
+        jMenu1.add(itemAbrir);
 
-        jMenuItem3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconoRevisar.png"))); // NOI18N
-        jMenuItem3.setText("     Revisar");
-        jMenuItem3.setOpaque(true);
-        jMenu1.add(jMenuItem3);
+        itemRevisar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconoRevisar.png"))); // NOI18N
+        itemRevisar.setText("     Revisar");
+        itemRevisar.setOpaque(true);
+        itemRevisar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                itemRevisarMouseClicked(evt);
+            }
+        });
+        jMenu1.add(itemRevisar);
 
-        jMenuItem4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconoCerrar.png"))); // NOI18N
-        jMenuItem4.setText("     Cerrar");
-        jMenuItem4.setOpaque(true);
-        jMenu1.add(jMenuItem4);
+        item_Cerrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconoCerrar.png"))); // NOI18N
+        item_Cerrar.setText("     Cerrar");
+        item_Cerrar.setOpaque(true);
+        jMenu1.add(item_Cerrar);
 
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Help");
 
-        jMenuItem5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconManualUser.png"))); // NOI18N
-        jMenuItem5.setText("     UserManual");
-        jMenuItem5.setOpaque(true);
-        jMenu2.add(jMenuItem5);
+        item_UserManual.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconManualUser.png"))); // NOI18N
+        item_UserManual.setText("     UserManual");
+        item_UserManual.setOpaque(true);
+        jMenu2.add(item_UserManual);
 
-        jMenuItem6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon-aboutUs.png"))); // NOI18N
-        jMenuItem6.setText("     AboutUs");
-        jMenuItem6.setToolTipText("");
-        jMenuItem6.setOpaque(true);
-        jMenu2.add(jMenuItem6);
+        item_AboutUs.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon-aboutUs.png"))); // NOI18N
+        item_AboutUs.setText("     AboutUs");
+        item_AboutUs.setToolTipText("");
+        item_AboutUs.setOpaque(true);
+        jMenu2.add(item_AboutUs);
 
         jMenuBar1.add(jMenu2);
 
@@ -168,11 +238,24 @@ public class IndigoTextEditor extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 984, Short.MAX_VALUE)
-                    .addComponent(FIlasColumnas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(barraPosicion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jLabel2)))
+                        .addGap(21, 21, 21)
+                        .addComponent(IniciarSesion, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(BloqueFormulario, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(AgregarComponente, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(BloqueConsultas, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cerrarSesion, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 110, Short.MAX_VALUE)
+                        .addComponent(jLabel2))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane1)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(PanelErrores, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -183,41 +266,100 @@ public class IndigoTextEditor extends javax.swing.JFrame {
                     .addComponent(PanelErrores, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jLabel2)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(BloqueFormulario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(BloqueConsultas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(AgregarComponente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cerrarSesion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(IniciarSesion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 791, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 791, Short.MAX_VALUE)
+                            .addComponent(jScrollPane4))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(FIlasColumnas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(barraPosicion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(6, 6, 6))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void FIlasColumnasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FIlasColumnasActionPerformed
+    private void barraPosicionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_barraPosicionActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_FIlasColumnasActionPerformed
+    }//GEN-LAST:event_barraPosicionActionPerformed
+
+    private void EditAreaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_EditAreaKeyReleased
+        embellecedor.actualizarLinea();//lo vamos a dejar para todas las teclas puesto que sino tenría que listar todas aquellas que pueden provocar que cb, como ENTER, sup, delete, ctrl+v.... y así xD                        
+        embellecedor.actualizarPosicion();//el más uno es porque si tiene decimales es porque está en la fila > en una ud al entero que salió...
+        
+    }//GEN-LAST:event_EditAreaKeyReleased
+
+    private void EditAreaMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_EditAreaMouseReleased
+        //aclaro, este método de actualizar línea SÍ tiene sentido, puesto que por esta llamada es que al colocar por primera vez el cursor en el área de texto, se coloca el #1 :3
+        embellecedor.actualizarLinea();//si no se add al area de texto la posibilidad de que pueda emplearse la opción pegar, entonces no tiene sentido que este método se encuentre aquí... xD, solo el método que cb los valores en la parte posterior xD
+        embellecedor.actualizarPosicion();
+    }//GEN-LAST:event_EditAreaMouseReleased
+
+    private void BloqueConsultasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BloqueConsultasMouseClicked
+        embellecedor.agregarBloque("CONSULTA");
+        embellecedor.actualizarLinea();
+        embellecedor.actualizarPosicion();
+    }//GEN-LAST:event_BloqueConsultasMouseClicked
+
+    private void cerrarSesionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cerrarSesionMouseClicked
+        
+    }//GEN-LAST:event_cerrarSesionMouseClicked
+
+    private void AgregarComponenteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_AgregarComponenteMouseClicked
+        embellecedor.agregarBloque("COMPONENTE");
+        embellecedor.actualizarLinea();
+        embellecedor.actualizarPosicion();
+    }//GEN-LAST:event_AgregarComponenteMouseClicked
+
+    private void BloqueFormularioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BloqueFormularioMouseClicked
+        embellecedor.agregarBloque("FORMULARIO");
+        embellecedor.actualizarLinea();
+        embellecedor.actualizarPosicion();
+    }//GEN-LAST:event_BloqueFormularioMouseClicked
+
+    private void IniciarSesionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_IniciarSesionMouseClicked
+        embellecedor.agregarBloque("USUARIO");
+        embellecedor.actualizarLinea();
+        embellecedor.actualizarPosicion();
+    }//GEN-LAST:event_IniciarSesionMouseClicked
+
+    private void itemRevisarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_itemRevisarMouseClicked
+        procesador = new Procesador(EditArea.getText());//Ahí decides si esto lo vuelves un método para no tener que estar instanciando cada vez este objeto, eso sí, si haces eso, tendrás que imple un método donde se llame el método limpiar lista para cad una de las existentes...
+    }//GEN-LAST:event_itemRevisarMouseClicked
 
  
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel AgregarComponente;
+    private javax.swing.JLabel BloqueConsultas;
+    private javax.swing.JLabel BloqueFormulario;
     private javax.swing.JTextArea EditArea;
-    private javax.swing.JTextField FIlasColumnas;
+    private javax.swing.JLabel IniciarSesion;
     private javax.swing.JPopupMenu Opciones;
     private javax.swing.JPanel PanelErrores;
+    private javax.swing.JTextArea areaNumeracion;
+    private javax.swing.JTextField barraPosicion;
+    private javax.swing.JLabel cerrarSesion;
+    private javax.swing.JMenuItem itemAbrir;
+    private javax.swing.JMenuItem itemRevisar;
+    private javax.swing.JMenuItem item_AboutUs;
+    private javax.swing.JMenuItem item_Cerrar;
+    private javax.swing.JMenuItem item_Guardar;
+    private javax.swing.JMenuItem item_UserManual;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JList<String> jList1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
-    private javax.swing.JMenuItem jMenuItem5;
-    private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JList<String> listadoErrores;
     // End of variables declaration//GEN-END:variables
 }
