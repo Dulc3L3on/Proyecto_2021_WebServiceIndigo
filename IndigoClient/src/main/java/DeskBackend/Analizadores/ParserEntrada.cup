@@ -29,6 +29,22 @@ parser code{:
         inicializarObjetosTransportadores();
     }    
 
+    public LinkedList<UserBus> darListadoSolicitudesUser(){
+        return listadoSolicitudesUsuario;
+    }
+
+    public LinkedList<FormBus> darListadoSolicitudesFormulario(){
+        return listadoSolicitudesForm;
+    }
+
+    public LinkedList<ComponentBus> darListadoSolicitudesComponentes(){
+        return listadoSolicitudesComponentes;
+    }
+
+    public LinkedList<QueryBus> darListadoSolicitudesConsultas(){
+        return listadoSolicitudesConsulta;
+    }
+
     private void inicializarListadoTrasnportadores(){
         listadoSolicitudesUsuario = new LinkedList<>();
         listadoSolicitudesForm = new LinkedList<>();
@@ -45,10 +61,9 @@ parser code{:
         contenedorConsultas = new QueryBus();
     }
 
-
     protected int error_sync_size() {//este es para cb el # de tokens que el parser requiere para recuperarse de los errores
-		return 1;
-    }    
+        return 1;
+    }        
 :}
 
 terminal INI, SOLICITUD, SOLICITUDES, FIN;

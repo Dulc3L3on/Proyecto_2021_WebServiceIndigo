@@ -561,6 +561,22 @@ public class Parser_Indigo extends java_cup.runtime.lr_parser {
         inicializarObjetosTransportadores();
     }    
 
+    public LinkedList<UserBus> darListadoSolicitudesUser(){
+        return listadoSolicitudesUsuario;
+    }
+
+    public LinkedList<FormBus> darListadoSolicitudesFormulario(){
+        return listadoSolicitudesForm;
+    }
+
+    public LinkedList<ComponentBus> darListadoSolicitudesComponentes(){
+        return listadoSolicitudesComponentes;
+    }
+
+    public LinkedList<QueryBus> darListadoSolicitudesConsultas(){
+        return listadoSolicitudesConsulta;
+    }
+
     private void inicializarListadoTrasnportadores(){
         listadoSolicitudesUsuario = new LinkedList<>();
         listadoSolicitudesForm = new LinkedList<>();
@@ -577,10 +593,9 @@ public class Parser_Indigo extends java_cup.runtime.lr_parser {
         contenedorConsultas = new QueryBus();
     }
 
-
     protected int error_sync_size() {//este es para cb el # de tokens que el parser requiere para recuperarse de los errores
-		return 1;
-    }    
+        return 1;
+    }        
 
 
 /** Cup generated class to encapsulate user supplied action code.*/

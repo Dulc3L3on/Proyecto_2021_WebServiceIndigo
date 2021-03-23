@@ -11,6 +11,7 @@ import DeskBackend.Entidades.Token;
 %unicode
 %line
 %column
+%public
 
 //comilla = \"
 letra = [a-zA-Z]
