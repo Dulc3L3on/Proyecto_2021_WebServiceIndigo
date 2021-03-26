@@ -13,10 +13,10 @@ public class Campo_Texto{
     String ID;    
     String nombre;
     String ID_formulario;
-    int indice;
+    int indice;//Para el caso de las agregaciones no debería aparecer... aunque si te recuerdas en la gramática consideras eso, así que no te preocupes por eso, solo haz que pueda ser opcional en el caso de la agregación
     String textoVisible;
     String alineacion;       
-    boolean esRequerido;
+    boolean esRequerido = true;//a menos que diga lo contrario [puesto que es opcional] yo lo tomaré como true xD   
     
     public void establecerID(String elID){
         ID = elID;

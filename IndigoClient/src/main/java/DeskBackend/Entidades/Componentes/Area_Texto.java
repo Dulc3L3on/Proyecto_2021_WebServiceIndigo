@@ -11,7 +11,8 @@ package DeskBackend.Entidades.Componentes;
  */
 public class Area_Texto extends Campo_Texto{
     private int filas;
-    private int columnas;
+    private int columnas;        
+    //al parecer SÍ se heredan los miembros static :v yo sabí que no xD
     
     public void establecerNumeroFilas(int numeroFilas){
         filas = numeroFilas;

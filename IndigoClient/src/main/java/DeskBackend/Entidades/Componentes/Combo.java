@@ -9,6 +9,6 @@ package DeskBackend.Entidades.Componentes;
  *
  * @author phily
  */
-public class Combo {
+public class Combo extends CheckBox{//aún no sé que le agregaré, pero puede que sirva la clase xD[digo lo mismo para el rBtn xD    
     
 }

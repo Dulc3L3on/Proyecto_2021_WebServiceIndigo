@@ -9,6 +9,5 @@ package DeskBackend.Entidades.Componentes;
  *
  * @author phily
  */
-public class Boton {
-    
+public class Boton extends Campo_Texto{//aunque varios de los atrib que ese posee no los utilice el btn... de todos modos eso no provoca problemas puesto que a partir de los atrinutos obligarorios será lo que se pida... xD 
 }

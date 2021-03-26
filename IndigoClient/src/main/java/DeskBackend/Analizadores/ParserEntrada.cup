@@ -1,65 +1,19 @@
 package DeskBackend.Analizadores;
 import java_cup.runtime.*;
 import DeskBackend.Entidades.Token;
-import DeskBackend.Entidades.Transportadores.UserBus;
-import DeskBackend.Entidades.Transportadores.FormBus;
-import DeskBackend.Entidades.Transportadores.ComponentBus;
-import DeskBackend.Entidades.Transportadores.QueryBus;
+import DeskBackend.Entidades.Manejadores.ManejadorArchivoRespuestaEntrada;
 import java.util.LinkedList;
 
 class Parser_Indigo;
 
 parser code{:
-    private LinkedList<UserBus> listadoSolicitudesUsuario;
-    private LinkedList<FormBus> listadoSolicitudesForm;
-    private LinkedList<ComponentBus> listadoSolicitudesComponentes;
-    private LinkedList<QueryBus> listadoSolicitudesConsulta;  
-
-    private LinkedList<String> items;
-
-    private UserBus contenedorUsuario;
-    private FormBus contenedorFormulario;
-    private ComponentBus contenedorComponente;
-    private QueryBus contenedorConsultas;
+    private ManejadorArchivoRespuestaEntrada manejadorRespuestas;    
 
     public Parser_Indigo (Lexer lexer){//a menos que lo sobreescribas, no es necesario colocarlo, puesto que ya existe este cnstrc y además el lexer hereda de Scanner...
-        super(lexer);         
-        
-        inicializarListadoTrasnportadores();
-        inicializarObjetosTransportadores();
-    }    
+        super(lexer);                 
 
-    public LinkedList<UserBus> darListadoSolicitudesUser(){
-        return listadoSolicitudesUsuario;
-    }
-
-    public LinkedList<FormBus> darListadoSolicitudesFormulario(){
-        return listadoSolicitudesForm;
-    }
-
-    public LinkedList<ComponentBus> darListadoSolicitudesComponentes(){
-        return listadoSolicitudesComponentes;
-    }
-
-    public LinkedList<QueryBus> darListadoSolicitudesConsultas(){
-        return listadoSolicitudesConsulta;
-    }
-
-    private void inicializarListadoTrasnportadores(){
-        listadoSolicitudesUsuario = new LinkedList<>();
-        listadoSolicitudesForm = new LinkedList<>();
-        listadoSolicitudesComponentes = new LinkedList<>();
-        listadoSolicitudesConsulta = new LinkedList<>();            
-
-        items = new LinkedList<>();
-    }
-
-    private void inicializarObjetosTransportadores(){
-        contenedorUsuario = new UserBus();
-        contenedorFormulario = new FormBus();
-        contenedorComponente = new ComponentBus();
-        contenedorConsultas = new QueryBus();
-    }
+        manejadorRespuestas = new ManejadorArchivoRespuestaEntrada();
+    }        
 
     protected int error_sync_size() {//este es para cb el # de tokens que el parser requiere para recuperarse de los errores
         return 1;
@@ -121,67 +75,57 @@ SerieCreacionUser ::= serie_creacion SerieCreacionUser
                  | serie_creacion
                  ;
 
-serie_creacion ::= APERTURALLAVE ParamCreacion CIERRELLAVE                               {:contenedorUsuario.establecerTipoAccion("CREACION");
-                                                                                          listadoSolicitudesUsuario.add(contenedorUsuario);
-                                                                                          contenedorUsuario = new UserBus();:}//de tal forma que no se tenga problemas a momento de apuntar con el nodo de la lista xD
+serie_creacion ::= APERTURALLAVE ParamCreacion CIERRELLAVE                                 {:manejadorRespuestas.establecerTipoSolicitud("creacionUsuario");:}
                  ;
 
-ParamCreacion ::= param_creacion COMA param_creacion COMA param_creacion            
+ParamCreacion ::= param_creacion COMA param_creacion COMA param_creacion                    
                  | param_creacion COMA param_creacion
                  ;
 
 param_creacion ::= param_login
-                 | COMILLA FECHA GUIONBAJO CREACION COMILLA DOSPUNTOS FORMATOFECHA:fecha  {:contenedorUsuario.establecerFecha(Token.parseToken(fecha).darLexema());:}
+                 | COMILLA FECHA GUIONBAJO CREACION COMILLA DOSPUNTOS FORMATOFECHA:fecha   {:manejadorRespuestas.agregarAtributo("fechaCreacion", fecha);:}  
                  ;
 
 SerieModifUser ::= serie_modif_user SerieModifUser
                  | serie_modif_user
                  ;
 
-serie_modif_user ::= APERTURALLAVE ParamModifUser CIERRELLAVE                           {:contenedorUsuario.establecerTipoAccion("MODIFICACION");
-                                                                                         listadoSolicitudesUsuario.add(contenedorUsuario);
-                                                                                         contenedorUsuario = new UserBus();:}
+serie_modif_user ::= APERTURALLAVE ParamModifUser CIERRELLAVE                           
                    ;
 
 ParamModifUser ::= param_modif_user COMA ParamModifUser
               | param_modif_user
               ;
 
-param_modif_user ::= COMILLA USUARIO GUIONBAJO ANTIGUO COMILLA DOSPUNTOS ALFANUMERICO:nombre   {:contenedorUsuario.establecerNombreAntiguo(Token.parseToken(nombre).darLexema());:}
-              | COMILLA USUARIO GUIONBAJO NUEVO COMILLA DOSPUNTOS ALFANUMERICO :nombre         {:contenedorUsuario.establecerNombreActual(Token.parseToken(nombre).darLexema());:}//recuerda que en cup cada var declarada es diferente, auqnue estén en las prod del mismo NT, puesto que se crean como variables locales xD pero por si las moscas xD... mejor compruebalo xD, sip si es así, ya recordé que al inge le daba error por no haber declarado a la var en la otra fial, puesto que la axn involucraba a una var en la fila anterior xD
-              | COMILLA NUEVO GUIONBAJO PASSWORD COMILLA DOSPUNTOS ALFANUMERICO:password       {:contenedorUsuario.establecerPassword(Token.parseToken(password).darLexema());:} 
-              | COMILLA FECHA GUIONBAJO MODIFICACION COMILLA DOSPUNTOS FORMATOFECHA:fecha      {:contenedorUsuario.establecerFecha(Token.parseToken(fecha).darLexema());:} 
+param_modif_user ::= COMILLA USUARIO GUIONBAJO ANTIGUO COMILLA DOSPUNTOS ALFANUMERICO:nombre   
+              | COMILLA USUARIO GUIONBAJO NUEVO COMILLA DOSPUNTOS ALFANUMERICO :nombre         
+              | COMILLA NUEVO GUIONBAJO PASSWORD COMILLA DOSPUNTOS ALFANUMERICO:password       
+              | COMILLA FECHA GUIONBAJO MODIFICACION COMILLA DOSPUNTOS FORMATOFECHA:fecha      
               ;
 
 SerieEliUser ::= serie_eli_user SerieEliUser
                 | serie_eli_user
                 ;
 
-serie_eli_user ::= APERTURALLAVE param_eli CIERRELLAVE                              {:contenedorUsuario.establecerTipoAccion("ELIMINACION");
-                                                                                     listadoSolicitudesUsuario.add(contenedorUsuario);
-                                                                                     contenedorUsuario = new UserBus();:}
+serie_eli_user ::= APERTURALLAVE param_eli CIERRELLAVE                              
                  ;
 
-param_eli ::= COMILLA USUARIO COMILLA DOSPUNTOS ALFANUMERICO:nombre                 {:contenedorUsuario.establecerNombreActual(Token.parseToken(nombre).darLexema());:}
+param_eli ::= COMILLA USUARIO COMILLA DOSPUNTOS ALFANUMERICO:nombre                 
             ;
 
 
-ParamLogin ::= APERTURALLAVE param_login COMA param_login CIERRELLAVE               {:contenedorUsuario.establecerTipoAccion("LOGIN");
-                                                                                     listadoSolicitudesUsuario.add(contenedorUsuario);
-                                                                                     contenedorUsuario = new UserBus();:}//se envía los datos del primer [y único, por lógica xD] conjunto de transporte de solicitud de login xD
+ParamLogin ::= APERTURALLAVE param_login COMA param_login CIERRELLAVE                                                                                                   
              ;
 
-param_login ::= COMILLA USUARIO COMILLA DOSPUNTOS ALFANUMERICO:nombre                      {:contenedorUsuario.establecerNombreActual(Token.parseToken(nombre).darLexema());:}
-              | COMILLA PASSWORD COMILLA DOSPUNTOS ALFANUMERICO:password                   {:contenedorUsuario.establecerPassword(Token.parseToken(password).darLexema());:}
+param_login ::= COMILLA USUARIO COMILLA DOSPUNTOS ALFANUMERICO:nombre                      
+              | COMILLA PASSWORD COMILLA DOSPUNTOS ALFANUMERICO:password                   
               ; 
 
 SerieNuevoForm ::= serie_nuevo_form SerieNuevoForm
                    | serie_nuevo_form
                    ;
 
-serie_nuevo_form ::= APERTURALLAVE Param_Nuevo_Form CIERRELLAVE                             {:contenedorFormulario.establecerTipoAccion("NUEVO_F");
-                                                                                             listadoSolicitudesForm.add(contenedorFormulario);
-                                                                                             contenedorFormulario = new FormBus();:}
+serie_nuevo_form ::= APERTURALLAVE Param_Nuevo_Form CIERRELLAVE                            
                     ;
 
 Param_Nuevo_Form ::= param_nuevo_form COMA param_nuevo_form COMA param_nuevo_form COMA param_nuevo_form COMA param_nuevo_form COMA param_nuevo_form
@@ -189,81 +133,75 @@ Param_Nuevo_Form ::= param_nuevo_form COMA param_nuevo_form COMA param_nuevo_for
                    | param_nuevo_form COMA param_nuevo_form COMA param_nuevo_form COMA param_nuevo_form
                    ;
 
-param_nuevo_form ::= COMILLA ID COMILLA DOSPUNTOS IDENTIFICADOR:id                             {:contenedorFormulario.establecerID(Token.parseToken(id).darLexema());:}
-                   | COMILLA TITULO COMILLA DOSPUNTOS cadena:titulo                            {:contenedorFormulario.establecerTitulo(Token.parseToken(titulo).darLexema());:}
-                   | COMILLA NOMBRE COMILLA DOSPUNTOS ALFANUMERICO:nombre                      {:contenedorFormulario.establecerElNombre(Token.parseToken(nombre).darLexema());:}
-                   | COMILLA TEMA COMILLA DOSPUNTOS TIPOTEMA:tema                              {:contenedorFormulario.establecerTema(Token.parseToken(tema).darLexema());:}
-                   | COMILLA USUARIO GUIONBAJO CREACION COMILLA DOSPUNTOS ALFANUMERICO:nombre  {:contenedorFormulario.establecerUsuarioCreador(Token.parseToken(nombre).darLexema());:}
-                   | COMILLA FECHA GUIONBAJO CREACION COMILLA DOSPUNTOS FORMATOFECHA:fecha     {:contenedorFormulario.establecerFecha(Token.parseToken(fecha).darLexema());:}
+param_nuevo_form ::= COMILLA ID COMILLA DOSPUNTOS IDENTIFICADOR:id                           
+                   | COMILLA TITULO COMILLA DOSPUNTOS cadena:titulo                          
+                   | COMILLA NOMBRE COMILLA DOSPUNTOS ALFANUMERICO:nombre                    
+                   | COMILLA TEMA COMILLA DOSPUNTOS TIPOTEMA:tema                            
+                   | COMILLA USUARIO GUIONBAJO CREACION COMILLA DOSPUNTOS ALFANUMERICO:nombre
+                   | COMILLA FECHA GUIONBAJO CREACION COMILLA DOSPUNTOS FORMATOFECHA:fecha     
                    ;
 
 SerieEliForm ::= serie_eli_form SerieEliForm
                 | serie_eli_form
                 ;
 
-serie_eli_form ::= APERTURALLAVE param_eli_form CIERRELLAVE                                    {:contenedorFormulario.establecerTipoAccion("ELIMINACION_F");
-                                                                                                 listadoSolicitudesForm.add(contenedorFormulario);
-                                                                                                 contenedorFormulario = new FormBus();:}
+serie_eli_form ::= APERTURALLAVE param_eli_form CIERRELLAVE                                    
                  ;
 
-param_eli_form ::= COMILLA ID COMILLA DOSPUNTOS IDENTIFICADOR:id                               {:contenedorFormulario.establecerID(Token.parseToken(id).darLexema());:}
+param_eli_form ::= COMILLA ID COMILLA DOSPUNTOS IDENTIFICADOR:id                               
                 ;
 
 SerieModifForm ::= serie_modif_form SerieModifForm
                   | serie_modif_form
                   ;
 
-serie_modif_form ::= APERTURALLAVE Param_Modif_Form CIERRELLAVE                                  {:contenedorFormulario.establecerTipoAccion("MODIFICACION_F");
-                                                                                                  listadoSolicitudesForm.add(contenedorFormulario);
-                                                                                                  contenedorFormulario = new FormBus();:}
+serie_modif_form ::= APERTURALLAVE Param_Modif_Form CIERRELLAVE                                 
                    ;
         
 Param_Modif_Form ::= param_modif_form COMA Param_Modif_Form
                    | param_modif_form COMA param_modif_form
                    ;
 
-param_modif_form ::= COMILLA ID COMILLA DOSPUNTOS IDENTIFICADOR:id                                {:contenedorFormulario.establecerID(Token.parseToken(id).darLexema());:}
-                   | COMILLA TITULO COMILLA DOSPUNTOS cadena:titulo                               {:contenedorFormulario.establecerTitulo(Token.parseToken(titulo).darLexema());:}           
-                   | COMILLA NOMBRE COMILLA DOSPUNTOS ALFANUMERICO:nombre                         {:contenedorFormulario.establecerElNombre(Token.parseToken(nombre).darLexema());:}  
-                   | COMILLA TEMA COMILLA DOSPUNTOS TIPOTEMA:tema                                 {:contenedorFormulario.establecerTema(Token.parseToken(tema).darLexema());:}  
+param_modif_form ::= COMILLA ID COMILLA DOSPUNTOS IDENTIFICADOR:id                               
+                   | COMILLA TITULO COMILLA DOSPUNTOS cadena:titulo                              
+                   | COMILLA NOMBRE COMILLA DOSPUNTOS ALFANUMERICO:nombre                        
+                   | COMILLA TEMA COMILLA DOSPUNTOS TIPOTEMA:tema                                
                    ;
 
 SerieAddComp ::= serie_add_comp SerieAddComp
                 | serie_add_comp
                 ;
 
-serie_add_comp ::= APERTURALLAVE Param_Add_Comp CIERRELLAVE                                       {:contenedorComponente.establecerTipoAccion("AGREGACION_C");
-                                                                                                   listadoSolicitudesComponentes.add(contenedorComponente);
-                                                                                                   contenedorComponente = new ComponentBus();:}
+serie_add_comp ::= APERTURALLAVE Param_Add_Comp CIERRELLAVE                                    
                  ;
 
 Param_Add_Comp ::= param_add_comp COMA Param_Add_Comp
                  | param_add_comp COMA param_add_comp COMA param_add_comp COMA param_add_comp
                  ;
 
-param_add_comp ::= COMILLA ID COMILLA DOSPUNTOS IDENTIFICADOR:id                                     {:contenedorComponente.establecerIDComponente(Token.parseToken(id).darLexema());:}  
-                 | COMILLA NOMBRE GUIONBAJO CAMPO COMILLA DOSPUNTOS ALFANUMERICO:nombre              {:contenedorComponente.establecerNombreCampo(Token.parseToken(nombre).darLexema());:}  
-                 | COMILLA FORMULARIO COMILLA DOSPUNTOS IDENTIFICADOR:id                             {:contenedorComponente.establecerIDFormulario(Token.parseToken(id).darLexema());:}  
+param_add_comp ::= COMILLA ID COMILLA DOSPUNTOS IDENTIFICADOR:id                                    
+                 | COMILLA NOMBRE GUIONBAJO CAMPO COMILLA DOSPUNTOS ALFANUMERICO:nombre             
+                 | COMILLA FORMULARIO COMILLA DOSPUNTOS IDENTIFICADOR:id                            
                  | COMILLA CLASE COMILLA DOSPUNTOS tipoComponente               
-                 | COMILLA TEXTO GUIONBAJO VISIBLE COMILLA DOSPUNTOS cadena:texto                    {:contenedorComponente.establecerTexto(Token.parseToken(texto).darLexema());:}  
-                 | COMILLA ALINEACION COMILLA DOSPUNTOS TIPOALINEACION:alineacion                    {:contenedorComponente.establecerTipoAlineacion(Token.parseToken(alineacion).darLexema());:}  
-                 | COMILLA REQUERIDO COMILLA DOSPUNTOS TIPOREQUERIDO:requerimiento                   {:contenedorComponente.establecerTipoRequerimiento((Token.parseToken(requerimiento).darLexema().equals("SI"))?true:false);:}       
+                 | COMILLA TEXTO GUIONBAJO VISIBLE COMILLA DOSPUNTOS cadena:texto                   
+                 | COMILLA ALINEACION COMILLA DOSPUNTOS TIPOALINEACION:alineacion                   
+                 | COMILLA REQUERIDO COMILLA DOSPUNTOS TIPOREQUERIDO:requerimiento                  
                  | COMILLA OPCIONES COMILLA DOSPUNTOS items
-                 | COMILLA FILAS COMILLA DOSPUNTOS NUMERO:filas                                      {:contenedorComponente.establecerNumeroFilas(Integer.parseInt((Token.parseToken(filas).darLexema())));:}//pero creo que daría probemas al haber errores, entonces habrá que enviar una excepción o usar el throw para hacer el respectivo lanzamiento xD
-                 | COMILLA COLUMNAS COMILLA DOSPUNTOS NUMERO:columnas                                {:contenedorComponente.establecerNumeroColumnas(Integer.parseInt((Token.parseToken(columnas).darLexema())));:}
-                 | COMILLA URL COMILLA DOSPUNTOS ALFANUMERICO:url                                    {:contenedorComponente.establecerURL((Token.parseToken(url).darLexema()));:}
+                 | COMILLA FILAS COMILLA DOSPUNTOS NUMERO:filas                                     
+                 | COMILLA COLUMNAS COMILLA DOSPUNTOS NUMERO:columnas                               
+                 | COMILLA URL COMILLA DOSPUNTOS ALFANUMERICO:url                                   
                  ;
 
-tipoComponente ::= TIPOCLASE:tipo                                                                         {:contenedorComponente.establecerTipoComponente(Token.parseToken(tipo).darLexema());:}  
-                 | CAMPO GUIONBAJO TEXTO                                                             {:contenedorComponente.establecerTipoComponente("CAMPO_TEXTO");:}            
-                 | AREA GUIONBAJO TEXTO                                                              {:contenedorComponente.establecerTipoComponente("AREA_TEXTO");:} 
+tipoComponente ::= TIPOCLASE:tipo                                                                   
+                 | CAMPO GUIONBAJO TEXTO                                                            
+                 | AREA GUIONBAJO TEXTO                                                             
                  ;//NOTA: si hacer esto te diera problemas con lo que habías pensado hacer para las axn, entonces en el jflex, add las palrbas completas de las clase en la calse "calse_componente" xD, y aquí eli este NT y vuelve a coloca ren la producción en lugar de tipoComponente TIPOCLASE, puesto que por el cb en el jflex, englobará a la palabra completa... xD
 
 cadena ::= ALFANUMERICO cadena
          | ALFANUMERICO
          ;
 
-items ::= ALFANUMERICO:item SEPARADOR items                                                          {:items.add(Token.parseToken(item).darLexema());:}//algo así tendría que ser, solo que aquí no considero el orden... y no se como exacatamente es que CUP devuelve los valores de los T cuando hay producciones de este tipo xD
+items ::= ALFANUMERICO:item SEPARADOR items                                                        
         | ALFANUMERICO
         ;//aquí tb voy a tener que hacer un cb así como se hizo para una producción, creo que era cuerpo... aaah no, hay que pensar como resolverlo, puesto que es la misma situación que la de las condiciones xD
 //quizá tenga que add otra producción, para que cuando se llegue ahí se erecoga todo, ó usar recursi a la iz, o ambas o ninguna xD
@@ -272,25 +210,21 @@ SerieEliComp ::= serie_eli_comp SerieEliComp
                 | serie_eli_comp
                 ;
 
-serie_eli_comp ::= APERTURALLAVE Param_Eli_Comp CIERRELLAVE                                          {:contenedorComponente.establecerTipoAccion("ELIMINACION_C");
-                                                                                                      listadoSolicitudesComponentes.add(contenedorComponente);
-                                                                                                      contenedorComponente = new ComponentBus();:}
+serie_eli_comp ::= APERTURALLAVE Param_Eli_Comp CIERRELLAVE                                         
                  ;
 
 Param_Eli_Comp ::= param_eli_comp COMA param_eli_comp
                  ;
 
-param_eli_comp ::= COMILLA ID COMILLA DOSPUNTOS IDENTIFICADOR:id                                     {:contenedorComponente.establecerIDComponente(Token.parseToken(id).darLexema());:} 
-                 | COMILLA FORMULARIO COMILLA DOSPUNTOS IDENTIFICADOR:id                             {:contenedorComponente.establecerIDFormulario(Token.parseToken(id).darLexema());:}
+param_eli_comp ::= COMILLA ID COMILLA DOSPUNTOS IDENTIFICADOR:id                                    
+                 | COMILLA FORMULARIO COMILLA DOSPUNTOS IDENTIFICADOR:id                            
                  ;
 
 SerieModifComp ::= serie_modif_comp SerieModifComp 
                   | serie_modif_comp
                   ;
 
-serie_modif_comp ::= APERTURALLAVE Param_Modif_Comp CIERRELLAVE                                      {:contenedorComponente.establecerTipoAccion("MODIFICACION_C");
-                                                                                                      listadoSolicitudesComponentes.add(contenedorComponente);
-                                                                                                      contenedorComponente = new ComponentBus();:}
+serie_modif_comp ::= APERTURALLAVE Param_Modif_Comp CIERRELLAVE                                    
                    ;
 
 Param_Modif_Comp ::= param_modif_comp COMA Param_Modif_Comp
@@ -298,7 +232,7 @@ Param_Modif_Comp ::= param_modif_comp COMA Param_Modif_Comp
                    ;
 
 param_modif_comp ::= param_add_comp
-                   | COMILLA INDICE COMILLA DOSPUNTOS NUMERO:indice                                  {:contenedorComponente.establecerIndice(Integer.parseInt((Token.parseToken(indice).darLexema())));:}   
+                   | COMILLA INDICE COMILLA DOSPUNTOS NUMERO:indice                               
                    ;
 
 Serie_Consultas ::= APERTURALLAVE serie_consultas CIERRELLAVE

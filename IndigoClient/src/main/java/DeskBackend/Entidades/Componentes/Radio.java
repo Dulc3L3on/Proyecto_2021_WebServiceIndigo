@@ -9,8 +9,6 @@ package DeskBackend.Entidades.Componentes;
  *
  * @author phily
  */
-public class Radio extends Campo_Texto{
-    
-    
+public class Radio extends CheckBox{    
     
 }
