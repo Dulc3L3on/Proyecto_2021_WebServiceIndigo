@@ -56,7 +56,7 @@ public class ManejadorAtributos {
         switch(tipoComponente){
             case "campoTexto":
                 otrosAtributos = new String[3];
-                otrosAtributos[0] = "nombreCampo";otrosAtributos[0] = "alineacion";otrosAtributos[0] = "requerido";
+                otrosAtributos[0] = "nombreCampo";otrosAtributos[1] = "alineacion";otrosAtributos[2] = "requerido";
                 return otrosAtributos;//solo nombre de Campo es obligatorio
             
             case "areaTexto":

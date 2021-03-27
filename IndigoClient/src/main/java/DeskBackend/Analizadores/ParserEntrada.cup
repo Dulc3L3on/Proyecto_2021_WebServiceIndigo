@@ -35,8 +35,8 @@ non terminal p, cuerpo, Cuerpo, opciones, b_user, b_form, b_comp, b_sqf, SerieCr
 
 start with p;
 
-p ::= MENOR ADMIRACION INI GUIONBAJO SOLICITUDES MAYOR cuerpo Cuerpo MENOR ADMIRACION FIN GUIONBAJO SOLICITUDES MAYOR
-    | cuerpo
+p ::= MENOR ADMIRACION INI GUIONBAJO SOLICITUDES MAYOR cuerpo Cuerpo MENOR ADMIRACION FIN GUIONBAJO SOLICITUDES MAYOR                   {:manejadorRespuestas.finalizarArchivo();:}
+    | cuerpo                                                                                                                            {:manejadorRespuestas.finalizarArchivo();:}
     ;
 
 cuerpo ::= MENOR ADMIRACION INI GUIONBAJO SOLICITUD opciones MENOR FIN GUIONBAJO SOLICITUD ADMIRACION MAYOR
@@ -75,7 +75,7 @@ SerieCreacionUser ::= serie_creacion SerieCreacionUser
                  | serie_creacion
                  ;
 
-serie_creacion ::= APERTURALLAVE ParamCreacion CIERRELLAVE                                 {:manejadorRespuestas.establecerTipoSolicitud("creacionUsuario");:}
+serie_creacion ::= APERTURALLAVE ParamCreacion CIERRELLAVE                                    {:manejadorRespuestas.establecerTipoSolicitud("creacionUsuario");:}
                  ;
 
 ParamCreacion ::= param_creacion COMA param_creacion COMA param_creacion                    
@@ -83,156 +83,155 @@ ParamCreacion ::= param_creacion COMA param_creacion COMA param_creacion
                  ;
 
 param_creacion ::= param_login
-                 | COMILLA FECHA GUIONBAJO CREACION COMILLA DOSPUNTOS FORMATOFECHA:fecha   {:manejadorRespuestas.agregarAtributo("fechaCreacion", fecha);:}  
+                 | COMILLA FECHA GUIONBAJO CREACION COMILLA DOSPUNTOS FORMATOFECHA:fecha      {:manejadorRespuestas.agregarAtributo("fechaCreacion", Token.parseToken(fecha).darLexema());:}  
                  ;
 
 SerieModifUser ::= serie_modif_user SerieModifUser
                  | serie_modif_user
                  ;
 
-serie_modif_user ::= APERTURALLAVE ParamModifUser CIERRELLAVE                           
+serie_modif_user ::= APERTURALLAVE ParamModifUser CIERRELLAVE                                  {:manejadorRespuestas.establecerTipoSolicitud("modificacionUsuario");:}                
                    ;
 
 ParamModifUser ::= param_modif_user COMA ParamModifUser
               | param_modif_user
               ;
 
-param_modif_user ::= COMILLA USUARIO GUIONBAJO ANTIGUO COMILLA DOSPUNTOS ALFANUMERICO:nombre   
-              | COMILLA USUARIO GUIONBAJO NUEVO COMILLA DOSPUNTOS ALFANUMERICO :nombre         
-              | COMILLA NUEVO GUIONBAJO PASSWORD COMILLA DOSPUNTOS ALFANUMERICO:password       
-              | COMILLA FECHA GUIONBAJO MODIFICACION COMILLA DOSPUNTOS FORMATOFECHA:fecha      
+param_modif_user ::= COMILLA USUARIO GUIONBAJO ANTIGUO COMILLA DOSPUNTOS ALFANUMERICO:nombre   {:manejadorRespuestas.agregarAtributo("usuarioAntiguo", Token.parseToken(nombre).darLexema());:}
+              | COMILLA USUARIO GUIONBAJO NUEVO COMILLA DOSPUNTOS ALFANUMERICO :nombre         {:manejadorRespuestas.agregarAtributo("usuarioNuevo", Token.parseToken(nombre).darLexema());:}   
+              | COMILLA NUEVO GUIONBAJO PASSWORD COMILLA DOSPUNTOS ALFANUMERICO:password       {:manejadorRespuestas.agregarAtributo("nuevoPassword", Token.parseToken(password).darLexema());:}
+              | COMILLA FECHA GUIONBAJO MODIFICACION COMILLA DOSPUNTOS FORMATOFECHA:fecha      {:manejadorRespuestas.agregarAtributo("fechaModificacion", Token.parseToken(fecha).darLexema());:}
               ;
 
 SerieEliUser ::= serie_eli_user SerieEliUser
                 | serie_eli_user
                 ;
 
-serie_eli_user ::= APERTURALLAVE param_eli CIERRELLAVE                              
+serie_eli_user ::= APERTURALLAVE param_eli CIERRELLAVE                                         {:manejadorRespuestas.establecerTipoSolicitud("eliminacionUsuario");:}                         
                  ;
 
-param_eli ::= COMILLA USUARIO COMILLA DOSPUNTOS ALFANUMERICO:nombre                 
+param_eli ::= COMILLA USUARIO COMILLA DOSPUNTOS ALFANUMERICO:nombre                            {:manejadorRespuestas.agregarAtributo("usuario", Token.parseToken(nombre).darLexema());:}
             ;
 
 
-ParamLogin ::= APERTURALLAVE param_login COMA param_login CIERRELLAVE                                                                                                   
+ParamLogin ::= APERTURALLAVE param_login COMA param_login CIERRELLAVE                          {:manejadorRespuestas.establecerTipoSolicitud("loginUsuario");:}                                                                                  
              ;
 
-param_login ::= COMILLA USUARIO COMILLA DOSPUNTOS ALFANUMERICO:nombre                      
-              | COMILLA PASSWORD COMILLA DOSPUNTOS ALFANUMERICO:password                   
+param_login ::= COMILLA USUARIO COMILLA DOSPUNTOS ALFANUMERICO:nombre                          {:manejadorRespuestas.agregarAtributo("usuario", Token.parseToken(nombre).darLexema());:}  
+              | COMILLA PASSWORD COMILLA DOSPUNTOS ALFANUMERICO:password                       {:manejadorRespuestas.agregarAtributo("password", Token.parseToken(password).darLexema());:}
               ; 
 
 SerieNuevoForm ::= serie_nuevo_form SerieNuevoForm
                    | serie_nuevo_form
                    ;
 
-serie_nuevo_form ::= APERTURALLAVE Param_Nuevo_Form CIERRELLAVE                            
+serie_nuevo_form ::= APERTURALLAVE Param_Nuevo_Form CIERRELLAVE                                {:manejadorRespuestas.establecerTipoSolicitud("creacionFormulario");:}             
                     ;
 
-Param_Nuevo_Form ::= param_nuevo_form COMA param_nuevo_form COMA param_nuevo_form COMA param_nuevo_form COMA param_nuevo_form COMA param_nuevo_form
+Param_Nuevo_Form ::= param_nuevo_form COMA param_nuevo_form COMA param_nuevo_form COMA param_nuevo_form COMA param_nuevo_form COMA param_nuevo_form         
                    | param_nuevo_form COMA param_nuevo_form COMA param_nuevo_form COMA param_nuevo_form COMA param_nuevo_form
                    | param_nuevo_form COMA param_nuevo_form COMA param_nuevo_form COMA param_nuevo_form
                    ;
 
-param_nuevo_form ::= COMILLA ID COMILLA DOSPUNTOS IDENTIFICADOR:id                           
-                   | COMILLA TITULO COMILLA DOSPUNTOS cadena:titulo                          
-                   | COMILLA NOMBRE COMILLA DOSPUNTOS ALFANUMERICO:nombre                    
-                   | COMILLA TEMA COMILLA DOSPUNTOS TIPOTEMA:tema                            
-                   | COMILLA USUARIO GUIONBAJO CREACION COMILLA DOSPUNTOS ALFANUMERICO:nombre
-                   | COMILLA FECHA GUIONBAJO CREACION COMILLA DOSPUNTOS FORMATOFECHA:fecha     
+param_nuevo_form ::= COMILLA ID COMILLA DOSPUNTOS IDENTIFICADOR:id                              {:manejadorRespuestas.agregarAtributo("id", Token.parseToken(id).darLexema());:}
+                   | COMILLA TITULO COMILLA DOSPUNTOS cadena:titulo                             {:manejadorRespuestas.agregarAtributo("titulo", Token.parseToken(titulo).darLexema());:}
+                   | COMILLA NOMBRE COMILLA DOSPUNTOS ALFANUMERICO:nombre                       {:manejadorRespuestas.agregarAtributo("nombre", Token.parseToken(nombre).darLexema());:}
+                   | COMILLA TEMA COMILLA DOSPUNTOS TIPOTEMA:tema                               {:manejadorRespuestas.agregarAtributo("tema", Token.parseToken(tema).darLexema());:}
+                   | COMILLA USUARIO GUIONBAJO CREACION COMILLA DOSPUNTOS ALFANUMERICO:nombre   {:manejadorRespuestas.agregarAtributo("usuarioCreacion", Token.parseToken(nombre).darLexema());:}
+                   | COMILLA FECHA GUIONBAJO CREACION COMILLA DOSPUNTOS FORMATOFECHA:fecha      {:manejadorRespuestas.agregarAtributo("fechaCreacion", Token.parseToken(fecha).darLexema());:}  
                    ;
 
 SerieEliForm ::= serie_eli_form SerieEliForm
                 | serie_eli_form
                 ;
 
-serie_eli_form ::= APERTURALLAVE param_eli_form CIERRELLAVE                                    
+serie_eli_form ::= APERTURALLAVE param_eli_form CIERRELLAVE                                     {:manejadorRespuestas.establecerTipoSolicitud("eliminacionFormulario");:}                                    
                  ;
 
-param_eli_form ::= COMILLA ID COMILLA DOSPUNTOS IDENTIFICADOR:id                               
-                ;
+param_eli_form ::= COMILLA ID COMILLA DOSPUNTOS IDENTIFICADOR:id                                {:manejadorRespuestas.agregarAtributo("id", Token.parseToken(id).darLexema());:}                   
+                ;   
 
 SerieModifForm ::= serie_modif_form SerieModifForm
                   | serie_modif_form
                   ;
 
-serie_modif_form ::= APERTURALLAVE Param_Modif_Form CIERRELLAVE                                 
+serie_modif_form ::= APERTURALLAVE Param_Modif_Form CIERRELLAVE                                 {:manejadorRespuestas.establecerTipoSolicitud("modificacionFormulario");:}                         
                    ;
         
 Param_Modif_Form ::= param_modif_form COMA Param_Modif_Form
                    | param_modif_form COMA param_modif_form
                    ;
 
-param_modif_form ::= COMILLA ID COMILLA DOSPUNTOS IDENTIFICADOR:id                               
-                   | COMILLA TITULO COMILLA DOSPUNTOS cadena:titulo                              
-                   | COMILLA NOMBRE COMILLA DOSPUNTOS ALFANUMERICO:nombre                        
-                   | COMILLA TEMA COMILLA DOSPUNTOS TIPOTEMA:tema                                
+param_modif_form ::= COMILLA ID COMILLA DOSPUNTOS IDENTIFICADOR:id                              {:manejadorRespuestas.agregarAtributo("id", Token.parseToken(id).darLexema());:}       
+                   | COMILLA TITULO COMILLA DOSPUNTOS cadena:titulo                             {:manejadorRespuestas.agregarAtributo("titulo", Token.parseToken(titulo).darLexema());:}       
+                   | COMILLA NOMBRE COMILLA DOSPUNTOS ALFANUMERICO:nombre                       {:manejadorRespuestas.agregarAtributo("nombre", Token.parseToken(nombre).darLexema());:}       
+                   | COMILLA TEMA COMILLA DOSPUNTOS TIPOTEMA:tema                               {:manejadorRespuestas.agregarAtributo("tema", Token.parseToken(tema).darLexema());:}      
                    ;
 
 SerieAddComp ::= serie_add_comp SerieAddComp
                 | serie_add_comp
                 ;
 
-serie_add_comp ::= APERTURALLAVE Param_Add_Comp CIERRELLAVE                                    
+serie_add_comp ::= APERTURALLAVE Param_Add_Comp CIERRELLAVE                                     {:manejadorRespuestas.establecerTipoSolicitud("agregarComponentes");:}                    
                  ;
 
 Param_Add_Comp ::= param_add_comp COMA Param_Add_Comp
                  | param_add_comp COMA param_add_comp COMA param_add_comp COMA param_add_comp
                  ;
 
-param_add_comp ::= COMILLA ID COMILLA DOSPUNTOS IDENTIFICADOR:id                                    
-                 | COMILLA NOMBRE GUIONBAJO CAMPO COMILLA DOSPUNTOS ALFANUMERICO:nombre             
-                 | COMILLA FORMULARIO COMILLA DOSPUNTOS IDENTIFICADOR:id                            
-                 | COMILLA CLASE COMILLA DOSPUNTOS tipoComponente               
-                 | COMILLA TEXTO GUIONBAJO VISIBLE COMILLA DOSPUNTOS cadena:texto                   
-                 | COMILLA ALINEACION COMILLA DOSPUNTOS TIPOALINEACION:alineacion                   
-                 | COMILLA REQUERIDO COMILLA DOSPUNTOS TIPOREQUERIDO:requerimiento                  
-                 | COMILLA OPCIONES COMILLA DOSPUNTOS items
-                 | COMILLA FILAS COMILLA DOSPUNTOS NUMERO:filas                                     
-                 | COMILLA COLUMNAS COMILLA DOSPUNTOS NUMERO:columnas                               
-                 | COMILLA URL COMILLA DOSPUNTOS ALFANUMERICO:url                                   
+param_add_comp ::= COMILLA ID COMILLA DOSPUNTOS IDENTIFICADOR:id                                {:manejadorRespuestas.agregarAtributo("id", Token.parseToken(id).darLexema());:}                          
+                 | COMILLA NOMBRE GUIONBAJO CAMPO COMILLA DOSPUNTOS ALFANUMERICO:nombre         {:manejadorRespuestas.agregarAtributo("nombreCampo", Token.parseToken(nombre).darLexema());:}      
+                 | COMILLA FORMULARIO COMILLA DOSPUNTOS IDENTIFICADOR:formulario                {:manejadorRespuestas.agregarAtributo("formulario", Token.parseToken(formulario).darLexema());:}      
+                 | COMILLA CLASE COMILLA DOSPUNTOS tipoComponente                         
+                 | COMILLA TEXTO GUIONBAJO VISIBLE COMILLA DOSPUNTOS cadena:texto                           
+                 | COMILLA ALINEACION COMILLA DOSPUNTOS TIPOALINEACION:alineacion               {:manejadorRespuestas.agregarAtributo("alineacion", Token.parseToken(alineacion).darLexema());:}       
+                 | COMILLA REQUERIDO COMILLA DOSPUNTOS TIPOREQUERIDO:requerimiento              {:manejadorRespuestas.agregarAtributo("requerido", Token.parseToken(requerimiento).darLexema());:}       
+                 | COMILLA OPCIONES COMILLA DOSPUNTOS items                                    
+                 | COMILLA FILAS COMILLA DOSPUNTOS NUMERO:filas                                 {:manejadorRespuestas.agregarAtributo("filas", Token.parseToken(filas).darLexema());:}         
+                 | COMILLA COLUMNAS COMILLA DOSPUNTOS NUMERO:columnas                           {:manejadorRespuestas.agregarAtributo("columnas", Token.parseToken(columnas).darLexema());:}     
+                 | COMILLA URL COMILLA DOSPUNTOS ALFANUMERICO:url                               {:manejadorRespuestas.agregarAtributo("URL", Token.parseToken(url).darLexema());:}      
                  ;
 
-tipoComponente ::= TIPOCLASE:tipo                                                                   
-                 | CAMPO GUIONBAJO TEXTO                                                            
-                 | AREA GUIONBAJO TEXTO                                                             
-                 ;//NOTA: si hacer esto te diera problemas con lo que habías pensado hacer para las axn, entonces en el jflex, add las palrbas completas de las clase en la calse "calse_componente" xD, y aquí eli este NT y vuelve a coloca ren la producción en lugar de tipoComponente TIPOCLASE, puesto que por el cb en el jflex, englobará a la palabra completa... xD
+tipoComponente ::= TIPOCLASE:tipo                                                               {:manejadorRespuestas.agregarAtributo("clase", Token.parseToken(tipo).darLexema());:}                                                       
+                 | CAMPO GUIONBAJO TEXTO                                                        {:manejadorRespuestas.agregarAtributo("clase", "campoTexto");:}    
+                 | AREA GUIONBAJO TEXTO                                                         {:manejadorRespuestas.agregarAtributo("clase", "areaTexto");:}     
+                 ;//NOTA[pero no da problemas xD]: si hacer esto te diera problemas con lo que habías pensado hacer para las axn, entonces en el jflex, add las palrbas completas de las clase en la calse "calse_componente" xD, y aquí eli este NT y vuelve a coloca ren la producción en lugar de tipoComponente TIPOCLASE, puesto que por el cb en el jflex, englobará a la palabra completa... xD
 
-cadena ::= ALFANUMERICO cadena
-         | ALFANUMERICO
-         ;
+cadena ::= ALFANUMERICO:texto cadena                                                            {:manejadorRespuestas.agregarAtributo("textoVisible", Token.parseToken(texto).darLexema());:}
+         | ALFANUMERICO:texto                                                                   {:manejadorRespuestas.agregarAtributo("textoVisible", Token.parseToken(texto).darLexema());:}
+         ;//una de las 2 saldrá como no se desea, es decir con el orden al revés del que lo ingresó el usuario, mas creo que esta será la que se tenga que arreglar, por ser recursi a la der... xD
 
-items ::= ALFANUMERICO:item SEPARADOR items                                                        
-        | ALFANUMERICO
-        ;//aquí tb voy a tener que hacer un cb así como se hizo para una producción, creo que era cuerpo... aaah no, hay que pensar como resolverlo, puesto que es la misma situación que la de las condiciones xD
-//quizá tenga que add otra producción, para que cuando se llegue ahí se erecoga todo, ó usar recursi a la iz, o ambas o ninguna xD
+items ::= ALFANUMERICO:opciones SEPARADOR items                                                 {:manejadorRespuestas.agregarAtributo("opciones", Token.parseToken(opciones).darLexema());:}                          
+        | ALFANUMERICO:opciones                                                                 {:manejadorRespuestas.agregarAtributo("opciones", Token.parseToken(opciones).darLexema());:}
+        ;//DEBES: revisar si los item llegan según como piensas, es decir del 1ro al último, por la recursi a la izq y porque yo pienso que como una f recursiva, cuando termine de llamarse, devolverá todo desde el último resultado hasta el primero... xD
 
 SerieEliComp ::= serie_eli_comp SerieEliComp
                 | serie_eli_comp
                 ;
 
-serie_eli_comp ::= APERTURALLAVE Param_Eli_Comp CIERRELLAVE                                         
+serie_eli_comp ::= APERTURALLAVE Param_Eli_Comp CIERRELLAVE                                     {:manejadorRespuestas.establecerTipoSolicitud("eliminarComponente");:}                
                  ;
 
 Param_Eli_Comp ::= param_eli_comp COMA param_eli_comp
                  ;
 
-param_eli_comp ::= COMILLA ID COMILLA DOSPUNTOS IDENTIFICADOR:id                                    
-                 | COMILLA FORMULARIO COMILLA DOSPUNTOS IDENTIFICADOR:id                            
+param_eli_comp ::= COMILLA ID COMILLA DOSPUNTOS IDENTIFICADOR:id                                {:manejadorRespuestas.agregarAtributo("id", Token.parseToken(id).darLexema());:}                                    
+                 | COMILLA FORMULARIO COMILLA DOSPUNTOS IDENTIFICADOR:formulario                {:manejadorRespuestas.agregarAtributo("formulario", Token.parseToken(formulario).darLexema());:}    
                  ;
 
 SerieModifComp ::= serie_modif_comp SerieModifComp 
                   | serie_modif_comp
                   ;
 
-serie_modif_comp ::= APERTURALLAVE Param_Modif_Comp CIERRELLAVE                                    
+serie_modif_comp ::= APERTURALLAVE Param_Modif_Comp CIERRELLAVE                                 {:manejadorRespuestas.establecerTipoSolicitud("modificarComponentes");:}                        
                    ;
 
 Param_Modif_Comp ::= param_modif_comp COMA Param_Modif_Comp
                    | param_modif_comp COMA param_modif_comp
                    ;
 
-param_modif_comp ::= param_add_comp
-                   | COMILLA INDICE COMILLA DOSPUNTOS NUMERO:indice                               
+param_modif_comp ::= param_add_comp                                                             
+                   | COMILLA INDICE COMILLA DOSPUNTOS NUMERO:indice                             {:manejadorRespuestas.agregarAtributo("indice", Token.parseToken(indice).darLexema());:}                           
                    ;
 
 Serie_Consultas ::= APERTURALLAVE serie_consultas CIERRELLAVE
@@ -259,6 +258,8 @@ cuerpo_consulta ::= APERTURAANGULAR seleccion CIERREANGULAR condicion
 seleccion ::= ALFANUMERICO COMA seleccion
             | ALFANUMERICO
             ;
+
+//Creo que con respecto a la produccion de la conidicón [o COndición xD, no recuerdo cual es exacatamente] habrá que cb la producción pues si no el orden en que el cliente especificó los elementos, no será el orden que visualice, es decir lo verá al revés o eso creo xD, revisa antes para afirmar o dicho con anterioridad xD
 
 condicion ::= WHERE APERTURAANGULAR negacion comparacion Condicion
             ;
