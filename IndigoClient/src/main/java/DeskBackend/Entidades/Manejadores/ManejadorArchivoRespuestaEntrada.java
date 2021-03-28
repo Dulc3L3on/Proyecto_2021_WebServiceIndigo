@@ -6,6 +6,7 @@
 package DeskBackend.Entidades.Manejadores;
 
 import DeskBackend.Entidades.Herramientas.ListaEnlazada;
+import DeskBackend.Entidades.Token;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -17,18 +18,18 @@ import javax.swing.JOptionPane;
  * @author phily
  */
 public class ManejadorArchivoRespuestaEntrada {
-    private ListaEnlazada<String[]> listadoAtributos;
+    private ListaEnlazada<Token> listadoAtributos;
     private FileWriter escritorArchivos;
     private BufferedWriter escritor;
     private File archivo;
     private String path = "/home/phily/Documentos/Carpeta_estudios/2021/5toSemestre/Compi_1"
             + "/Laboratorio/tareas/pra-proy/Proyecto1/Proyecto_2021_WebServiceIndigo/IndigoClient/src/"
-            + "main/java/DeskBackend/Archivos/RespuestaEntrada/RespuestaEntrada.txt";
+            + "main/java/DeskBackend/Archivos/RespuestaEntrada/RespuestaEntrada.txt";//el nombre del arch cb según el nombre del user y el del componente, por lo cual para tener acceso a él, se almacenará a una var para que se pueda recuperar el dato cuando se requiera xD
     private String tipoSolicitud;
     private String claseComponente = null;
-    private String[] elementos = {"", ""};
     private ManejadorAtributos manejadorAtributos = new ManejadorAtributos();    
-    private int atributos = 0;
+    private int atributos = 0;//sigo sin saber por qué coloqué esto :v xD
+    private int atributosOrdenados = 0;
     private int numeroSolicitudes = 0;
     private StringBuffer buffer;//a este se add los datos que se escribirán o no d
     
@@ -54,28 +55,25 @@ public class ManejadorArchivoRespuestaEntrada {
         }       
     }       
     
-    public void agregarAtributo(String nombreAtributo, String atributo){//con atributos me refiero a "usuario" "fechaMOdificacion", "fechaCreacion"... y así xD        
+    public void agregarAtributo(String nombreAtributo, Token token){//con atributos me refiero a "usuario" "fechaMOdificacion", "fechaCreacion"... y así xD        
         if(nombreAtributo.equals("opciones") | nombreAtributo.equals("textoVisible")){
-            if(elementos[0].isEmpty()){
-                elementos[0] = nombreAtributo;                                   
-            }
-            if(elementos[1].isEmpty()){//supongo que es este xD, sino utiliza isBlank xD
-                listadoAtributos.add(elementos);
-            }
-                        
-            elementos[1]+= atributo;                                   
+            if(!Token.parseToken(listadoAtributos.getLastItem()).darNombreDelToken().equals("opciones") && 
+               !Token.parseToken(listadoAtributos.getLastItem()).darNombreDelToken().equals("textoVisible")){
+                
+                token.establecerNombreDelToken(nombreAtributo);
+                listadoAtributos.add(token);                
+            }else{
+               String lexema = Token.parseToken(listadoAtributos.getLastItem()).darLexema();
+               lexema += ", "+token.darLexema();
+               Token.parseToken(listadoAtributos.getLastItem()).reestablecerLexema(lexema);
+            }                        
         }else{
-            String datosAtributo[] = {nombreAtributo, atributo};
-            listadoAtributos.add(datosAtributo);
+            token.establecerNombreDelToken(nombreAtributo);
+            listadoAtributos.add(token);         
         
             if(nombreAtributo.equals("clase")){
                 claseComponente = nombreAtributo;
-            }
-            
-            if(!elementos[1].isEmpty()){
-                elementos[1]= "";//xD
-                elementos[0] ="";//puesto que tb hay que resetear el nombre, porque para add el nombre, el espacio debe estar vacío xD
-            }
+            }                       
         }        
     }
     
@@ -84,11 +82,11 @@ public class ManejadorArchivoRespuestaEntrada {
       escribirArchivo("iniSoli", elTipoSolicitud);  
       
       if(claseComponente!=null){
-          escribirArchivo("clase", claseComponente);
-          claseComponente = null;
+          escribirArchivo("clase", claseComponente);          
       }     
       
       ordenar();
+      claseComponente = null;//para el siguiente componente si es que lo hubiera
       
       escribirArchivo("finSoli", elTipoSolicitud);  
       numeroSolicitudes++;
@@ -107,20 +105,20 @@ public class ManejadorArchivoRespuestaEntrada {
     private void ordenarAtributosGenerales(){
         String[] atributosEsperados = manejadorAtributos.darAtributosCorrespondientes(tipoSolicitud);
         boolean[] atributosEspecificados = new boolean[atributosEsperados.length];        
-        String[] tokenActual;
+        Token tokenActual;
         
-        for (int atributoActual = 0; atributoActual < listadoAtributos.size(); atributoActual++) {
-            tokenActual = (String[])listadoAtributos.get(atributoActual);
-            int posicionDelAtributo = buscarPosicionDelAtributo(tokenActual[0], atributosEsperados);
+        for (atributosOrdenados = 0; atributosOrdenados < listadoAtributos.size(); atributosOrdenados++) {//de esta manera no habrá problemas cuando se vuelva a emplear esta variable, por le hecho de que cuando se requiera emplear nuevamente, se reiniciará su valor xD y cuando se quiere emplear para hacer el ajuste en la posición del istado al ordenar los componentes, aún poserá su valor, lo cual es lo que se necesita xD :3 xD
+            tokenActual = Token.parseToken(listadoAtributos.get(atributosOrdenados));
+            int posicionDelAtributo = buscarPosicionDelAtributo(tokenActual.darNombreDelToken(), atributosEsperados);
             
            if(!atributosEspecificados[posicionDelAtributo]){//no coloco if !=-1, porque nunca se llegará ahí puesto qu etodos los atributos que están en la lista, son los permitidos... xD
                atributosEspecificados[posicionDelAtributo] = true;
            }else{
                //Se envía el arror de REPITENCIA al manejador...
-           }                      
+           }                        
         }
         
-        revisarObligatoriedad(atributosEspecificados);
+        revisarObligatoriedad(atributosEspecificados, tipoSolicitud);
     }
     
     private int buscarPosicionDelAtributo(String elAtributo, String[] atributosEsperados){
@@ -132,8 +130,8 @@ public class ManejadorArchivoRespuestaEntrada {
         return -1;//Aunque si mal no estoy, a esta partae no se va a llegar nunca, por el hecho de que todos los atributos que estén en la lista d eespecificados, será todos los permitirdos, lo que si puede pasar es que estén repetidos, pero NO que sean atributos que no admite la solicitud en cuestión xD
     }//preferí escoger este método y no el de buscar en la lista [ya sea la coincidencia o repitencia, por medio de un método a add en la ListaEnlazada.. xD
     
-    private void revisarObligatoriedad(boolean atributosEspecificados[]){
-        int[] arregloObligatoriedad = manejadorAtributos.darImportancia(tipoSolicitud);
+    private void revisarObligatoriedad(boolean atributosEspecificados[], String tipoObligatoriedad){
+        int[] arregloObligatoriedad = manejadorAtributos.darImportancia(tipoObligatoriedad);
         int numeroAtributosMinimosAdd = 0;
         
         for (int atributoActual = 0; atributoActual < atributosEspecificados.length; atributoActual++) {
@@ -144,7 +142,7 @@ public class ManejadorArchivoRespuestaEntrada {
             }//soy libre de hacer eso, puesto que si hay un atributo == 0 entonces hay otros que tambien == 0... xD
         }
         
-        if(tipoSolicitud.equals("modificacionFormulario") && numeroAtributosMinimosAdd<1){
+        if(tipoObligatoriedad.equals("modificacionFormulario") && numeroAtributosMinimosAdd<1){//yo me recuerdo que solo este tiene como oblig un valor 0... xD
             //Add el error por no haber especificado al menos un atributo de "estilo" a modificar del formulario xD
         }
     }
@@ -152,25 +150,26 @@ public class ManejadorArchivoRespuestaEntrada {
     private void ordenarAtributosComponentes(){
         String[] atributosEspecificosComponente = manejadorAtributos.darDemasObligatoriosComponente(claseComponente);
         boolean[] atributosEspecificados = new boolean[atributosEspecificosComponente.length];
-        String[] tokenActual;
+        Token tokenActual;
+        atributosOrdenados++;//puesto que necesito la cdad evaluada y no la última posición xD
         
-          for (int atributoActual = 0; atributoActual < listadoAtributos.size(); atributoActual++) {
-            tokenActual = (String[]) listadoAtributos.get(atributoActual);
-            int posicionDelAtributo = buscarPosicionDelAtributo(tokenActual[0], atributosEspecificosComponente);            
+        for (int atributoActual = 0; atributoActual < listadoAtributos.size(); atributoActual++) {
+            tokenActual = (Token) listadoAtributos.get(atributosOrdenados+atributoActual);
+            int posicionDelAtributo = buscarPosicionDelAtributo(tokenActual.darNombreDelToken(), atributosEspecificosComponente);            
             
             if(!atributosEspecificados[posicionDelAtributo]){//no coloco if !=-1, porque nunca se llegará ahí puesto qu etodos los atributos que están en la lista, son los permitidos... xD
                atributosEspecificados[posicionDelAtributo] = true;//esto debe colocarse aunque sea una cloase, porque esta no ha sifdo registrada de esa manera xD
                
-               if(!tokenActual[0].equals("clase")){
+               if(!tokenActual.darNombreDelToken().equals("clase")){
                    //se escribe en el archivo xD
-                   escribirArchivo(tokenActual[0], tokenActual[1]);
+                   escribirArchivo(tokenActual.darNombreDelToken(), tokenActual.darLexema());
                }//puesto que ya se ha agergado antes xD                              
            }else{
                //Se envía el arror de REPITENCIA al manejador...
            }                      
         }
           
-        revisarObligatoriedad(atributosEspecificados);//es posible hacer esto puesto que el método de "revisarObligatoriedad" obtiene los datos del método que brinda los arregloes de enteros, también tiene declarados los caso que corresponden a los componentes xD :3 xD  
+        revisarObligatoriedad(atributosEspecificados, claseComponente);//es posible hacer esto puesto que el método de "revisarObligatoriedad" obtiene los datos del método que brinda los arregloes de enteros, también tiene declarados los caso que corresponden a los componentes xD :3 xD  
     }  
     
     private void escribirArchivo(String encabezado, String cuerpo){

@@ -7,8 +7,8 @@ public class Token implements Serializable {
      *
      */
     private static final long serialVersionUID = 1L;
-    private final String nombreToken;
-    private final String lexema;
+    private String nombreToken;
+    private String lexema;
     private final Token tokenAnterior;//no es necesario add null como default porque de todos modos si es el primero lo que termianrá conteniendo es nada "" xD
     private final int fila;
     private final int columna;
@@ -30,10 +30,18 @@ public class Token implements Serializable {
     public void establecerSiguiente(Token elSiguiente){
         tokenSiguiente = elSiguiente;
     }
+    
+    public void establecerNombreDelToken(String elNombre){
+        nombreToken = elNombre;
+    }
 
+    public void reestablecerLexema(String nuevoLexema){
+        lexema = nuevoLexema;
+    }
+    
     public String darNombreDelToken(){
         return nombreToken;
-    }
+    }    
 
     public String darLexema(){
         return lexema;

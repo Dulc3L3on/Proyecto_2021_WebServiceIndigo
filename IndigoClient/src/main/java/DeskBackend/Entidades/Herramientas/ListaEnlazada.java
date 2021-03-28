@@ -14,14 +14,17 @@ import java.util.List;
  */
 public class ListaEnlazada <T> extends ArrayList{
     
-    public String find(String datoABuscar){
+    public Object find(String datoABuscar){
         for (int datoActual = 0; datoActual < this.size(); datoActual++) {
             if(this.get(datoActual).equals(datoActual)){
-                return (String) this.get(datoActual);
+                return this.get(datoActual);
             }
         }
         return null;
     }   
-    
+        
+    public Object getLastItem(){
+        return this.get(this.size()-1);
+    }
     
 }

@@ -831,7 +831,7 @@ class CUP$Parser_Indigo$actions {
 		int fechaleft = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).left;
 		int fecharight = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).right;
 		Object fecha = (Object)((java_cup.runtime.Symbol) CUP$Parser_Indigo$stack.peek()).value;
-		manejadorRespuestas.agregarAtributo("fechaCreacion", Token.parseToken(fecha).darLexema());
+		manejadorRespuestas.agregarAtributo("fechaCreacion", Token.parseToken(fecha));
               CUP$Parser_Indigo$result = parser.getSymbolFactory().newSymbol("param_creacion",11, ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.elementAt(CUP$Parser_Indigo$top-6)), ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()), RESULT);
             }
           return CUP$Parser_Indigo$result;
@@ -888,7 +888,7 @@ class CUP$Parser_Indigo$actions {
 		int nombreleft = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).left;
 		int nombreright = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).right;
 		Object nombre = (Object)((java_cup.runtime.Symbol) CUP$Parser_Indigo$stack.peek()).value;
-		manejadorRespuestas.agregarAtributo("usuarioAntiguo", Token.parseToken(nombre).darLexema());
+		manejadorRespuestas.agregarAtributo("usuarioAntiguo", Token.parseToken(nombre));
               CUP$Parser_Indigo$result = parser.getSymbolFactory().newSymbol("param_modif_user",15, ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.elementAt(CUP$Parser_Indigo$top-6)), ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()), RESULT);
             }
           return CUP$Parser_Indigo$result;
@@ -900,7 +900,7 @@ class CUP$Parser_Indigo$actions {
 		int nombreleft = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).left;
 		int nombreright = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).right;
 		Object nombre = (Object)((java_cup.runtime.Symbol) CUP$Parser_Indigo$stack.peek()).value;
-		manejadorRespuestas.agregarAtributo("usuarioNuevo", Token.parseToken(nombre).darLexema());
+		manejadorRespuestas.agregarAtributo("usuarioNuevo", Token.parseToken(nombre));
               CUP$Parser_Indigo$result = parser.getSymbolFactory().newSymbol("param_modif_user",15, ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.elementAt(CUP$Parser_Indigo$top-6)), ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()), RESULT);
             }
           return CUP$Parser_Indigo$result;
@@ -912,7 +912,7 @@ class CUP$Parser_Indigo$actions {
 		int passwordleft = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).left;
 		int passwordright = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).right;
 		Object password = (Object)((java_cup.runtime.Symbol) CUP$Parser_Indigo$stack.peek()).value;
-		manejadorRespuestas.agregarAtributo("nuevoPassword", Token.parseToken(password).darLexema());
+		manejadorRespuestas.agregarAtributo("nuevoPassword", Token.parseToken(password));
               CUP$Parser_Indigo$result = parser.getSymbolFactory().newSymbol("param_modif_user",15, ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.elementAt(CUP$Parser_Indigo$top-6)), ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()), RESULT);
             }
           return CUP$Parser_Indigo$result;
@@ -924,7 +924,7 @@ class CUP$Parser_Indigo$actions {
 		int fechaleft = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).left;
 		int fecharight = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).right;
 		Object fecha = (Object)((java_cup.runtime.Symbol) CUP$Parser_Indigo$stack.peek()).value;
-		manejadorRespuestas.agregarAtributo("fechaModificacion", Token.parseToken(fecha).darLexema());
+		manejadorRespuestas.agregarAtributo("fechaModificacion", Token.parseToken(fecha));
               CUP$Parser_Indigo$result = parser.getSymbolFactory().newSymbol("param_modif_user",15, ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.elementAt(CUP$Parser_Indigo$top-6)), ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()), RESULT);
             }
           return CUP$Parser_Indigo$result;
@@ -963,7 +963,7 @@ class CUP$Parser_Indigo$actions {
 		int nombreleft = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).left;
 		int nombreright = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).right;
 		Object nombre = (Object)((java_cup.runtime.Symbol) CUP$Parser_Indigo$stack.peek()).value;
-		manejadorRespuestas.agregarAtributo("usuario", Token.parseToken(nombre).darLexema());
+		manejadorRespuestas.agregarAtributo("usuario", Token.parseToken(nombre));
               CUP$Parser_Indigo$result = parser.getSymbolFactory().newSymbol("param_eli",18, ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.elementAt(CUP$Parser_Indigo$top-4)), ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()), RESULT);
             }
           return CUP$Parser_Indigo$result;
@@ -984,7 +984,7 @@ class CUP$Parser_Indigo$actions {
 		int nombreleft = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).left;
 		int nombreright = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).right;
 		Object nombre = (Object)((java_cup.runtime.Symbol) CUP$Parser_Indigo$stack.peek()).value;
-		manejadorRespuestas.agregarAtributo("usuario", Token.parseToken(nombre).darLexema());
+		manejadorRespuestas.agregarAtributo("usuario", Token.parseToken(nombre));
               CUP$Parser_Indigo$result = parser.getSymbolFactory().newSymbol("param_login",20, ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.elementAt(CUP$Parser_Indigo$top-4)), ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()), RESULT);
             }
           return CUP$Parser_Indigo$result;
@@ -996,7 +996,7 @@ class CUP$Parser_Indigo$actions {
 		int passwordleft = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).left;
 		int passwordright = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).right;
 		Object password = (Object)((java_cup.runtime.Symbol) CUP$Parser_Indigo$stack.peek()).value;
-		manejadorRespuestas.agregarAtributo("password", Token.parseToken(password).darLexema());
+		manejadorRespuestas.agregarAtributo("password", Token.parseToken(password));
               CUP$Parser_Indigo$result = parser.getSymbolFactory().newSymbol("param_login",20, ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.elementAt(CUP$Parser_Indigo$top-4)), ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()), RESULT);
             }
           return CUP$Parser_Indigo$result;
@@ -1062,7 +1062,7 @@ class CUP$Parser_Indigo$actions {
 		int idleft = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).left;
 		int idright = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).right;
 		Object id = (Object)((java_cup.runtime.Symbol) CUP$Parser_Indigo$stack.peek()).value;
-		manejadorRespuestas.agregarAtributo("id", Token.parseToken(id).darLexema());
+		manejadorRespuestas.agregarAtributo("id", Token.parseToken(id));
               CUP$Parser_Indigo$result = parser.getSymbolFactory().newSymbol("param_nuevo_form",24, ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.elementAt(CUP$Parser_Indigo$top-4)), ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()), RESULT);
             }
           return CUP$Parser_Indigo$result;
@@ -1074,7 +1074,7 @@ class CUP$Parser_Indigo$actions {
 		int tituloleft = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).left;
 		int tituloright = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).right;
 		Object titulo = (Object)((java_cup.runtime.Symbol) CUP$Parser_Indigo$stack.peek()).value;
-		manejadorRespuestas.agregarAtributo("titulo", Token.parseToken(titulo).darLexema());
+		manejadorRespuestas.agregarAtributo("titulo", Token.parseToken(titulo));
               CUP$Parser_Indigo$result = parser.getSymbolFactory().newSymbol("param_nuevo_form",24, ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.elementAt(CUP$Parser_Indigo$top-4)), ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()), RESULT);
             }
           return CUP$Parser_Indigo$result;
@@ -1086,7 +1086,7 @@ class CUP$Parser_Indigo$actions {
 		int nombreleft = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).left;
 		int nombreright = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).right;
 		Object nombre = (Object)((java_cup.runtime.Symbol) CUP$Parser_Indigo$stack.peek()).value;
-		manejadorRespuestas.agregarAtributo("nombre", Token.parseToken(nombre).darLexema());
+		manejadorRespuestas.agregarAtributo("nombre", Token.parseToken(nombre));
               CUP$Parser_Indigo$result = parser.getSymbolFactory().newSymbol("param_nuevo_form",24, ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.elementAt(CUP$Parser_Indigo$top-4)), ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()), RESULT);
             }
           return CUP$Parser_Indigo$result;
@@ -1098,7 +1098,7 @@ class CUP$Parser_Indigo$actions {
 		int temaleft = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).left;
 		int temaright = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).right;
 		Object tema = (Object)((java_cup.runtime.Symbol) CUP$Parser_Indigo$stack.peek()).value;
-		manejadorRespuestas.agregarAtributo("tema", Token.parseToken(tema).darLexema());
+		manejadorRespuestas.agregarAtributo("tema", Token.parseToken(tema));
               CUP$Parser_Indigo$result = parser.getSymbolFactory().newSymbol("param_nuevo_form",24, ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.elementAt(CUP$Parser_Indigo$top-4)), ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()), RESULT);
             }
           return CUP$Parser_Indigo$result;
@@ -1110,7 +1110,7 @@ class CUP$Parser_Indigo$actions {
 		int nombreleft = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).left;
 		int nombreright = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).right;
 		Object nombre = (Object)((java_cup.runtime.Symbol) CUP$Parser_Indigo$stack.peek()).value;
-		manejadorRespuestas.agregarAtributo("usuarioCreacion", Token.parseToken(nombre).darLexema());
+		manejadorRespuestas.agregarAtributo("usuarioCreacion", Token.parseToken(nombre));
               CUP$Parser_Indigo$result = parser.getSymbolFactory().newSymbol("param_nuevo_form",24, ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.elementAt(CUP$Parser_Indigo$top-6)), ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()), RESULT);
             }
           return CUP$Parser_Indigo$result;
@@ -1122,7 +1122,7 @@ class CUP$Parser_Indigo$actions {
 		int fechaleft = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).left;
 		int fecharight = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).right;
 		Object fecha = (Object)((java_cup.runtime.Symbol) CUP$Parser_Indigo$stack.peek()).value;
-		manejadorRespuestas.agregarAtributo("fechaCreacion", Token.parseToken(fecha).darLexema());
+		manejadorRespuestas.agregarAtributo("fechaCreacion", Token.parseToken(fecha));
               CUP$Parser_Indigo$result = parser.getSymbolFactory().newSymbol("param_nuevo_form",24, ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.elementAt(CUP$Parser_Indigo$top-6)), ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()), RESULT);
             }
           return CUP$Parser_Indigo$result;
@@ -1161,7 +1161,7 @@ class CUP$Parser_Indigo$actions {
 		int idleft = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).left;
 		int idright = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).right;
 		Object id = (Object)((java_cup.runtime.Symbol) CUP$Parser_Indigo$stack.peek()).value;
-		manejadorRespuestas.agregarAtributo("id", Token.parseToken(id).darLexema());
+		manejadorRespuestas.agregarAtributo("id", Token.parseToken(id));
               CUP$Parser_Indigo$result = parser.getSymbolFactory().newSymbol("param_eli_form",27, ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.elementAt(CUP$Parser_Indigo$top-4)), ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()), RESULT);
             }
           return CUP$Parser_Indigo$result;
@@ -1218,7 +1218,7 @@ class CUP$Parser_Indigo$actions {
 		int idleft = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).left;
 		int idright = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).right;
 		Object id = (Object)((java_cup.runtime.Symbol) CUP$Parser_Indigo$stack.peek()).value;
-		manejadorRespuestas.agregarAtributo("id", Token.parseToken(id).darLexema());
+		manejadorRespuestas.agregarAtributo("id", Token.parseToken(id));
               CUP$Parser_Indigo$result = parser.getSymbolFactory().newSymbol("param_modif_form",31, ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.elementAt(CUP$Parser_Indigo$top-4)), ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()), RESULT);
             }
           return CUP$Parser_Indigo$result;
@@ -1230,7 +1230,7 @@ class CUP$Parser_Indigo$actions {
 		int tituloleft = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).left;
 		int tituloright = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).right;
 		Object titulo = (Object)((java_cup.runtime.Symbol) CUP$Parser_Indigo$stack.peek()).value;
-		manejadorRespuestas.agregarAtributo("titulo", Token.parseToken(titulo).darLexema());
+		manejadorRespuestas.agregarAtributo("titulo", Token.parseToken(titulo));
               CUP$Parser_Indigo$result = parser.getSymbolFactory().newSymbol("param_modif_form",31, ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.elementAt(CUP$Parser_Indigo$top-4)), ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()), RESULT);
             }
           return CUP$Parser_Indigo$result;
@@ -1242,7 +1242,7 @@ class CUP$Parser_Indigo$actions {
 		int nombreleft = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).left;
 		int nombreright = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).right;
 		Object nombre = (Object)((java_cup.runtime.Symbol) CUP$Parser_Indigo$stack.peek()).value;
-		manejadorRespuestas.agregarAtributo("nombre", Token.parseToken(nombre).darLexema());
+		manejadorRespuestas.agregarAtributo("nombre", Token.parseToken(nombre));
               CUP$Parser_Indigo$result = parser.getSymbolFactory().newSymbol("param_modif_form",31, ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.elementAt(CUP$Parser_Indigo$top-4)), ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()), RESULT);
             }
           return CUP$Parser_Indigo$result;
@@ -1254,7 +1254,7 @@ class CUP$Parser_Indigo$actions {
 		int temaleft = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).left;
 		int temaright = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).right;
 		Object tema = (Object)((java_cup.runtime.Symbol) CUP$Parser_Indigo$stack.peek()).value;
-		manejadorRespuestas.agregarAtributo("tema", Token.parseToken(tema).darLexema());
+		manejadorRespuestas.agregarAtributo("tema", Token.parseToken(tema));
               CUP$Parser_Indigo$result = parser.getSymbolFactory().newSymbol("param_modif_form",31, ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.elementAt(CUP$Parser_Indigo$top-4)), ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()), RESULT);
             }
           return CUP$Parser_Indigo$result;
@@ -1311,7 +1311,7 @@ class CUP$Parser_Indigo$actions {
 		int idleft = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).left;
 		int idright = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).right;
 		Object id = (Object)((java_cup.runtime.Symbol) CUP$Parser_Indigo$stack.peek()).value;
-		manejadorRespuestas.agregarAtributo("id", Token.parseToken(id).darLexema());
+		manejadorRespuestas.agregarAtributo("id", Token.parseToken(id));
               CUP$Parser_Indigo$result = parser.getSymbolFactory().newSymbol("param_add_comp",35, ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.elementAt(CUP$Parser_Indigo$top-4)), ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()), RESULT);
             }
           return CUP$Parser_Indigo$result;
@@ -1323,7 +1323,7 @@ class CUP$Parser_Indigo$actions {
 		int nombreleft = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).left;
 		int nombreright = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).right;
 		Object nombre = (Object)((java_cup.runtime.Symbol) CUP$Parser_Indigo$stack.peek()).value;
-		manejadorRespuestas.agregarAtributo("nombreCampo", Token.parseToken(nombre).darLexema());
+		manejadorRespuestas.agregarAtributo("nombreCampo", Token.parseToken(nombre));
               CUP$Parser_Indigo$result = parser.getSymbolFactory().newSymbol("param_add_comp",35, ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.elementAt(CUP$Parser_Indigo$top-6)), ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()), RESULT);
             }
           return CUP$Parser_Indigo$result;
@@ -1335,7 +1335,7 @@ class CUP$Parser_Indigo$actions {
 		int formularioleft = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).left;
 		int formularioright = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).right;
 		Object formulario = (Object)((java_cup.runtime.Symbol) CUP$Parser_Indigo$stack.peek()).value;
-		manejadorRespuestas.agregarAtributo("formulario", Token.parseToken(formulario).darLexema());
+		manejadorRespuestas.agregarAtributo("formulario", Token.parseToken(formulario));
               CUP$Parser_Indigo$result = parser.getSymbolFactory().newSymbol("param_add_comp",35, ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.elementAt(CUP$Parser_Indigo$top-4)), ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()), RESULT);
             }
           return CUP$Parser_Indigo$result;
@@ -1368,7 +1368,7 @@ class CUP$Parser_Indigo$actions {
 		int alineacionleft = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).left;
 		int alineacionright = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).right;
 		Object alineacion = (Object)((java_cup.runtime.Symbol) CUP$Parser_Indigo$stack.peek()).value;
-		manejadorRespuestas.agregarAtributo("alineacion", Token.parseToken(alineacion).darLexema());
+		manejadorRespuestas.agregarAtributo("alineacion", Token.parseToken(alineacion));
               CUP$Parser_Indigo$result = parser.getSymbolFactory().newSymbol("param_add_comp",35, ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.elementAt(CUP$Parser_Indigo$top-4)), ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()), RESULT);
             }
           return CUP$Parser_Indigo$result;
@@ -1380,7 +1380,7 @@ class CUP$Parser_Indigo$actions {
 		int requerimientoleft = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).left;
 		int requerimientoright = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).right;
 		Object requerimiento = (Object)((java_cup.runtime.Symbol) CUP$Parser_Indigo$stack.peek()).value;
-		manejadorRespuestas.agregarAtributo("requerido", Token.parseToken(requerimiento).darLexema());
+		manejadorRespuestas.agregarAtributo("requerido", Token.parseToken(requerimiento));
               CUP$Parser_Indigo$result = parser.getSymbolFactory().newSymbol("param_add_comp",35, ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.elementAt(CUP$Parser_Indigo$top-4)), ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()), RESULT);
             }
           return CUP$Parser_Indigo$result;
@@ -1401,7 +1401,7 @@ class CUP$Parser_Indigo$actions {
 		int filasleft = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).left;
 		int filasright = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).right;
 		Object filas = (Object)((java_cup.runtime.Symbol) CUP$Parser_Indigo$stack.peek()).value;
-		manejadorRespuestas.agregarAtributo("filas", Token.parseToken(filas).darLexema());
+		manejadorRespuestas.agregarAtributo("filas", Token.parseToken(filas));
               CUP$Parser_Indigo$result = parser.getSymbolFactory().newSymbol("param_add_comp",35, ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.elementAt(CUP$Parser_Indigo$top-4)), ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()), RESULT);
             }
           return CUP$Parser_Indigo$result;
@@ -1413,7 +1413,7 @@ class CUP$Parser_Indigo$actions {
 		int columnasleft = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).left;
 		int columnasright = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).right;
 		Object columnas = (Object)((java_cup.runtime.Symbol) CUP$Parser_Indigo$stack.peek()).value;
-		manejadorRespuestas.agregarAtributo("columnas", Token.parseToken(columnas).darLexema());
+		manejadorRespuestas.agregarAtributo("columnas", Token.parseToken(columnas));
               CUP$Parser_Indigo$result = parser.getSymbolFactory().newSymbol("param_add_comp",35, ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.elementAt(CUP$Parser_Indigo$top-4)), ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()), RESULT);
             }
           return CUP$Parser_Indigo$result;
@@ -1425,7 +1425,7 @@ class CUP$Parser_Indigo$actions {
 		int urlleft = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).left;
 		int urlright = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).right;
 		Object url = (Object)((java_cup.runtime.Symbol) CUP$Parser_Indigo$stack.peek()).value;
-		manejadorRespuestas.agregarAtributo("URL", Token.parseToken(url).darLexema());
+		manejadorRespuestas.agregarAtributo("URL", Token.parseToken(url));
               CUP$Parser_Indigo$result = parser.getSymbolFactory().newSymbol("param_add_comp",35, ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.elementAt(CUP$Parser_Indigo$top-4)), ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()), RESULT);
             }
           return CUP$Parser_Indigo$result;
@@ -1437,7 +1437,7 @@ class CUP$Parser_Indigo$actions {
 		int tipoleft = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).left;
 		int tiporight = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).right;
 		Object tipo = (Object)((java_cup.runtime.Symbol) CUP$Parser_Indigo$stack.peek()).value;
-		manejadorRespuestas.agregarAtributo("clase", Token.parseToken(tipo).darLexema());
+		manejadorRespuestas.agregarAtributo("clase", Token.parseToken(tipo));
               CUP$Parser_Indigo$result = parser.getSymbolFactory().newSymbol("tipoComponente",36, ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()), RESULT);
             }
           return CUP$Parser_Indigo$result;
@@ -1446,7 +1446,11 @@ class CUP$Parser_Indigo$actions {
           case 86: // tipoComponente ::= CAMPO GUIONBAJO TEXTO 
             {
               Object RESULT =null;
-		manejadorRespuestas.agregarAtributo("clase", "campoTexto");
+		int elementoleft = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.elementAt(CUP$Parser_Indigo$top-2)).left;
+		int elementoright = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.elementAt(CUP$Parser_Indigo$top-2)).right;
+		Object elemento = (Object)((java_cup.runtime.Symbol) CUP$Parser_Indigo$stack.elementAt(CUP$Parser_Indigo$top-2)).value;
+		Token.parseToken(elemento).reestablecerLexema("campoTexto");
+                                                                                                  manejadorRespuestas.agregarAtributo("clase", Token.parseToken(elemento));
               CUP$Parser_Indigo$result = parser.getSymbolFactory().newSymbol("tipoComponente",36, ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.elementAt(CUP$Parser_Indigo$top-2)), ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()), RESULT);
             }
           return CUP$Parser_Indigo$result;
@@ -1455,7 +1459,11 @@ class CUP$Parser_Indigo$actions {
           case 87: // tipoComponente ::= AREA GUIONBAJO TEXTO 
             {
               Object RESULT =null;
-		manejadorRespuestas.agregarAtributo("clase", "areaTexto");
+		int elementoleft = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.elementAt(CUP$Parser_Indigo$top-2)).left;
+		int elementoright = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.elementAt(CUP$Parser_Indigo$top-2)).right;
+		Object elemento = (Object)((java_cup.runtime.Symbol) CUP$Parser_Indigo$stack.elementAt(CUP$Parser_Indigo$top-2)).value;
+		Token.parseToken(elemento).reestablecerLexema("areaTexto");
+                                                                                                  manejadorRespuestas.agregarAtributo("clase", Token.parseToken(elemento));
               CUP$Parser_Indigo$result = parser.getSymbolFactory().newSymbol("tipoComponente",36, ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.elementAt(CUP$Parser_Indigo$top-2)), ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()), RESULT);
             }
           return CUP$Parser_Indigo$result;
@@ -1467,7 +1475,7 @@ class CUP$Parser_Indigo$actions {
 		int textoleft = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.elementAt(CUP$Parser_Indigo$top-1)).left;
 		int textoright = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.elementAt(CUP$Parser_Indigo$top-1)).right;
 		Object texto = (Object)((java_cup.runtime.Symbol) CUP$Parser_Indigo$stack.elementAt(CUP$Parser_Indigo$top-1)).value;
-		manejadorRespuestas.agregarAtributo("textoVisible", Token.parseToken(texto).darLexema());
+		manejadorRespuestas.agregarAtributo("textoVisible", Token.parseToken(texto));
               CUP$Parser_Indigo$result = parser.getSymbolFactory().newSymbol("cadena",37, ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.elementAt(CUP$Parser_Indigo$top-1)), ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()), RESULT);
             }
           return CUP$Parser_Indigo$result;
@@ -1479,7 +1487,7 @@ class CUP$Parser_Indigo$actions {
 		int textoleft = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).left;
 		int textoright = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).right;
 		Object texto = (Object)((java_cup.runtime.Symbol) CUP$Parser_Indigo$stack.peek()).value;
-		manejadorRespuestas.agregarAtributo("textoVisible", Token.parseToken(texto).darLexema());
+		manejadorRespuestas.agregarAtributo("textoVisible", Token.parseToken(texto));
               CUP$Parser_Indigo$result = parser.getSymbolFactory().newSymbol("cadena",37, ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()), RESULT);
             }
           return CUP$Parser_Indigo$result;
@@ -1491,7 +1499,7 @@ class CUP$Parser_Indigo$actions {
 		int opcionesleft = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.elementAt(CUP$Parser_Indigo$top-2)).left;
 		int opcionesright = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.elementAt(CUP$Parser_Indigo$top-2)).right;
 		Object opciones = (Object)((java_cup.runtime.Symbol) CUP$Parser_Indigo$stack.elementAt(CUP$Parser_Indigo$top-2)).value;
-		manejadorRespuestas.agregarAtributo("opciones", Token.parseToken(opciones).darLexema());
+		manejadorRespuestas.agregarAtributo("opciones", Token.parseToken(opciones));
               CUP$Parser_Indigo$result = parser.getSymbolFactory().newSymbol("items",38, ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.elementAt(CUP$Parser_Indigo$top-2)), ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()), RESULT);
             }
           return CUP$Parser_Indigo$result;
@@ -1503,7 +1511,7 @@ class CUP$Parser_Indigo$actions {
 		int opcionesleft = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).left;
 		int opcionesright = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).right;
 		Object opciones = (Object)((java_cup.runtime.Symbol) CUP$Parser_Indigo$stack.peek()).value;
-		manejadorRespuestas.agregarAtributo("opciones", Token.parseToken(opciones).darLexema());
+		manejadorRespuestas.agregarAtributo("opciones", Token.parseToken(opciones));
               CUP$Parser_Indigo$result = parser.getSymbolFactory().newSymbol("items",38, ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()), RESULT);
             }
           return CUP$Parser_Indigo$result;
@@ -1551,7 +1559,7 @@ class CUP$Parser_Indigo$actions {
 		int idleft = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).left;
 		int idright = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).right;
 		Object id = (Object)((java_cup.runtime.Symbol) CUP$Parser_Indigo$stack.peek()).value;
-		manejadorRespuestas.agregarAtributo("id", Token.parseToken(id).darLexema());
+		manejadorRespuestas.agregarAtributo("id", Token.parseToken(id));
               CUP$Parser_Indigo$result = parser.getSymbolFactory().newSymbol("param_eli_comp",42, ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.elementAt(CUP$Parser_Indigo$top-4)), ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()), RESULT);
             }
           return CUP$Parser_Indigo$result;
@@ -1563,7 +1571,7 @@ class CUP$Parser_Indigo$actions {
 		int formularioleft = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).left;
 		int formularioright = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).right;
 		Object formulario = (Object)((java_cup.runtime.Symbol) CUP$Parser_Indigo$stack.peek()).value;
-		manejadorRespuestas.agregarAtributo("formulario", Token.parseToken(formulario).darLexema());
+		manejadorRespuestas.agregarAtributo("formulario", Token.parseToken(formulario));
               CUP$Parser_Indigo$result = parser.getSymbolFactory().newSymbol("param_eli_comp",42, ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.elementAt(CUP$Parser_Indigo$top-4)), ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()), RESULT);
             }
           return CUP$Parser_Indigo$result;
@@ -1629,7 +1637,7 @@ class CUP$Parser_Indigo$actions {
 		int indiceleft = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).left;
 		int indiceright = ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()).right;
 		Object indice = (Object)((java_cup.runtime.Symbol) CUP$Parser_Indigo$stack.peek()).value;
-		manejadorRespuestas.agregarAtributo("indice", Token.parseToken(indice).darLexema());
+		manejadorRespuestas.agregarAtributo("indice", Token.parseToken(indice));
               CUP$Parser_Indigo$result = parser.getSymbolFactory().newSymbol("param_modif_comp",46, ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.elementAt(CUP$Parser_Indigo$top-4)), ((java_cup.runtime.Symbol)CUP$Parser_Indigo$stack.peek()), RESULT);
             }
           return CUP$Parser_Indigo$result;

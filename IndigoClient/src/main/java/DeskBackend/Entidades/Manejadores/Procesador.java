@@ -35,7 +35,7 @@ public class Procesador {//este se encargará de llamar al manejador que le corr
     private LinkedList<ComponentBus> listadoAccionesComponente;
     private LinkedList<QueryBus> listadoConsultas;
     private ManejadorArchivoRespuestaEntrada manejadorAxnUser;
-    private ManejadorSolicitudesFormulario manejadorAxnForm;    
+    private ManejadorErrores manejadorAxnForm;    
     private ManejadorAtributos manejadorAxnConsultas;    
     //encargados de realizar el aálisis a la entrada
     private Lexer lexer;
@@ -59,7 +59,7 @@ public class Procesador {//este se encargará de llamar al manejador que le corr
         listadoConsultas = elListadoConsultas;
         
         manejadorAxnUser = new ManejadorArchivoRespuestaEntrada();
-        manejadorAxnForm = new ManejadorSolicitudesFormulario();
+        manejadorAxnForm = new ManejadorErrores();
         manejadorAxnConsultas = new ManejadorAtributos();    
     }
     
