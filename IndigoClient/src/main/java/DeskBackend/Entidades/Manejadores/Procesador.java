@@ -29,13 +29,8 @@ import javax.swing.JOptionPane;
  *
  * @author phily
  */
-public class Procesador {//este se encargará de llamar al manejador que le corresponde trabajar la lista no vacía ecibida del parser...esto siempre y cuando no hayan habido errores de cualquier tipo
-    private LinkedList<UserBus> listadoAccionesUsuario;
-    private LinkedList<FormBus> listadoAccionesFormulario;
-    private LinkedList<ComponentBus> listadoAccionesComponente;
-    private LinkedList<QueryBus> listadoConsultas;
-    private ManejadorArchivoRespuestaEntrada manejadorAxnUser;
-    private ManejadorErrores manejadorAxnForm;    
+public class Procesador {//este se encargará de llamar al manejador que le corresponde trabajar la lista no vacía ecibida del parser...esto siempre y cuando no hayan habido errores de cualquier tipo  
+    private ManejadorArchivoRespuestaEntrada manejadorAxnUser;     
     private ManejadorAtributos manejadorAxnConsultas;    
     //encargados de realizar el aálisis a la entrada
     private Lexer lexer;
@@ -46,23 +41,14 @@ public class Procesador {//este se encargará de llamar al manejador que le corr
         
         lexer = new Lexer(lectorEntrada);
         parser = new Parser_Indigo(lexer);
-
-        inicializarListados(parser.darListadoSolicitudesUser(), parser.darListadoSolicitudesFormulario(),parser.darListadoSolicitudesComponentes(), parser.darListadoSolicitudesConsultas());//aún no se han add esto smétodos al parser...
+        parser.estableceManejadorErrores(lexer.darManejadorErrores());
+        
+        if(!parser.darListadoErrores().isEmpty()){
+            //Se envía el nombre del archivo por medio del método de manipulador de arch de entrada, al JSO o servlet, por medo de las herramientas proporcionadas por el inge xD
+        }        
     }    
     
-    private void inicializarListados(LinkedList<UserBus> elListadoAccionesUsuario, LinkedList<FormBus> elListadoAccionesFormulario,
-            LinkedList<ComponentBus> elListadoAccionesComponente, LinkedList<QueryBus> elListadoConsultas){
-        
-        listadoAccionesUsuario = elListadoAccionesUsuario;
-        listadoAccionesFormulario = elListadoAccionesFormulario;
-        listadoAccionesComponente = elListadoAccionesComponente;
-        listadoConsultas = elListadoConsultas;
-        
-        manejadorAxnUser = new ManejadorArchivoRespuestaEntrada();
-        manejadorAxnForm = new ManejadorErrores();
-        manejadorAxnConsultas = new ManejadorAtributos();    
-    }
-    
+   
     public void ejecutarAxn(){
         if(!listadoAccionesUsuario.isEmpty()){
             //Se realiza la axn de usuario [teniendo en cuenta que si inicia sesión nuevamente [con el mismo usuario] se lanzará un warning...

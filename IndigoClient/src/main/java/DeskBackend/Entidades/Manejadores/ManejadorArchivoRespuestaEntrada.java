@@ -22,28 +22,34 @@ public class ManejadorArchivoRespuestaEntrada {
     private FileWriter escritorArchivos;
     private BufferedWriter escritor;
     private File archivo;
+    private String nombreArchivo;
     private String path = "/home/phily/Documentos/Carpeta_estudios/2021/5toSemestre/Compi_1"
             + "/Laboratorio/tareas/pra-proy/Proyecto1/Proyecto_2021_WebServiceIndigo/IndigoClient/src/"
-            + "main/java/DeskBackend/Archivos/RespuestaEntrada/RespuestaEntrada.txt";//el nombre del arch cb según el nombre del user y el del componente, por lo cual para tener acceso a él, se almacenará a una var para que se pueda recuperar el dato cuando se requiera xD
+            + "main/java/DeskBackend/Archivos/RespuestaEntrada/EntradaPrueba.txt";//el nombre del arch cb según el nombre del user y el del componente, por lo cual para tener acceso a él, se almacenará a una var para que se pueda recuperar el dato cuando se requiera xD
     private String tipoSolicitud;
     private String claseComponente = null;
     private ManejadorAtributos manejadorAtributos = new ManejadorAtributos();    
+    private ManejadorErrores manejadorErrores;
     private int atributos = 0;//sigo sin saber por qué coloqué esto :v xD
     private int atributosOrdenados = 0;
     private int numeroSolicitudes = 0;
     private StringBuffer buffer;//a este se add los datos que se escribirán o no d
     
     
-    public void registrarCdadDeAtributos(){//para qué rayos era eso??? :v xD
+    public void registrarCdadDeAtributos(){//para qué rayos era eso??? xD :v xD
         atributos++;
     }        
     
-    public ManejadorArchivoRespuestaEntrada(){
+    public ManejadorArchivoRespuestaEntrada(ManejadorErrores elManejadorErrores){
         try {
+            manejadorErrores = elManejadorErrores;
+            
             listadoAtributos = new ListaEnlazada<>();
+            
             
             archivo = new File(path);//el path, será una combinación del nombre del usuario y el nombre del formulario xD, así será fácil hallarlo al buscarlo xD
             //archivo.createNewFile();//auqnue no se si debería hacerlo aquí, puesto que solo se enviará al arch lo recoupilado, si NO hubo error alguno xD
+            
             
             escritorArchivos = new FileWriter(archivo);
             escritor = new BufferedWriter(escritorArchivos);
@@ -53,7 +59,12 @@ public class ManejadorArchivoRespuestaEntrada {
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null, "Error al intentar CREAR el archivo de respuesta");
         }       
-    }       
+    }    
+    
+    public void establecerNombreArchivo(String elNombreArchivo){//este es e que aún no se sabe donde exe, puesto que en el cntrc ya se requiere del valor que este recibe, pero este solose puede usar después de construir... :| xD
+        nombreArchivo = elNombreArchivo;
+    }//ahora no se como hacerle con el nombre de archivo, puesto que este lo recibo hasta haber logeado al user y esto según estaba pensando, se hace después de que se hayan emeplado ests métodos, [puesto que estos se exe en las axn del CUP] y la revisión del login se hace hasta que haya terminado el CUP su trabajo... :| xD
+     //estaba pensando enviarle la var al string del path de una vez y que cuando se tviera el nombre que se colocara en la var, pero no funcionará puesto qu eun String no cb automaticamente cuando el obj al que se le igualó cb, uesto que el String [según recuerdo] es semejante a los tipos primitivos como el int...xD
     
     public void agregarAtributo(String nombreAtributo, Token token){//con atributos me refiero a "usuario" "fechaMOdificacion", "fechaCreacion"... y así xD        
         if(nombreAtributo.equals("opciones") | nombreAtributo.equals("textoVisible")){
@@ -114,11 +125,11 @@ public class ManejadorArchivoRespuestaEntrada {
            if(!atributosEspecificados[posicionDelAtributo]){//no coloco if !=-1, porque nunca se llegará ahí puesto qu etodos los atributos que están en la lista, son los permitidos... xD
                atributosEspecificados[posicionDelAtributo] = true;
            }else{
-               //Se envía el arror de REPITENCIA al manejador...
+               manejadorErrores.establecerErrorDeToken("atributoRepetido", tokenActual);
            }                        
         }
         
-        revisarObligatoriedad(atributosEspecificados, tipoSolicitud);
+        revisarObligatoriedad(atributosEsperados, atributosEspecificados, tipoSolicitud);
     }
     
     private int buscarPosicionDelAtributo(String elAtributo, String[] atributosEsperados){
@@ -130,7 +141,7 @@ public class ManejadorArchivoRespuestaEntrada {
         return -1;//Aunque si mal no estoy, a esta partae no se va a llegar nunca, por el hecho de que todos los atributos que estén en la lista d eespecificados, será todos los permitirdos, lo que si puede pasar es que estén repetidos, pero NO que sean atributos que no admite la solicitud en cuestión xD
     }//preferí escoger este método y no el de buscar en la lista [ya sea la coincidencia o repitencia, por medio de un método a add en la ListaEnlazada.. xD
     
-    private void revisarObligatoriedad(boolean atributosEspecificados[], String tipoObligatoriedad){
+    private void revisarObligatoriedad(String[] atributosEsperados, boolean atributosEspecificados[], String tipoObligatoriedad){
         int[] arregloObligatoriedad = manejadorAtributos.darImportancia(tipoObligatoriedad);
         int numeroAtributosMinimosAdd = 0;
         
@@ -144,6 +155,7 @@ public class ManejadorArchivoRespuestaEntrada {
         
         if(tipoObligatoriedad.equals("modificacionFormulario") && numeroAtributosMinimosAdd<1){//yo me recuerdo que solo este tiene como oblig un valor 0... xD
             //Add el error por no haber especificado al menos un atributo de "estilo" a modificar del formulario xD
+            manejadorErrores.establecerErrorHallado("atributosAModificarFaltantes", "", "");
         }
     }
     
@@ -166,10 +178,11 @@ public class ManejadorArchivoRespuestaEntrada {
                }//puesto que ya se ha agergado antes xD                              
            }else{
                //Se envía el arror de REPITENCIA al manejador...
+               manejadorErrores.establecerErrorDeToken("atributoRepetido", tokenActual);
            }                      
         }
           
-        revisarObligatoriedad(atributosEspecificados, claseComponente);//es posible hacer esto puesto que el método de "revisarObligatoriedad" obtiene los datos del método que brinda los arregloes de enteros, también tiene declarados los caso que corresponden a los componentes xD :3 xD  
+        revisarObligatoriedad(atributosEspecificosComponente, atributosEspecificados, claseComponente);//es posible hacer esto puesto que el método de "revisarObligatoriedad" obtiene los datos del método que brinda los arregloes de enteros, también tiene declarados los caso que corresponden a los componentes xD :3 xD  
     }  
     
     private void escribirArchivo(String encabezado, String cuerpo){
@@ -203,7 +216,7 @@ public class ManejadorArchivoRespuestaEntrada {
             }
         }
         
-        if(false/*la lista de errores tam =0*/){
+        if(!manejadorErrores.hubieronErrores()){
             try {
                 //se escribe el archivo y se envía a la web para que lo procese con sus analizadores y los muestre gráficamente xD
                 archivo.createNewFile();
@@ -211,6 +224,10 @@ public class ManejadorArchivoRespuestaEntrada {
                 JOptionPane.showMessageDialog(null, "Surgió un error al registrar\n el archivo de respuesta :(");
             }
         }
+    }
+    
+    public String darNombreArchivo(){//están formados por un nombre de usuario y el nombre del frmulario detal forma que se pueda hacer una revsión en or
+        return nombreArchivo;
     }
     
     //deberás pensar como le harás cuando los bloques que se requeiren estań presenrtes pero no el orden que debería [como crear form y add componentes, que viniera antes lo de los compoentes y después del form :v, usarás lo que el inge dijo es decir descarar hasta encontrar lo que se busca o harás otra cosa, como buscarlo hasta hallarlo??? xD

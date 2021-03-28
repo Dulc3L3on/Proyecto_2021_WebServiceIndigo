@@ -6,7 +6,11 @@
 package DeskBackend.Analizadores;
 import java_cup.runtime.*;
 import static DeskBackend.Analizadores.Parser_IndigoSym.*;
+import DeskBackend.Entidades.EntidadError;
 import DeskBackend.Entidades.Token;
+import DeskBackend.Entidades.Herramientas.ListaEnlazada;
+import DeskBackend.Entidades.Manejadores.ManejadorErrores;
+
 
 
 // See https://github.com/jflex-de/jflex/issues/222
@@ -657,6 +661,7 @@ public class Lexer implements java_cup.runtime.Scanner {
     boolean estaEnYYINITIAL = true;//para qué era esto??? :v :| xD aaah, es para saber si al estar en alfa#, se debe dar el # que le representa ó el # del token con el que coincide... xD
     boolean sonConsultas = false;//esto es para saber si se debe entrar a valores, cuando se encuentre una " y antes de ella : xD
     Token tokenAnterior;
+    ManejadorErrores manejadorErrores = new ManejadorErrores();
 
     private Symbol simbolo(int tipo) {
         return simbolo(tipo, "");//puesto que no veo que tenga razón de ser xD
@@ -689,6 +694,9 @@ public class Lexer implements java_cup.runtime.Scanner {
         return 60;//aquí el # que corresponde al alfa#
     }
     
+    public ManejadorErrores darManejadorErrores(){
+        return manejadorErrores;
+    }
 
 
   /**
@@ -1092,12 +1100,12 @@ public class Lexer implements java_cup.runtime.Scanner {
       if (zzInput == YYEOF && zzStartRead == zzCurrentPos) {
         zzAtEOF = true;
             zzDoEOF();
-          { return new java_cup.runtime.Symbol(sym.EOF); }
+          { return new java_cup.runtime.Symbol(Parser_IndigoSym.EOF); }
       }
       else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1:
-            { /*caracter no aceptado*/
+            { manejadorErrores.establecerErrorDeToken("lexico", (Token)simbolo(1).value);/*caracter no aceptado*/
             }
             // fall through
           case 26: break;

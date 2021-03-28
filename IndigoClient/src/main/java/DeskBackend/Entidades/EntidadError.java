@@ -9,16 +9,21 @@ package DeskBackend.Entidades;
  *
  * @author phily
  */
-public class Error {
+public class EntidadError {
     private Token token;
     private String tipoError;
     private String descripcion;
     
-    public Error(Token elToken, String elTipoError, String laDescripcion){
-        token = elToken;
+    public EntidadError(String elTipoError, String laDescripcion){//este será para cuando se halle un errro que no correpsonda a un token especificador por el cliente, sino a otra coasa, p.ej que no lo haya especificado xD
         tipoError = elTipoError;
         descripcion = laDescripcion;
     }
+    
+    public EntidadError(Token elToken, String elTipoError, String laDescripcion){//cuando el error sea en un token, es decir en el que se está trabajndo actualemnte xD
+        token = elToken;
+        tipoError = elTipoError;
+        descripcion = laDescripcion;
+    }       
     
     public String darTipoError(){
         return tipoError;

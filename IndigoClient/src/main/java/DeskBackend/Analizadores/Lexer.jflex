@@ -2,7 +2,11 @@
 package DeskBackend.Analizadores;
 import java_cup.runtime.*;
 import static DeskBackend.Analizadores.Parser_IndigoSym.*;
+import DeskBackend.Entidades.EntidadError;
 import DeskBackend.Entidades.Token;
+import DeskBackend.Entidades.Herramientas.ListaEnlazada;
+import DeskBackend.Entidades.Manejadores.ManejadorErrores;
+
 
 %%
 /*segunda sección: settings*/
@@ -34,6 +38,7 @@ identificador =  (\$|_|-)({letra}|{numero}|_|-|\$)*
     boolean estaEnYYINITIAL = true;//para qué era esto??? :v :| xD aaah, es para saber si al estar en alfa#, se debe dar el # que le representa ó el # del token con el que coincide... xD
     boolean sonConsultas = false;//esto es para saber si se debe entrar a valores, cuando se encuentre una " y antes de ella : xD
     Token tokenAnterior;
+    ManejadorErrores manejadorErrores = new ManejadorErrores();
 
     private Symbol simbolo(int tipo) {
         return simbolo(tipo, "");//puesto que no veo que tenga razón de ser xD
@@ -66,6 +71,9 @@ identificador =  (\$|_|-)({letra}|{numero}|_|-|\$)*
         return 60;//aquí el # que corresponde al alfa#
     }
     
+    public ManejadorErrores darManejadorErrores(){
+        return manejadorErrores;
+    }
 %}
 
 %state VALORES
@@ -122,4 +130,5 @@ identificador =  (\$|_|-)({letra}|{numero}|_|-|\$)*
 }
 
 //ahora en alfa# será donde revises si alguna de sus entradas coinciden con palarbas reservadas, de tal forma que se envíe el # que representa a dicho lexema xD
-[^]      {/*caracter no aceptado*/}
+[^]      {manejadorErrores.establecerErrorDeToken("lexico", (Token)simbolo(1).value);/*caracter no aceptado*/}
+//vamos a dejarlo así por el momento, porque hay que probar como funciona, cuando se vea que no falla, add la prod de alfa# aquí para que "cache" a todos aquellos conjuntos de caracteres [palabras] que no forman parte de las palabras reservadas... xD
