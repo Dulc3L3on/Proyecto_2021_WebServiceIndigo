@@ -201,8 +201,8 @@ public class IndigoTextEditor extends javax.swing.JFrame {
         itemRevisar.setText("     Revisar");
         itemRevisar.setOpaque(true);
         itemRevisar.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                itemRevisarMouseClicked(evt);
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                itemRevisarMousePressed(evt);
             }
         });
         jMenu1.add(itemRevisar);
@@ -329,9 +329,11 @@ public class IndigoTextEditor extends javax.swing.JFrame {
         embellecedor.actualizarPosicion();
     }//GEN-LAST:event_IniciarSesionMouseClicked
 
-    private void itemRevisarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_itemRevisarMouseClicked
+    private void itemRevisarMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_itemRevisarMousePressed
+        //en el caso de los mnItem, el listener deben ser los mouse pressed, because the mouse clicked it's used on the complete menu xD
+        System.out.println("En el clicked listener...");
         procesador = new Procesador(EditArea.getText());//Ahí decides si esto lo vuelves un método para no tener que estar instanciando cada vez este objeto, eso sí, si haces eso, tendrás que imple un método donde se llame el método limpiar lista para cad una de las existentes...
-    }//GEN-LAST:event_itemRevisarMouseClicked
+    }//GEN-LAST:event_itemRevisarMousePressed
 
  
 

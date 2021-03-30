@@ -5,10 +5,6 @@
  */
 package DeskBackend.Entidades.Manejadores;
 
-import DeskBackend.Entidades.Transportadores.ComponentBus;
-import DeskBackend.Entidades.Transportadores.FormBus;
-import DeskBackend.Entidades.Transportadores.QueryBus;
-import DeskBackend.Entidades.Transportadores.UserBus;
 import DeskBackend.Analizadores.Lexer;
 import DeskBackend.Analizadores.Parser_Indigo;
 import java.io.FileNotFoundException;
@@ -19,9 +15,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpRequest.BodyPublishers;
 import java.nio.file.Paths;
 import java.time.Duration;
-import java.util.LinkedList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 
@@ -30,52 +23,45 @@ import javax.swing.JOptionPane;
  * @author phily
  */
 public class Procesador {//este se encargará de llamar al manejador que le corresponde trabajar la lista no vacía ecibida del parser...esto siempre y cuando no hayan habido errores de cualquier tipo  
-    private ManejadorArchivoRespuestaEntrada manejadorAxnUser;     
+    private ManejadorArchivoRespuestaEntrada manejadorRespuestas;     
     private ManejadorAtributos manejadorAxnConsultas;    
     //encargados de realizar el aálisis a la entrada
     private Lexer lexer;
     private Parser_Indigo parser;    
     
     public Procesador(String especificacionesEntrada){
-        StringReader lectorEntrada = new StringReader(especificacionesEntrada);
-        
-        lexer = new Lexer(lectorEntrada);
-        parser = new Parser_Indigo(lexer);
-        parser.estableceManejadorErrores(lexer.darManejadorErrores());
-        
-        if(!parser.darListadoErrores().isEmpty()){
-            //Se envía el nombre del archivo por medio del método de manipulador de arch de entrada, al JSO o servlet, por medo de las herramientas proporcionadas por el inge xD
-        }        
+        try {
+            StringReader lectorEntrada = new StringReader(especificacionesEntrada);
+            
+            System.out.println("A punto de entrar a la fase de análisis...\n");
+            lexer = new Lexer(lectorEntrada);
+            parser = new Parser_Indigo(lexer);
+            parser.estableceManejadorErrores(lexer.darManejadorErrores());
+            
+            parser.parse();
+            
+            System.out.println("A punto de entrar a la conexion\n");
+            
+            if(parser.darListadoErrores().isEmpty()){
+                try {
+                    //Se envía el nombre del archivo por medio del método de manipulador de arch de entrada, al JSO o servlet, por medo de las herramientas proporcionadas por el inge xD
+                    HttpClient cliente = HttpClient.newHttpClient();
+                    //yo asumo que ese set ContentType es para especificar que va a ser lo que se abrirá xD, en este caso un JSP, por eso coloqué este tipo xD... aunque quizá sea lo del archivo.... :v xD
+                    HttpRequest request = HttpRequest.newBuilder().uri(URI.create("http://localhost:8080//IndigoWebApp//IndigoForms.jsp")).timeout(Duration.ofMinutes(15)).header("Content-Type", "text/html; charset=UTF-8").POST(BodyPublishers.ofFile(Paths.get(manejadorRespuestas.darDireccionCompletaArchivo()))).build();//la otra diagonal servirá para establecer el header que será el quedistinga a cada archivo de los demás... xD
+                } catch (FileNotFoundException ex) {                
+                    JOptionPane.showMessageDialog(null, "El archivo: "+ manejadorRespuestas.darNombreArchivo() +" no existe");
+                }
+                System.out.println("Acabando de salir de la conexion\n");
+            }
+        } catch (Exception ex) {
+            System.out.println("Error al intentar ANALIZAR la entrada");
+            ex.printStackTrace();
+            System.out.println(ex.getMessage());
+        }
     }    
     
    
-    public void ejecutarAxn(){
-        if(!listadoAccionesUsuario.isEmpty()){
-            //Se realiza la axn de usuario [teniendo en cuenta que si inicia sesión nuevamente [con el mismo usuario] se lanzará un warning...
-        }
-        if(true/*Y EL USAURIO YA INICIÓ SESIÓN*/){
-            HttpClient cliente = HttpClient.newHttpClient();
-            HttpRequest request = HttpRequest.newBuilder().uri(URI.create("http://openjdk.java.net/")).build();//Esta URI la tendría que almacenar en una var string para que pueda existir un botón para copiar el enlace...          
-            
-            if(!listadoAccionesFormulario.isEmpty()){
-                try {
-                    //mira si esta variable requets la debes crear aquí o de manera global xD, quiza la var si de manera global pero la instancia en cada condición xD
-                    //HttpRequest request = HttpRequest.newBuilder().uri(URI.create("http://openjdk.java.net/")).timeout(Duration.ofMinutes(1)).header("Content-Type", "application/json").POST(BodyPublishers.ofFile(Paths.get("file.json"))).build();
-                } catch (FileNotFoundException ex) {
-                    Logger.getLogger(Procesador.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-            if(!listadoAccionesComponente.isEmpty()){
-                
-            }
-            if(!listadoConsultas.isEmpty()){
-                
-            }   
-        }else if(!listadoAccionesFormulario.isEmpty() || !listadoAccionesComponente.isEmpty() || !listadoConsultas.isEmpty()){
-            JOptionPane.showMessageDialog(null, "Debes iniciar sesión para\nsolicitar cualquier tipo de acción");
-        }       
-        
-    }
+   
     
     public void ejecutarAccionesUsuario(){
         //pdte, puesto que aún no se ha produndizado [y tampco resuleto la prod que se encarga de consultar, y de add los cb olocados por el aux hace poco] y tb porque no se sabe bien bien s ise va a poder MySQL o no,como para idear el proceso de recuperación de daos a partir de un arch y no de la DB en tablas... xD

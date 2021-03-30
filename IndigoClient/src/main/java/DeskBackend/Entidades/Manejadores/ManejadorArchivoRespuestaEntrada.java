@@ -21,50 +21,34 @@ public class ManejadorArchivoRespuestaEntrada {
     private ListaEnlazada<Token> listadoAtributos;
     private FileWriter escritorArchivos;
     private BufferedWriter escritor;
-    private File archivo;
-    private String nombreArchivo;
+    private File archivo;    
+    private String nombreArchTemp = "ArchivoRespuesta.txt";
     private String path = "/home/phily/Documentos/Carpeta_estudios/2021/5toSemestre/Compi_1"
-            + "/Laboratorio/tareas/pra-proy/Proyecto1/Proyecto_2021_WebServiceIndigo/IndigoClient/src/"
-            + "main/java/DeskBackend/Archivos/RespuestaEntrada/EntradaPrueba.txt";//el nombre del arch cb según el nombre del user y el del componente, por lo cual para tener acceso a él, se almacenará a una var para que se pueda recuperar el dato cuando se requiera xD
+            + "/Laboratorio/tareas/pra-proy/Proyecto1/Proyecto_2021_WebServiceIndigo/IndigoWebApp/src/"
+            + "main/webapp/resources/Archivos/";//el nombre del arch cb según el nombre del user y el del componente, por lo cual para tener acceso a él, se almacenará a una var para que se pueda recuperar el dato cuando se requiera xD    
     private String tipoSolicitud;
     private String claseComponente = null;
+    private String nombreArchivo ="";
     private ManejadorAtributos manejadorAtributos = new ManejadorAtributos();    
-    private ManejadorErrores manejadorErrores;
-    private int atributos = 0;//sigo sin saber por qué coloqué esto :v xD
+    private ManejadorErrores manejadorErrores;    
     private int atributosOrdenados = 0;
-    private int numeroSolicitudes = 0;
-    private StringBuffer buffer;//a este se add los datos que se escribirán o no d
-    
-    
-    public void registrarCdadDeAtributos(){//para qué rayos era eso??? xD :v xD
-        atributos++;
-    }        
+    private int numeroSolicitudes = 0;    
     
     public ManejadorArchivoRespuestaEntrada(ManejadorErrores elManejadorErrores){
         try {
-            manejadorErrores = elManejadorErrores;
+            manejadorErrores = elManejadorErrores;            
+            listadoAtributos = new ListaEnlazada<>();            
             
-            listadoAtributos = new ListaEnlazada<>();
-            
-            
-            archivo = new File(path);//el path, será una combinación del nombre del usuario y el nombre del formulario xD, así será fácil hallarlo al buscarlo xD
-            //archivo.createNewFile();//auqnue no se si debería hacerlo aquí, puesto que solo se enviará al arch lo recoupilado, si NO hubo error alguno xD
-            
-            
+            archivo = new File(path+nombreArchTemp);//el path, será una combinación del nombre del usuario y el nombre del formulario xD, así será fácil hallarlo al buscarlo xD                        
+                //se escribe el archivo y se envía a la web para que lo procese con sus analizadores y los muestre gráficamente xD                
+            archivo.createNewFile();
             escritorArchivos = new FileWriter(archivo);
             escritor = new BufferedWriter(escritorArchivos);
-//            escritor.
-            //NO se si add esto o no, puesto que si es una sola solicitud, estará mal... pero si no lo hago aquí, no se como lo agregaría al principio...
-            
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null, "Error al intentar CREAR el archivo de respuesta");
+            System.out.println("msje:"+ex.getMessage());
         }       
     }    
-    
-    public void establecerNombreArchivo(String elNombreArchivo){//este es e que aún no se sabe donde exe, puesto que en el cntrc ya se requiere del valor que este recibe, pero este solose puede usar después de construir... :| xD
-        nombreArchivo = elNombreArchivo;
-    }//ahora no se como hacerle con el nombre de archivo, puesto que este lo recibo hasta haber logeado al user y esto según estaba pensando, se hace después de que se hayan emeplado ests métodos, [puesto que estos se exe en las axn del CUP] y la revisión del login se hace hasta que haya terminado el CUP su trabajo... :| xD
-     //estaba pensando enviarle la var al string del path de una vez y que cuando se tviera el nombre que se colocara en la var, pero no funcionará puesto qu eun String no cb automaticamente cuando el obj al que se le igualó cb, uesto que el String [según recuerdo] es semejante a los tipos primitivos como el int...xD
     
     public void agregarAtributo(String nombreAtributo, Token token){//con atributos me refiero a "usuario" "fechaMOdificacion", "fechaCreacion"... y así xD        
         if(nombreAtributo.equals("opciones") | nombreAtributo.equals("textoVisible")){
@@ -83,8 +67,8 @@ public class ManejadorArchivoRespuestaEntrada {
             listadoAtributos.add(token);         
         
             if(nombreAtributo.equals("clase")){
-                claseComponente = nombreAtributo;
-            }                       
+                claseComponente = token.darLexema();
+            }                
         }        
     }
     
@@ -113,33 +97,35 @@ public class ManejadorArchivoRespuestaEntrada {
         listadoAtributos.clear();        
     }    
     
-    private void ordenarAtributosGenerales(){
+   private void ordenarAtributosGenerales(){
         String[] atributosEsperados = manejadorAtributos.darAtributosCorrespondientes(tipoSolicitud);
-        boolean[] atributosEspecificados = new boolean[atributosEsperados.length];        
-        Token tokenActual;
+        boolean[] atributosEspecificados = new boolean[atributosEsperados.length];               
+        int[] datosImportantes;
         
-        for (atributosOrdenados = 0; atributosOrdenados < listadoAtributos.size(); atributosOrdenados++) {//de esta manera no habrá problemas cuando se vuelva a emplear esta variable, por le hecho de que cuando se requiera emplear nuevamente, se reiniciará su valor xD y cuando se quiere emplear para hacer el ajuste en la posición del istado al ordenar los componentes, aún poserá su valor, lo cual es lo que se necesita xD :3 xD
-            tokenActual = Token.parseToken(listadoAtributos.get(atributosOrdenados));
-            int posicionDelAtributo = buscarPosicionDelAtributo(tokenActual.darNombreDelToken(), atributosEsperados);
+        //coloco como lím el tamaño del arreglo, pues los atrib generales, nunca sobrepasarán o serán menores a la cdad esperada, por e hecho de que en las producciones se colocan los diferentes # de parámetros requeridos de a cuerdo al caso, y tb acer esto no afecta al tipo de solicitud [Add comp [creo que hay otro xD]], es más arregla el inconveniente de que el listado tenga más elementos que el arreglo, lo cual vendría a provocar un indexOutBounds... xD
+        for (atributosOrdenados = 0; atributosOrdenados < atributosEsperados.length; atributosOrdenados++) {//de esta manera no habrá problemas cuando se vuelva a emplear esta variable, por le hecho de que cuando se requiera emplear nuevamente, se reiniciará su valor xD y cuando se quiere emplear para hacer el ajuste en la posición del istado al ordenar los componentes, aún poserá su valor, lo cual es lo que se necesita xD :3 xD        
+            datosImportantes = listadoAtributos.existToken(listadoAtributos, atributosEsperados[atributosOrdenados]);            
             
-           if(!atributosEspecificados[posicionDelAtributo]){//no coloco if !=-1, porque nunca se llegará ahí puesto qu etodos los atributos que están en la lista, son los permitidos... xD
-               atributosEspecificados[posicionDelAtributo] = true;
-           }else{
-               manejadorErrores.establecerErrorDeToken("atributoRepetido", tokenActual);
-           }                        
-        }
+            if(datosImportantes[1]>=1){
+                if(datosImportantes[1]>1){
+                    manejadorErrores.establecerErrorHallado("atributoRepetido", atributosEsperados[atributosOrdenados],"");//Se establece el error por repitencia
+                }
+                atributosEspecificados[atributosOrdenados]= true;
+                
+                escribirArchivo(atributosEsperados[atributosOrdenados], Token.parseToken(listadoAtributos.get(datosImportantes[0])).darLexema());//Se escribe en el arch 
+            }//Si no es así entonces no se hace nada, pues eso le corresponde  la revisión de obligatoriedad xD...
+                    
+           if(atributosEsperados[atributosOrdenados].equals("nombre") && (tipoSolicitud.equals("creacionFormulario") || tipoSolicitud.equals("modificacionFormulario"))){//supongo que se podrá trabajar igual que en el caso de la creación la modificación... xD
+               nombreArchivo += Token.parseToken(listadoAtributos.get(datosImportantes[0])).darLexema();
+           }
+           else if(atributosEsperados[atributosOrdenados].equals("usuarioCreacion")){//supongo que se podrá trabajar igual que en el caso de la creación la modificación... xD
+               nombreArchivo = Token.parseToken(listadoAtributos.get(datosImportantes[0])).darLexema() + nombreArchivo;
+           }
+        }//NOTA: Habrá que revisarse [cuando ya se tenga el archivo en el que se alamcenarán los usuarios, si el usuario creador corresponde al logueado... sino ERROR xD
+        //ese if nenvolverá el if que add al ini el nombre del user? naa xD,, pues con un error, este archivo no se crea y por lo tanto no se envía a la sig fase que corresp a la webApp xD
         
         revisarObligatoriedad(atributosEsperados, atributosEspecificados, tipoSolicitud);
-    }
-    
-    private int buscarPosicionDelAtributo(String elAtributo, String[] atributosEsperados){
-        for (int posicionAtributoActual = 0; posicionAtributoActual < atributosEsperados.length; posicionAtributoActual++) {
-            if(atributosEsperados[posicionAtributoActual].equals(elAtributo)){
-                return posicionAtributoActual;
-            }            
-        }
-        return -1;//Aunque si mal no estoy, a esta partae no se va a llegar nunca, por el hecho de que todos los atributos que estén en la lista d eespecificados, será todos los permitirdos, lo que si puede pasar es que estén repetidos, pero NO que sean atributos que no admite la solicitud en cuestión xD
-    }//preferí escoger este método y no el de buscar en la lista [ya sea la coincidencia o repitencia, por medio de un método a add en la ListaEnlazada.. xD
+    }      
     
     private void revisarObligatoriedad(String[] atributosEsperados, boolean atributosEspecificados[], String tipoObligatoriedad){
         int[] arregloObligatoriedad = manejadorAtributos.darImportancia(tipoObligatoriedad);
@@ -160,45 +146,51 @@ public class ManejadorArchivoRespuestaEntrada {
     }
     
     private void ordenarAtributosComponentes(){
-        String[] atributosEspecificosComponente = manejadorAtributos.darDemasObligatoriosComponente(claseComponente);
-        boolean[] atributosEspecificados = new boolean[atributosEspecificosComponente.length];
-        Token tokenActual;
-        atributosOrdenados++;//puesto que necesito la cdad evaluada y no la última posición xD
+        String[] atributosEseradosComponente = manejadorAtributos.darDemasObligatoriosComponente(claseComponente);
+        boolean[] atributosEspecificados = new boolean[atributosEseradosComponente.length];    
+        int[] datosImportantes;
         
-        for (int atributoActual = 0; atributoActual < listadoAtributos.size(); atributoActual++) {
-            tokenActual = (Token) listadoAtributos.get(atributosOrdenados+atributoActual);
-            int posicionDelAtributo = buscarPosicionDelAtributo(tokenActual.darNombreDelToken(), atributosEspecificosComponente);            
-            
-            if(!atributosEspecificados[posicionDelAtributo]){//no coloco if !=-1, porque nunca se llegará ahí puesto qu etodos los atributos que están en la lista, son los permitidos... xD
-               atributosEspecificados[posicionDelAtributo] = true;//esto debe colocarse aunque sea una cloase, porque esta no ha sifdo registrada de esa manera xD
-               
-               if(!tokenActual.darNombreDelToken().equals("clase")){
-                   //se escribe en el archivo xD
-                   escribirArchivo(tokenActual.darNombreDelToken(), tokenActual.darLexema());
-               }//puesto que ya se ha agergado antes xD                              
-           }else{
-               //Se envía el arror de REPITENCIA al manejador...
-               manejadorErrores.establecerErrorDeToken("atributoRepetido", tokenActual);
-           }                      
+        try{
+            for (int atributoActual = 0; atributoActual < atributosEseradosComponente.length; atributoActual++) {
+                datosImportantes = listadoAtributos.existToken(listadoAtributos, atributosEseradosComponente[atributoActual]);
+                    if(datosImportantes[1]>=1){
+                        if(datosImportantes[1]>1){
+                            manejadorErrores.establecerErrorHallado("atributoRepetido", atributosEseradosComponente[atributosOrdenados],"");//Se establece el error por repitencia
+                        }
+                        atributosEspecificados[atributosOrdenados]= true;                            
+                        
+                        if(!atributosEseradosComponente[atributoActual].equals("clase")){                       
+                            escribirArchivo(atributosEseradosComponente[atributosOrdenados], Token.parseToken(listadoAtributos.get(datosImportantes[0])).darLexema());//Se escribe en el arch 
+                        }//puesto que ya se ha agergado antes xD                              
+                    }                                                                       
+            }
+        }catch(IndexOutOfBoundsException e){
+             manejadorErrores.establecerErrorHallado("atributosComponenteIsuficienes", claseComponente, "");
+        }   
+        
+        if((listadoAtributos.size()-atributosOrdenados+1)>atributosEseradosComponente.length){
+            manejadorErrores.establecerErrorHallado("demasiadosAtribComp", claseComponente, "");
         }
-          
-        revisarObligatoriedad(atributosEspecificosComponente, atributosEspecificados, claseComponente);//es posible hacer esto puesto que el método de "revisarObligatoriedad" obtiene los datos del método que brinda los arregloes de enteros, también tiene declarados los caso que corresponden a los componentes xD :3 xD  
+        
+        revisarObligatoriedad(atributosEseradosComponente, atributosEspecificados, claseComponente);//es posible hacer esto puesto que el método de "revisarObligatoriedad" obtiene los datos del método que brinda los arregloes de enteros, también tiene declarados los caso que corresponden a los componentes xD :3 xD  
     }  
     
     private void escribirArchivo(String encabezado, String cuerpo){
         try {
-            if(encabezado.equals("iniSoli")){
-                escritor.append("<!ini_respuesta: \""+cuerpo+"\">");
-                escritor.newLine();
-      
-            }else if(encabezado.equals("finSoli")){
-                escritor.append("<!fin_respuesta: \""+cuerpo+"\">");
-                escritor.newLine();
-            
-            }else{
-                escritor.append(encabezado+": "+ cuerpo);
-                escritor.newLine();
-            }            
+            switch (encabezado) {
+                case "iniSoli":
+                    escritor.write("<!ini_respuesta: \""+cuerpo+"\">");
+                    escritor.newLine();
+                    break;
+                case "finSoli":
+                    escritor.write("<!fin_respuesta: \""+cuerpo+"\">");
+                    escritor.newLine();
+                    break;
+                default:
+                    escritor.write(encabezado+": "+ cuerpo);//vamos a ver si el fallo no se debía al append...
+                    escritor.newLine();            
+                    break;
+            }
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null, "Ocurrió un error al intentar escribir la respuesta a la solicitud");
         }        
@@ -217,18 +209,26 @@ public class ManejadorArchivoRespuestaEntrada {
         }
         
         if(!manejadorErrores.hubieronErrores()){
-            try {
-                //se escribe el archivo y se envía a la web para que lo procese con sus analizadores y los muestre gráficamente xD
-                archivo.createNewFile();
+            try {            
+            //mientras tanto lo comentaré, pues no es de mi utilidad xD
+            //  archivo.renameTo(new File(path+nombreArchTemp));//YO SUPONGO que pasa el arch original completo a la ubicación especificada y NO lo vuelve a crear, es decir no lo deja en blanco... claramente esto no scederá porque NO TIENE SENTIDO que se llame renameTO... xD y tampoco tendría sentido la forma en que se renombra si lo que hiciera este métooo es rehacer el arch desde 0... xD
+            escritor.close();
+            escritor.flush();
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(null, "Surgió un error al registrar\n el archivo de respuesta :(");
             }
+        }else{
+            archivo.delete();//que bueno que almacena el nombre hasta ser limpiado xD
         }
     }
     
-    public String darNombreArchivo(){//están formados por un nombre de usuario y el nombre del frmulario detal forma que se pueda hacer una revsión en or
+    public String darNombreArchivo(){
         return nombreArchivo;
     }
+    
+    public String darDireccionCompletaArchivo(){//están formados por un nombre de usuario y el nombre del frmulario detal forma que se pueda hacer una revsión en or
+        return path+nombreArchivo;
+    }      
     
     //deberás pensar como le harás cuando los bloques que se requeiren estań presenrtes pero no el orden que debería [como crear form y add componentes, que viniera antes lo de los compoentes y después del form :v, usarás lo que el inge dijo es decir descarar hasta encontrar lo que se busca o harás otra cosa, como buscarlo hasta hallarlo??? xD
 }

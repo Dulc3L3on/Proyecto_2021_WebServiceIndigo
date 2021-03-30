@@ -44,7 +44,7 @@ terminal TIPOCLASE;
 terminal TIPOALINEACION;
 terminal CONSULTAR, DATOS, SELECT, TO, FORM, WHERE, CONSULTAS, CONSULTA, AND, OR, NOT;
 
-non terminal p, cuerpo, Cuerpo, opciones, b_user, b_form, b_comp, b_sqf, SerieCreacionUser, serie_creacion, ParamCreacion, param_creacion, SerieModifUser, serie_modif_user, ParamModifUser, param_modif_user, SerieEliUser, serie_eli_user, param_eli, ParamLogin, param_login, SerieNuevoForm, serie_nuevo_form, Param_Nuevo_Form, param_nuevo_form, SerieEliForm, serie_eli_form, param_eli_form, SerieModifForm, serie_modif_form, Param_Modif_Form, param_modif_form, SerieAddComp, serie_add_comp, Param_Add_Comp, param_add_comp, tipoComponente, cadena, items, SerieEliComp, serie_eli_comp, Param_Eli_Comp, param_eli_comp, SerieModifComp, serie_modif_comp, Param_Modif_Comp, param_modif_comp, Serie_Consultas, serie_consultas, cuerpo_consultas, bloque_sqf, identificacion, cuerpo_consulta, seleccion, condicion, Condicion, comparacion, negacion, logico, relacional, valor;
+non terminal p, cuerpo, Cuerpo, opciones, cierreOpciones, b_user, b_form, b_comp, b_sqf, SerieCreacionUser, serie_creacion, ParamCreacion, param_creacion, SerieModifUser, serie_modif_user, ParamModifUser, param_modif_user, SerieEliUser, serie_eli_user, param_eli, ParamLogin, param_login, SerieNuevoForm, serie_nuevo_form, Param_Nuevo_Form, param_nuevo_form, SerieEliForm, serie_eli_form, param_eli_form, SerieModifForm, serie_modif_form, Param_Modif_Form, param_modif_form, SerieAddComp, serie_add_comp, Param_Add_Comp, param_add_comp, tipoComponente, cadena, items, SerieEliComp, serie_eli_comp, Param_Eli_Comp, param_eli_comp, SerieModifComp, serie_modif_comp, Param_Modif_Comp, param_modif_comp, Serie_Consultas, serie_consultas, cuerpo_consultas, bloque_sqf, identificacion, cuerpo_consulta, seleccion, condicion, Condicion, comparacion, negacion, logico, relacional, valor;
 
 /*precedencia? hasta donde sé no es necesario que incluya eso :v xD*/
 
@@ -54,25 +54,28 @@ p ::= MENOR ADMIRACION INI GUIONBAJO SOLICITUDES MAYOR cuerpo Cuerpo MENOR ADMIR
     | cuerpo                                                                                                                            {:manejadorRespuestas.finalizarArchivo();:}
     ;
 
-cuerpo ::= MENOR ADMIRACION INI GUIONBAJO SOLICITUD opciones MENOR FIN GUIONBAJO SOLICITUD ADMIRACION MAYOR
+cuerpo ::= MENOR ADMIRACION INI GUIONBAJO SOLICITUD DOSPUNTOS opciones MENOR FIN GUIONBAJO SOLICITUD ADMIRACION MAYOR
         ;
 
 Cuerpo ::= Cuerpo cuerpo
          | cuerpo
          ;
 
-opciones ::= COMILLA CREAR GUIONBAJO USUARIO COMILLA MAYOR APERTURALLAVE b_user SerieCreacionUser CIERREANGULAR CIERRELLAVE
-           | COMILLA MODIFICAR GUIONBAJO USUARIO COMILLA MAYOR APERTURALLAVE b_user SerieModifUser CIERREANGULAR CIERRELLAVE
-           | COMILLA ELIMINAR GUIONBAJO USUARIO COMILLA MAYOR APERTURALLAVE b_user SerieEliUser CIERREANGULAR CIERRELLAVE
-           | COMILLA LOGIN GUIONBAJO USUARIO COMILLA MAYOR APERTURALLAVE b_user ParamLogin CIERREANGULAR CIERRELLAVE
-           | COMILLA NUEVO GUIONBAJO FORMULARIO COMILLA MAYOR APERTURALLAVE b_form SerieNuevoForm CIERREANGULAR CIERRELLAVE
-           | COMILLA ELIMINAR GUIONBAJO FORMULARIO COMILLA MAYOR APERTURALLAVE b_form SerieEliForm CIERREANGULAR CIERRELLAVE
-           | COMILLA MODIFICAR GUIONBAJO FORMULARIO COMILLA MAYOR APERTURALLAVE b_form SerieModifForm CIERREANGULAR CIERRELLAVE
-           | COMILLA AGREGAR GUIONBAJO COMPONENTE COMILLA MAYOR APERTURALLAVE b_comp SerieAddComp CIERREANGULAR CIERRELLAVE
-           | COMILLA ELIMINAR GUIONBAJO COMPONENTE COMILLA MAYOR APERTURALLAVE b_comp SerieEliComp CIERREANGULAR CIERRELLAVE
-           | COMILLA MODIFICAR GUIONBAJO COMPONENTE COMILLA MAYOR APERTURALLAVE b_comp SerieModifComp CIERREANGULAR CIERRELLAVE
+opciones ::= COMILLA CREAR GUIONBAJO USUARIO COMILLA MAYOR APERTURALLAVE b_user SerieCreacionUser cierreOpciones
+           | COMILLA MODIFICAR GUIONBAJO USUARIO COMILLA MAYOR APERTURALLAVE b_user SerieModifUser cierreOpciones
+           | COMILLA ELIMINAR GUIONBAJO USUARIO COMILLA MAYOR APERTURALLAVE b_user SerieEliUser cierreOpciones
+           | COMILLA LOGIN GUIONBAJO USUARIO COMILLA MAYOR APERTURALLAVE b_user ParamLogin cierreOpciones
+           | COMILLA NUEVO GUIONBAJO FORMULARIO COMILLA MAYOR APERTURALLAVE b_form SerieNuevoForm cierreOpciones
+           | COMILLA ELIMINAR GUIONBAJO FORMULARIO COMILLA MAYOR APERTURALLAVE b_form SerieEliForm cierreOpciones
+           | COMILLA MODIFICAR GUIONBAJO FORMULARIO COMILLA MAYOR APERTURALLAVE b_form SerieModifForm cierreOpciones
+           | COMILLA AGREGAR GUIONBAJO COMPONENTE COMILLA MAYOR APERTURALLAVE b_comp SerieAddComp cierreOpciones
+           | COMILLA ELIMINAR GUIONBAJO COMPONENTE COMILLA MAYOR APERTURALLAVE b_comp SerieEliComp cierreOpciones
+           | COMILLA MODIFICAR GUIONBAJO COMPONENTE COMILLA MAYOR APERTURALLAVE b_comp SerieModifComp cierreOpciones
            | COMILLA CONSULTAR GUIONBAJO DATOS COMILLA MAYOR APERTURALLAVE b_sqf CIERRELLAVE
            ;
+
+cierreOpciones ::= CIERREANGULAR CIERRELLAVE
+                ;
 
 b_user ::= COMILLA CREDENCIALES GUIONBAJO USUARIO COMILLA DOSPUNTOS APERTURAANGULAR 
         ;
@@ -86,7 +89,7 @@ b_comp ::= COMILLA PARAMETROS GUIONBAJO COMPONENTE COMILLA DOSPUNTOS APERTURAANG
 b_sqf ::= COMILLA CONSULTAS COMILLA MAYOR APERTURAANGULAR Serie_Consultas CIERREANGULAR
         ;
 
-SerieCreacionUser ::= serie_creacion SerieCreacionUser                              
+SerieCreacionUser ::= serie_creacion COMA SerieCreacionUser                              
                  | serie_creacion                 
                  ;
 
@@ -102,7 +105,7 @@ param_creacion ::= param_login
                  | COMILLA FECHA GUIONBAJO CREACION COMILLA DOSPUNTOS FORMATOFECHA:fecha      {:manejadorRespuestas.agregarAtributo("fechaCreacion", Token.parseToken(fecha));:}  
                  ;
 
-SerieModifUser ::= serie_modif_user SerieModifUser
+SerieModifUser ::= serie_modif_user COMA SerieModifUser
                  | serie_modif_user
                  ;
 
@@ -120,7 +123,7 @@ param_modif_user ::= COMILLA USUARIO GUIONBAJO ANTIGUO COMILLA DOSPUNTOS ALFANUM
               | COMILLA FECHA GUIONBAJO MODIFICACION COMILLA DOSPUNTOS FORMATOFECHA:fecha      {:manejadorRespuestas.agregarAtributo("fechaModificacion", Token.parseToken(fecha));:}              
               ;
 
-SerieEliUser ::= serie_eli_user SerieEliUser
+SerieEliUser ::= serie_eli_user COMA SerieEliUser
                 | serie_eli_user
                 ;
 
@@ -140,7 +143,7 @@ param_login ::= COMILLA USUARIO COMILLA DOSPUNTOS ALFANUMERICO:nombre           
               | COMILLA PASSWORD COMILLA DOSPUNTOS ALFANUMERICO:password                       {:manejadorRespuestas.agregarAtributo("password", Token.parseToken(password));:}
               ; 
 
-SerieNuevoForm ::= serie_nuevo_form SerieNuevoForm
+SerieNuevoForm ::= serie_nuevo_form COMA SerieNuevoForm
                    | serie_nuevo_form                 
                    ;
 
@@ -161,7 +164,7 @@ param_nuevo_form ::= COMILLA ID COMILLA DOSPUNTOS IDENTIFICADOR:id              
                    | COMILLA FECHA GUIONBAJO CREACION COMILLA DOSPUNTOS FORMATOFECHA:fecha      {:manejadorRespuestas.agregarAtributo("fechaCreacion", Token.parseToken(fecha));:}                     
                    ;
 
-SerieEliForm ::= serie_eli_form SerieEliForm
+SerieEliForm ::= serie_eli_form COMA SerieEliForm
                 | serie_eli_form               
                 ;
 
@@ -172,7 +175,7 @@ serie_eli_form ::= APERTURALLAVE param_eli_form CIERRELLAVE                     
 param_eli_form ::= COMILLA ID COMILLA DOSPUNTOS IDENTIFICADOR:id                                {:manejadorRespuestas.agregarAtributo("id", Token.parseToken(id));:}                   
                 ;   
 
-SerieModifForm ::= serie_modif_form SerieModifForm
+SerieModifForm ::= serie_modif_form COMA SerieModifForm
                   | serie_modif_form                  
                   ;
 
@@ -182,7 +185,7 @@ serie_modif_form ::= APERTURALLAVE Param_Modif_Form CIERRELLAVE                 
 Param_Modif_Form ::= param_modif_form COMA param_modif_form COMA param_modif_form COMA param_modif_form
                    | param_modif_form COMA param_modif_form COMA param_modif_form
                    | param_modif_form COMA param_modif_form                   
-                   | error /*no se especificó el # de atribs esperados...*/                     {:manejadorErrores.establecerErrorHallado("atributosInsuficientes", "", "");:}
+                   | error /*no se especificó el # de atribs esperados...*/                   {:manejadorErrores.establecerErrorHallado("atributosInsuficientes", "", "");:}
                    ;
 
 param_modif_form ::= COMILLA ID COMILLA DOSPUNTOS IDENTIFICADOR:id                              {:manejadorRespuestas.agregarAtributo("id", Token.parseToken(id));:}       
@@ -191,7 +194,7 @@ param_modif_form ::= COMILLA ID COMILLA DOSPUNTOS IDENTIFICADOR:id              
                    | COMILLA TEMA COMILLA DOSPUNTOS TIPOTEMA:tema                               {:manejadorRespuestas.agregarAtributo("tema", Token.parseToken(tema));:}      
                    ;
 
-SerieAddComp ::= serie_add_comp SerieAddComp
+SerieAddComp ::= serie_add_comp COMA SerieAddComp
                 | serie_add_comp                
                 ;
 
@@ -203,17 +206,17 @@ Param_Add_Comp ::= param_add_comp COMA Param_Add_Comp
                  | error /*No puedes especificar menos atributos de los que requiere un botón*/ {:manejadorErrores.establecerErrorHallado("atribsFaltantesAddComp", "", "");:}
                  ;
 
-param_add_comp ::= COMILLA ID COMILLA DOSPUNTOS IDENTIFICADOR:id                                {:manejadorRespuestas.agregarAtributo("id", Token.parseToken(id));:}                          
-                 | COMILLA NOMBRE GUIONBAJO CAMPO COMILLA DOSPUNTOS ALFANUMERICO:nombre         {:manejadorRespuestas.agregarAtributo("nombreCampo", Token.parseToken(nombre));:}      
-                 | COMILLA FORMULARIO COMILLA DOSPUNTOS IDENTIFICADOR:formulario                {:manejadorRespuestas.agregarAtributo("formulario", Token.parseToken(formulario));:}      
-                 | COMILLA CLASE COMILLA DOSPUNTOS tipoComponente                         
-                 | COMILLA TEXTO GUIONBAJO VISIBLE COMILLA DOSPUNTOS cadena:texto                           
-                 | COMILLA ALINEACION COMILLA DOSPUNTOS TIPOALINEACION:alineacion               {:manejadorRespuestas.agregarAtributo("alineacion", Token.parseToken(alineacion));:}       
-                 | COMILLA REQUERIDO COMILLA DOSPUNTOS TIPOREQUERIDO:requerimiento              {:manejadorRespuestas.agregarAtributo("requerido", Token.parseToken(requerimiento));:}       
-                 | COMILLA OPCIONES COMILLA DOSPUNTOS items                                    
+param_add_comp ::= COMILLA ID COMILLA DOSPUNTOS COMILLA IDENTIFICADOR:id COMILLA                               {:manejadorRespuestas.agregarAtributo("id", Token.parseToken(id));:}                          
+                 | COMILLA NOMBRE GUIONBAJO CAMPO COMILLA DOSPUNTOS COMILLA ALFANUMERICO:nombre COMILLA        {:manejadorRespuestas.agregarAtributo("nombreCampo", Token.parseToken(nombre));:}      
+                 | COMILLA FORMULARIO COMILLA DOSPUNTOS COMILLA IDENTIFICADOR:formulario COMILLA               {:manejadorRespuestas.agregarAtributo("formulario", Token.parseToken(formulario));:}      
+                 | COMILLA CLASE COMILLA DOSPUNTOS COMILLA tipoComponente COMILLA                        
+                 | COMILLA TEXTO GUIONBAJO VISIBLE COMILLA DOSPUNTOS COMILLA cadena:texto COMILLA                         
+                 | COMILLA ALINEACION COMILLA DOSPUNTOS COMILLA TIPOALINEACION:alineacion COMILLA              {:manejadorRespuestas.agregarAtributo("alineacion", Token.parseToken(alineacion));:}       
+                 | COMILLA REQUERIDO COMILLA DOSPUNTOS COMILLA TIPOREQUERIDO:requerimiento COMILLA             {:manejadorRespuestas.agregarAtributo("requerido", Token.parseToken(requerimiento));:}       
+                 | COMILLA OPCIONES COMILLA DOSPUNTOS COMILLA items COMILLA                                   
                  | COMILLA FILAS COMILLA DOSPUNTOS NUMERO:filas                                 {:manejadorRespuestas.agregarAtributo("filas", Token.parseToken(filas));:}         
                  | COMILLA COLUMNAS COMILLA DOSPUNTOS NUMERO:columnas                           {:manejadorRespuestas.agregarAtributo("columnas", Token.parseToken(columnas));:}     
-                 | COMILLA URL COMILLA DOSPUNTOS ALFANUMERICO:url                               {:manejadorRespuestas.agregarAtributo("URL", Token.parseToken(url));:}      
+                 | COMILLA URL COMILLA DOSPUNTOS ALFANUMERICO:url                               {:manejadorRespuestas.agregarAtributo("URL", Token.parseToken(url));:}                       
                  ;
 
 tipoComponente ::= TIPOCLASE:tipo                                                               {:manejadorRespuestas.agregarAtributo("clase", Token.parseToken(tipo));:}       
@@ -231,7 +234,7 @@ items ::= ALFANUMERICO:opciones SEPARADOR items                                 
         | ALFANUMERICO:opciones                                                                 {:manejadorRespuestas.agregarAtributo("opciones", Token.parseToken(opciones));:}
         ;//DEBES: revisar si los item llegan según como piensas, es decir del 1ro al último, por la recursi a la izq y porque yo pienso que como una f recursiva, cuando termine de llamarse, devolverá todo desde el último resultado hasta el primero... xD
 
-SerieEliComp ::= serie_eli_comp SerieEliComp
+SerieEliComp ::= serie_eli_comp COMA SerieEliComp
                 | serie_eli_comp                
                 ;
 
@@ -239,14 +242,14 @@ serie_eli_comp ::= APERTURALLAVE Param_Eli_Comp CIERRELLAVE                     
                  ;
 
 Param_Eli_Comp ::= param_eli_comp COMA param_eli_comp
-                 | error /*se esperaba id del componente y del formulario a eliminar ...*/      {:manejadorErrores.establecerErrorHallado("atributoFaltante", "id del componente y del formulario", "");:}
+                 | error /*se esperaba id del componente y del formulario a eliminar ...*/     {:manejadorErrores.establecerErrorHallado("atributoFaltante", "id del componente y del formulario", "");:}
                  ;
 
 param_eli_comp ::= COMILLA ID COMILLA DOSPUNTOS IDENTIFICADOR:id                                {:manejadorRespuestas.agregarAtributo("id", Token.parseToken(id));:}                                    
                  | COMILLA FORMULARIO COMILLA DOSPUNTOS IDENTIFICADOR:formulario                {:manejadorRespuestas.agregarAtributo("formulario", Token.parseToken(formulario));:}    
                  ;
 
-SerieModifComp ::= serie_modif_comp SerieModifComp 
+SerieModifComp ::= serie_modif_comp COMA SerieModifComp 
                   | serie_modif_comp                  
                   ;
 

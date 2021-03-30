@@ -27,10 +27,7 @@ public class ManejadorErrores {//este se encargará de enviar los listado de for
         switch(tipoError){
             case "lexico"://Aquí e nombre del tipo de error, que brindará la descripción generalizada [lo cual está super dúper xD] del problema, y así completar los que requiere lel cntrc de la clase error xD
                 descripcion = "El caracter "+ token.darLexema() +" no es válido";
-            break;
-            case "atributoRepetido":
-                descripcion = "Atributo "+ token.darNombreDelToken()+" repetido";
-            break;                                   
+            break;                                            
         }              
         
         EntidadError error = new EntidadError(token, tipoError, descripcion);
@@ -40,6 +37,9 @@ public class ManejadorErrores {//este se encargará de enviar los listado de for
         String descripcion = "";
         
         switch(tipoError){
+            case "atributoRepetido":
+                descripcion = "Atributo "+ elError +" repetido";
+            break;  
             case "atributosAModificarFaltantes":
                 descripcion = "Necesitas modificar tema, titulo\n o nombre del formulario";
             break;    
@@ -48,7 +48,13 @@ public class ManejadorErrores {//este se encargará de enviar los listado de for
             break;    
             case "atributosInsuficientes":
                 descripcion = "No se especificó el número de parametros esperados";
-            break;    
+            break;
+            case "atributosComponenteIsuficienes":
+                descripcion = "Insuficientes atributos para el componente" + elError;
+            break;
+            case "demasiadosAtribComp":
+                descripcion = "Demasiados atributos para el componente -> "+elError;
+            break;               
             case "atributosLoginFaltantes":
                 descripcion = "Debes especificar el username y password";
             break;    

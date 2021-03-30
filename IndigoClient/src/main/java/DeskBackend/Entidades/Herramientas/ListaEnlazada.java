@@ -5,8 +5,8 @@
  */
 package DeskBackend.Entidades.Herramientas;
 
+import DeskBackend.Entidades.Token;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -14,13 +14,21 @@ import java.util.List;
  */
 public class ListaEnlazada <T> extends ArrayList{
     
-    public Object find(String datoABuscar){
+    public int[] existToken(ListaEnlazada<Token> listadoTokens, String datoABuscar){//nos vamos a tardar más en buscar, pero así deberá hacerse... :( xD
+        int datosImportantes[] = {-1, 0};//[0] -> la posición, [1]-> el # apariciones
+        
         for (int datoActual = 0; datoActual < this.size(); datoActual++) {
-            if(this.get(datoActual).equals(datoActual)){
-                return this.get(datoActual);
-            }
+            Token token = (Token)listadoTokens.get(datoActual);
+            
+            if(token.darNombreDelToken().equals(datoABuscar)){
+                datosImportantes[1]++;
+                
+                if(datosImportantes[1]==1){//esto quiere decir que solo se tomará en uenta el valor de la prier opción... aunque creo que era más fácil ir asignando la posición ás actual... creo xD
+                    datosImportantes[0] = datoActual;
+                }
+            }           
         }
-        return null;
+        return datosImportantes;
     }   
         
     public Object getLastItem(){
