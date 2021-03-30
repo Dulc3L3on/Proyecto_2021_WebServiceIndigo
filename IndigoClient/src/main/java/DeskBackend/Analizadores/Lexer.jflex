@@ -20,9 +20,9 @@ import DeskBackend.Entidades.Manejadores.ManejadorErrores;
 //comilla = \"
 letra = [a-zA-Z]
 numero = [0-9]
-finDeLinea = \r|\n|\r\n
-tabulacion = [ \t\f]/*no olvides que ese espacio en blanco siempre debe ir, de lo contrario no funcionará para todas las poribles formas de un blankSpace*/
-espacioEnBlanco = {finDeLinea} | {tabulacion}
+/*finDeLinea = \r|\n|\r\n
+tabulacion = [ \t\f]*//*no olvides que ese espacio en blanco siempre debe ir, de lo contrario no funcionará para todas las poribles formas de un blankSpace*/
+/*espacioEnBlanco = {finDeLinea} | {tabulacion}*/
 
 /*NOTA: yo me acuerdo que para el graficador, al declarr una clase que tuviera más de un tipo de palabra reservada, me dada problema, de volverte a pasar lo mismo, colocarás a cada palabra por separado en el YYINITIAL... sino entonces en la misma linea del YYINITIAL colocas el yytext como nombre del tkn xD*/
 BLOQUES = "CREDENCIALES" | "PARAMETROS" 
@@ -133,8 +133,8 @@ identificador =  (\$|_|-)({letra}|{numero}|_|-|\$)*
                                                                                                  return simbolo(IDENTIFICADOR);}
         ({letra}|{numero}|_|:|\$|%|#|\!|¡|&|\/|\(|\)|\+|-|\*|\?|¿|'|\{|\}|\.|,|=|\]|\[)+	        {System.out.println(yytext());/*se agregó a :, por el eje del aux, espero no de problemas... no debería xD pero por lo que observé, los estados internos tb pueden emplear las palrbas iniciales del estado que los engloba... o esos : que aparecieron fueron porque estaban "errados"?... fmmm xD*/
                                                                                                  return simbolo(darTipoAlfaNum());}//si no te da problemas incluyes el slaxh para que le user pueda ingresar los salos de linea corresp, que se entenderán como esto al leer el string concatenado en la axn de la gram correspondiente xD
-          
-        {espacioEnBlanco}                                                                       {/*se ignora, puesto que no afecta el desarrollo del análisis que YA FUNCIONA xD*/}
+        /*{espacioEnBlanco}+*/                                                                     /*{se ignora}*/
+      
 
     }//introduje a este estado, por la existencia de los errores, que de entre ellos puede ser que aparezca en un lugar donde no corresponde un token aceptado por el alfabeto xD
     //este estado permite que se reduzcan la cantidad de palabras que el user no puede escribir igual a la de las reservadas xD, además me permitió ver que si hay espacios, entonces habrá maś de un tipo de expre reg definida, p ej. superalfa# xD

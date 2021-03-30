@@ -210,10 +210,10 @@ param_add_comp ::= COMILLA ID COMILLA DOSPUNTOS COMILLA IDENTIFICADOR:id COMILLA
                  | COMILLA NOMBRE GUIONBAJO CAMPO COMILLA DOSPUNTOS COMILLA ALFANUMERICO:nombre COMILLA        {:manejadorRespuestas.agregarAtributo("nombreCampo", Token.parseToken(nombre));:}      
                  | COMILLA FORMULARIO COMILLA DOSPUNTOS COMILLA IDENTIFICADOR:formulario COMILLA               {:manejadorRespuestas.agregarAtributo("formulario", Token.parseToken(formulario));:}      
                  | COMILLA CLASE COMILLA DOSPUNTOS COMILLA tipoComponente COMILLA                        
-                 | COMILLA TEXTO GUIONBAJO VISIBLE COMILLA DOSPUNTOS COMILLA cadena:texto COMILLA                         
+                 | COMILLA TEXTO GUIONBAJO VISIBLE COMILLA DOSPUNTOS COMILLA cadena:texto COMILLA              {:manejadorRespuestas.agregarAtributo("textoVisible", null);:}/*como en esta parte lo que interesa es el nombre y no el token... xD*/
                  | COMILLA ALINEACION COMILLA DOSPUNTOS COMILLA TIPOALINEACION:alineacion COMILLA              {:manejadorRespuestas.agregarAtributo("alineacion", Token.parseToken(alineacion));:}       
                  | COMILLA REQUERIDO COMILLA DOSPUNTOS COMILLA TIPOREQUERIDO:requerimiento COMILLA             {:manejadorRespuestas.agregarAtributo("requerido", Token.parseToken(requerimiento));:}       
-                 | COMILLA OPCIONES COMILLA DOSPUNTOS COMILLA items COMILLA                                   
+                 | COMILLA OPCIONES COMILLA DOSPUNTOS COMILLA items COMILLA                                    {:manejadorRespuestas.agregarAtributo("opciones", null);:}              
                  | COMILLA FILAS COMILLA DOSPUNTOS NUMERO:filas                                 {:manejadorRespuestas.agregarAtributo("filas", Token.parseToken(filas));:}         
                  | COMILLA COLUMNAS COMILLA DOSPUNTOS NUMERO:columnas                           {:manejadorRespuestas.agregarAtributo("columnas", Token.parseToken(columnas));:}     
                  | COMILLA URL COMILLA DOSPUNTOS ALFANUMERICO:url                               {:manejadorRespuestas.agregarAtributo("URL", Token.parseToken(url));:}                       
@@ -226,12 +226,12 @@ tipoComponente ::= TIPOCLASE:tipo                                               
                                                                                                   manejadorRespuestas.agregarAtributo("clase", Token.parseToken(elemento));:}    
                  ;//NOTA[pero no da problemas xD]: si hacer esto te diera problemas con lo que habías pensado hacer para las axn, entonces en el jflex, add las palrbas completas de las clase en la calse "calse_componente" xD, y aquí eli este NT y vuelve a coloca ren la producción en lugar de tipoComponente TIPOCLASE, puesto que por el cb en el jflex, englobará a la palabra completa... xD
 
-cadena ::= ALFANUMERICO:texto cadena                                                            {:manejadorRespuestas.agregarAtributo("textoVisible", Token.parseToken(texto));:}
-         | ALFANUMERICO:texto                                                                   {:manejadorRespuestas.agregarAtributo("textoVisible", Token.parseToken(texto));:}
+cadena ::= cadena ALFANUMERICO:texto                                                             {:manejadorRespuestas.agregarAtributo("", Token.parseToken(texto));:}
+         | ALFANUMERICO:texto                                                                    {:manejadorRespuestas.agregarAtributo("", Token.parseToken(texto));:}
          ;//una de las 2 saldrá como no se desea, es decir con el orden al revés del que lo ingresó el usuario, mas creo que esta será la que se tenga que arreglar, por ser recursi a la der... xD
 
-items ::= ALFANUMERICO:opciones SEPARADOR items                                                 {:manejadorRespuestas.agregarAtributo("opciones", Token.parseToken(opciones));:}                          
-        | ALFANUMERICO:opciones                                                                 {:manejadorRespuestas.agregarAtributo("opciones", Token.parseToken(opciones));:}
+items ::= cadena SEPARADOR:separador items                                                       {:manejadorRespuestas.agregarAtributo("", Token.parseToken(separador));:}                          
+        | cadena                                                            
         ;//DEBES: revisar si los item llegan según como piensas, es decir del 1ro al último, por la recursi a la izq y porque yo pienso que como una f recursiva, cuando termine de llamarse, devolverá todo desde el último resultado hasta el primero... xD
 
 SerieEliComp ::= serie_eli_comp COMA SerieEliComp

@@ -32,7 +32,8 @@ public class ManejadorArchivoRespuestaEntrada {
     private ManejadorAtributos manejadorAtributos = new ManejadorAtributos();    
     private ManejadorErrores manejadorErrores;    
     private int atributosOrdenados = 0;
-    private int numeroSolicitudes = 0;    
+    private int numeroSolicitudes = 0;   
+    private Token tokenAuxiliar = null;
     
     public ManejadorArchivoRespuestaEntrada(ManejadorErrores elManejadorErrores){
         try {
@@ -51,17 +52,18 @@ public class ManejadorArchivoRespuestaEntrada {
     }    
     
     public void agregarAtributo(String nombreAtributo, Token token){//con atributos me refiero a "usuario" "fechaMOdificacion", "fechaCreacion"... y así xD        
-        if(nombreAtributo.equals("opciones") | nombreAtributo.equals("textoVisible")){
-            if(!Token.parseToken(listadoAtributos.getLastItem()).darNombreDelToken().equals("opciones") && 
-               !Token.parseToken(listadoAtributos.getLastItem()).darNombreDelToken().equals("textoVisible")){
-                
-                token.establecerNombreDelToken(nombreAtributo);
-                listadoAtributos.add(token);                
+        if(nombreAtributo.isEmpty() | nombreAtributo.equals("opciones") | nombreAtributo.equals("textoVisible")){
+            if(nombreAtributo.equalsIgnoreCase("textoVisible") | nombreAtributo.equalsIgnoreCase("opciones")){
+                tokenAuxiliar.establecerNombreDelToken(nombreAtributo);
+                listadoAtributos.add(tokenAuxiliar);
+                tokenAuxiliar = null;//puesto que se sabe que se entrará aquí al llegar a la última palrba que se debe concatenar... xD
             }else{
-               String lexema = Token.parseToken(listadoAtributos.getLastItem()).darLexema();
-               lexema += ", "+token.darLexema();
-               Token.parseToken(listadoAtributos.getLastItem()).reestablecerLexema(lexema);
-            }                        
+                if(tokenAuxiliar==null){
+                    tokenAuxiliar = token;
+                }else{                    
+                    tokenAuxiliar.reestablecerLexema(tokenAuxiliar.darLexema() +" "+ token.darLexema());                    
+                }
+            }                    
         }else{
             token.establecerNombreDelToken(nombreAtributo);
             listadoAtributos.add(token);         
@@ -83,7 +85,7 @@ public class ManejadorArchivoRespuestaEntrada {
       ordenar();
       claseComponente = null;//para el siguiente componente si es que lo hubiera
       
-      escribirArchivo("finSoli", elTipoSolicitud);  
+      escribirArchivo("finSoli", "");  
       numeroSolicitudes++;
     }     
     
@@ -112,7 +114,10 @@ public class ManejadorArchivoRespuestaEntrada {
                 }
                 atributosEspecificados[atributosOrdenados]= true;
                 
-                escribirArchivo(atributosEsperados[atributosOrdenados], Token.parseToken(listadoAtributos.get(datosImportantes[0])).darLexema());//Se escribe en el arch 
+                if(!atributosEsperados[atributosOrdenados].equals("clase")){                       
+                   escribirArchivo(atributosEsperados[atributosOrdenados], Token.parseToken(listadoAtributos.get(datosImportantes[0])).darLexema());//Se escribe en el arch 
+                }//puesto que ya se ha agergado antes xD                             
+                
             }//Si no es así entonces no se hace nada, pues eso le corresponde  la revisión de obligatoriedad xD...
                     
            if(atributosEsperados[atributosOrdenados].equals("nombre") && (tipoSolicitud.equals("creacionFormulario") || tipoSolicitud.equals("modificacionFormulario"))){//supongo que se podrá trabajar igual que en el caso de la creación la modificación... xD
@@ -155,13 +160,10 @@ public class ManejadorArchivoRespuestaEntrada {
                 datosImportantes = listadoAtributos.existToken(listadoAtributos, atributosEseradosComponente[atributoActual]);
                     if(datosImportantes[1]>=1){
                         if(datosImportantes[1]>1){
-                            manejadorErrores.establecerErrorHallado("atributoRepetido", atributosEseradosComponente[atributosOrdenados],"");//Se establece el error por repitencia
+                            manejadorErrores.establecerErrorHallado("atributoRepetido", atributosEseradosComponente[atributoActual],"");//Se establece el error por repitencia
                         }
-                        atributosEspecificados[atributosOrdenados]= true;                            
-                        
-                        if(!atributosEseradosComponente[atributoActual].equals("clase")){                       
-                            escribirArchivo(atributosEseradosComponente[atributosOrdenados], Token.parseToken(listadoAtributos.get(datosImportantes[0])).darLexema());//Se escribe en el arch 
-                        }//puesto que ya se ha agergado antes xD                              
+                        atributosEspecificados[atributoActual]= true;                                                                            
+                        escribirArchivo(atributosEseradosComponente[atributoActual], Token.parseToken(listadoAtributos.get(datosImportantes[0])).darLexema());//Se escribe en el arch... y aqui no iba el if para no escribir clase xD, puesto que en los atrib de los comp nunca estará este, pues a partir de este atrib es que se ibtiene el arreglo de los obligatorios de los comp corresp xD...                        
                     }                                                                       
             }
         }catch(IndexOutOfBoundsException e){
@@ -183,7 +185,7 @@ public class ManejadorArchivoRespuestaEntrada {
                     escritor.newLine();
                     break;
                 case "finSoli":
-                    escritor.write("<!fin_respuesta: \""+cuerpo+"\">");
+                    escritor.write("<!fin_respuesta>");
                     escritor.newLine();
                     break;
                 default:
@@ -218,6 +220,7 @@ public class ManejadorArchivoRespuestaEntrada {
                 JOptionPane.showMessageDialog(null, "Surgió un error al registrar\n el archivo de respuesta :(");
             }
         }else{
+            System.out.println("Se borro el archivo");
             archivo.delete();//que bueno que almacena el nombre hasta ser limpiado xD
         }
     }

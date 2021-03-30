@@ -75,7 +75,7 @@ public class ManejadorErrores {//este se encargará de enviar los listado de for
     }
     
     public boolean hubieronErrores(){
-        return listadoErrores.isEmpty();
+        return !listadoErrores.isEmpty();
     }
     
 }
