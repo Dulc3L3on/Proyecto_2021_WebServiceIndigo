@@ -52,8 +52,8 @@ public class ManejadorArchivoRespuestaEntrada {
     }    
     
     public void agregarAtributo(String nombreAtributo, Token token){//con atributos me refiero a "usuario" "fechaMOdificacion", "fechaCreacion"... y así xD        
-        if(nombreAtributo.isEmpty() | nombreAtributo.equals("opciones") | nombreAtributo.equals("textoVisible")){
-            if(nombreAtributo.equalsIgnoreCase("textoVisible") | nombreAtributo.equalsIgnoreCase("opciones")){
+        if(nombreAtributo.isEmpty() | nombreAtributo.equals("opciones") | nombreAtributo.equals("textoVisible") | nombreAtributo.equalsIgnoreCase("titulo")){
+            if(nombreAtributo.equalsIgnoreCase("textoVisible") | nombreAtributo.equalsIgnoreCase("opciones") | nombreAtributo.equalsIgnoreCase("titulo")){
                 tokenAuxiliar.establecerNombreDelToken(nombreAtributo);
                 listadoAtributos.add(tokenAuxiliar);
                 tokenAuxiliar = null;//puesto que se sabe que se entrará aquí al llegar a la última palrba que se debe concatenar... xD
@@ -93,7 +93,7 @@ public class ManejadorArchivoRespuestaEntrada {
         ordenarAtributosGenerales();
         
         //esto es por la existencia de los tipos de componentes... xD
-        if(tipoSolicitud.equals("agregarComponentes") || tipoSolicitud.equals("modificarComponentes")){
+        if(claseComponente!=null && (tipoSolicitud.equals("agregarComponentes") || tipoSolicitud.equals("modificarComponentes"))){
             ordenarAtributosComponentes();
         }        
         listadoAtributos.clear();        
@@ -102,8 +102,7 @@ public class ManejadorArchivoRespuestaEntrada {
    private void ordenarAtributosGenerales(){
         String[] atributosEsperados = manejadorAtributos.darAtributosCorrespondientes(tipoSolicitud);
         boolean[] atributosEspecificados = new boolean[atributosEsperados.length];               
-        int[] datosImportantes;
-        
+        int[] datosImportantes;               
         //coloco como lím el tamaño del arreglo, pues los atrib generales, nunca sobrepasarán o serán menores a la cdad esperada, por e hecho de que en las producciones se colocan los diferentes # de parámetros requeridos de a cuerdo al caso, y tb acer esto no afecta al tipo de solicitud [Add comp [creo que hay otro xD]], es más arregla el inconveniente de que el listado tenga más elementos que el arreglo, lo cual vendría a provocar un indexOutBounds... xD
         for (atributosOrdenados = 0; atributosOrdenados < atributosEsperados.length; atributosOrdenados++) {//de esta manera no habrá problemas cuando se vuelva a emplear esta variable, por le hecho de que cuando se requiera emplear nuevamente, se reiniciará su valor xD y cuando se quiere emplear para hacer el ajuste en la posición del istado al ordenar los componentes, aún poserá su valor, lo cual es lo que se necesita xD :3 xD        
             datosImportantes = listadoAtributos.existToken(listadoAtributos, atributosEsperados[atributosOrdenados]);            
@@ -112,22 +111,35 @@ public class ManejadorArchivoRespuestaEntrada {
                 if(datosImportantes[1]>1){
                     manejadorErrores.establecerErrorHallado("atributoRepetido", atributosEsperados[atributosOrdenados],"");//Se establece el error por repitencia
                 }
+                
                 atributosEspecificados[atributosOrdenados]= true;
                 
                 if(!atributosEsperados[atributosOrdenados].equals("clase")){                       
                    escribirArchivo(atributosEsperados[atributosOrdenados], Token.parseToken(listadoAtributos.get(datosImportantes[0])).darLexema());//Se escribe en el arch 
                 }//puesto que ya se ha agergado antes xD                             
                 
-            }//Si no es así entonces no se hace nada, pues eso le corresponde  la revisión de obligatoriedad xD...
+                if(atributosEsperados[atributosOrdenados].equals("nombre") && (tipoSolicitud.equals("creacionFormulario") || tipoSolicitud.equals("modificacionFormulario"))){//supongo que se podrá trabajar igual que en el caso de la creación la modificación... xD
+                    nombreArchivo += Token.parseToken(listadoAtributos.get(datosImportantes[0])).darLexema();
+                }
+                else if(atributosEsperados[atributosOrdenados].equals("usuarioCreacion")){//supongo que se podrá trabajar igual que en el caso de la creación la modificación... xD
+                    nombreArchivo = Token.parseToken(listadoAtributos.get(datosImportantes[0])).darLexema() + nombreArchivo;
+                }//puesto que si no se halló ese atributo en el listado, se generaría un error de tipo IndexOutOfBounds...               
+            }else if(atributosEsperados[atributosOrdenados].contains("fecha") || atributosEsperados[atributosOrdenados].equals("usuarioCreacion")){//Se puede hacer esto puesto que el error se establece en el método que se encarga de hallar si se cumplió con la obligatoriedad... xD
+                if(atributosEsperados[atributosOrdenados].contains("fecha")){//quiere decir que la primer ubic es -1, puesto que almacena las posi xD                    
+                    //Se envía null, puesto que en realidad no estaba en el arch de entrada... auqnue podría addle el anterior último del listado, el cual se obtendría al pedir el Ultimo, puesto que en ese momento el listado no ha cambiado por el hecho de que está del lado izq y eso se exe antes que el der...
+                    listadoAtributos.add(new Token(atributosEsperados[atributosOrdenados], java.time.LocalDate.now().toString(), Token.parseToken(listadoAtributos.get(listadoAtributos.size()-1)), 0, 0));//yo me acuerdo que este separa con guiones... sino pues habrá una excepción conrespecto a este símbolo cuando se add automáticamente que cuando se add manualmente, por lo tnato habrá que add este variacion en ele otro parser al revisar el arch de respuesta... xD
                     
-           if(atributosEsperados[atributosOrdenados].equals("nombre") && (tipoSolicitud.equals("creacionFormulario") || tipoSolicitud.equals("modificacionFormulario"))){//supongo que se podrá trabajar igual que en el caso de la creación la modificación... xD
-               nombreArchivo += Token.parseToken(listadoAtributos.get(datosImportantes[0])).darLexema();
-           }
-           else if(atributosEsperados[atributosOrdenados].equals("usuarioCreacion")){//supongo que se podrá trabajar igual que en el caso de la creación la modificación... xD
-               nombreArchivo = Token.parseToken(listadoAtributos.get(datosImportantes[0])).darLexema() + nombreArchivo;
-           }
+                }else if(atributosEsperados[atributosOrdenados].equals("usuarioCreacion")){//quiere decir que la primer ubic es -1, puesto que almacena las posi xD
+                    //se busca en el arch aquel user que diga logueado y se add
+                    //SINO, entonces error, porque tendría que haberse logueado antes... xD
+                }
+                
+                 atributosEspecificados[atributosOrdenados]= true;
+                 escribirArchivo(atributosEsperados[atributosOrdenados], Token.parseToken(listadoAtributos.get(listadoAtributos.size()-1)).darLexema());//Se escribe en el arch 
+            }//Si no es así entonces no se hace nada, pues eso le corresponde  la revisión de obligatoriedad xD...                                          
         }//NOTA: Habrá que revisarse [cuando ya se tenga el archivo en el que se alamcenarán los usuarios, si el usuario creador corresponde al logueado... sino ERROR xD
         //ese if nenvolverá el if que add al ini el nombre del user? naa xD,, pues con un error, este archivo no se crea y por lo tanto no se envía a la sig fase que corresp a la webApp xD
+        
         
         revisarObligatoriedad(atributosEsperados, atributosEspecificados, tipoSolicitud);
     }      
@@ -151,30 +163,35 @@ public class ManejadorArchivoRespuestaEntrada {
     }
     
     private void ordenarAtributosComponentes(){
-        String[] atributosEseradosComponente = manejadorAtributos.darDemasObligatoriosComponente(claseComponente);
-        boolean[] atributosEspecificados = new boolean[atributosEseradosComponente.length];    
-        int[] datosImportantes;
+        String[] atributosEseradosComponente = manejadorAtributos.darDemasObligatoriosComponente(claseComponente);        
         
-        try{
-            for (int atributoActual = 0; atributoActual < atributosEseradosComponente.length; atributoActual++) {
-                datosImportantes = listadoAtributos.existToken(listadoAtributos, atributosEseradosComponente[atributoActual]);
-                    if(datosImportantes[1]>=1){
-                        if(datosImportantes[1]>1){
-                            manejadorErrores.establecerErrorHallado("atributoRepetido", atributosEseradosComponente[atributoActual],"");//Se establece el error por repitencia
-                        }
-                        atributosEspecificados[atributoActual]= true;                                                                            
-                        escribirArchivo(atributosEseradosComponente[atributoActual], Token.parseToken(listadoAtributos.get(datosImportantes[0])).darLexema());//Se escribe en el arch... y aqui no iba el if para no escribir clase xD, puesto que en los atrib de los comp nunca estará este, pues a partir de este atrib es que se ibtiene el arreglo de los obligatorios de los comp corresp xD...                        
-                    }                                                                       
+        if(atributosEseradosComponente!=null){
+            boolean[] atributosEspecificados = new boolean[atributosEseradosComponente.length];    
+            int[] datosImportantes;
+            
+            try{
+                for (int atributoActual = 0; atributoActual < atributosEseradosComponente.length; atributoActual++) {
+                    datosImportantes = listadoAtributos.existToken(listadoAtributos, atributosEseradosComponente[atributoActual]);
+                        if(datosImportantes[1]>=1){
+                            if(datosImportantes[1]>1){
+                                manejadorErrores.establecerErrorHallado("atributoRepetido", atributosEseradosComponente[atributoActual],"");//Se establece el error por repitencia
+                            }
+                            atributosEspecificados[atributoActual]= true;                                                                            
+                            escribirArchivo(atributosEseradosComponente[atributoActual], Token.parseToken(listadoAtributos.get(datosImportantes[0])).darLexema());//Se escribe en el arch... y aqui no iba el if para no escribir clase xD, puesto que en los atrib de los comp nunca estará este, pues a partir de este atrib es que se ibtiene el arreglo de los obligatorios de los comp corresp xD...                        
+                        }                                                                       
+                }
+            }catch(IndexOutOfBoundsException e){
+                 manejadorErrores.establecerErrorHallado("atributosComponenteIsuficienes", claseComponente, "");
+            }   
+         
+            if((listadoAtributos.size()-atributosOrdenados+1)>atributosEseradosComponente.length){
+                manejadorErrores.establecerErrorHallado("demasiadosAtribComp", claseComponente, "");
             }
-        }catch(IndexOutOfBoundsException e){
-             manejadorErrores.establecerErrorHallado("atributosComponenteIsuficienes", claseComponente, "");
-        }   
-        
-        if((listadoAtributos.size()-atributosOrdenados+1)>atributosEseradosComponente.length){
-            manejadorErrores.establecerErrorHallado("demasiadosAtribComp", claseComponente, "");
-        }
-        
-        revisarObligatoriedad(atributosEseradosComponente, atributosEspecificados, claseComponente);//es posible hacer esto puesto que el método de "revisarObligatoriedad" obtiene los datos del método que brinda los arregloes de enteros, también tiene declarados los caso que corresponden a los componentes xD :3 xD  
+            
+            if(!tipoSolicitud.equals("modificarComponentes")){
+                revisarObligatoriedad(atributosEseradosComponente, atributosEspecificados, claseComponente);//es posible hacer esto puesto que el método de "revisarObligatoriedad" obtiene los datos del método que brinda los arregloes de enteros, también tiene declarados los caso que corresponden a los componentes xD :3 xD  
+            }//De tal forma que se pueda hallar la repitencia pero no se muestre error por no venir algun atributo xD                        
+        }                              
     }  
     
     private void escribirArchivo(String encabezado, String cuerpo){
@@ -201,7 +218,8 @@ public class ManejadorArchivoRespuestaEntrada {
     public void finalizarArchivo(){
         if(numeroSolicitudes>1){
             try {
-                escritor.append("<!ini_respuestas>", 0, 18);//para que se escriba al principio de todo el archivo xD, si no sale como quiero intenta nuevamente y si no, no lo coloques :v, de todos modos no te afecta al formar los tipo de componentes xD
+                //esta forma de apendizar de abajo, no sirve para insertar en otra línea, solo sirve pra indicar lel tam de lo que se insertará--- :v xD
+                //escritor.append("<!ini_respuestas>", 0, 17);//para que se escriba al principio de todo el archivo xD, si no sale como quiero intenta nuevamente y si no, no lo coloques :v, de todos modos no te afecta al formar los tipo de componentes xD
                 escritor.newLine();
                 escritor.append("<!fin_respuestas>");
                 escritor.newLine();

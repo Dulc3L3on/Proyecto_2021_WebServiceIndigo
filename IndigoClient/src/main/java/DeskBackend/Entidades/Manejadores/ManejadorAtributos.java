@@ -54,25 +54,25 @@ public class ManejadorAtributos {
         String[] otrosAtributos;
         
         switch(tipoComponente){
-            case "campoTexto":
+            case "CAMPO_TEXTO":
                 otrosAtributos = new String[3];
                 otrosAtributos[0] = "nombreCampo";otrosAtributos[1] = "alineacion";otrosAtributos[2] = "requerido";
                 return otrosAtributos;//solo nombre de Campo es obligatorio
             
-            case "areaTexto":
+            case "AREA_TEXTO":
                 otrosAtributos = new String[5];
                 otrosAtributos[0] = "nombreCampo"; otrosAtributos[1] = "filas"; otrosAtributos[2] = "columnas";
                 ;otrosAtributos[3] = "alineacion";otrosAtributos[4] = "requerido";
                 return otrosAtributos;//solo la alineación y "requerido" son opcionales... xD
            
-            case "checkbox": case "radio": case "combo":            
-                otrosAtributos = new String[2];//:v xD
+            case "CHECKBOX": case "RADIO": case "COMBO":            
+                otrosAtributos = new String[4];//:v xD
                 otrosAtributos[0] = "nombreCampo";otrosAtributos[1] = "opciones";
                 otrosAtributos[2] = "alineacion";otrosAtributos[3] = "requerido";
                 
                 return otrosAtributos;
             
-            case "imagen":
+            case "IMAGEN":
                 otrosAtributos = new String[1];
                 otrosAtributos[0] = "URL";
                 return otrosAtributos;//solo nombre de Campo es obligatorio            
@@ -120,22 +120,22 @@ public class ManejadorAtributos {
                 }         
                
              //de los atributos de los componentes xD
-            case "campoTexto":
+            case "CAMPO_TEXTO":
                 {
                     int[] importancia = {1,-1,-1};
                     return importancia;
                 }                                         
-            case "areaTexto":
+            case "AREA_TEXTO":
                 {
                     int[] importancia = {1, 1, 1,-1, -1};
                     return importancia;
                 }    
-            case "checkbox": case "radio": case "combo":
+            case "CHECKBOX": case "RADIO": case "COMBO":
                 {
                     int[] importancia = {1, 1, -1, -1};
                     return importancia;
                 }              
-            case "imagen":
+            case "IMAGEN":
                 {
                     int[] importancia = {1};
                     return importancia;

@@ -1,0 +1,13 @@
+<!ini_respuesta: "creacionUsuario">
+usuario: juanito619
+password: 12345678pass
+fechaCreacion: 2021-03-31
+<!fin_respuesta>
+<!ini_respuesta: "modificarComponentes">
+clase: CHECKBOX
+id: $_grupo_paises
+formulario: $form1
+indice: 1
+<!fin_respuesta>
+<!ini_respuestas>
+<!fin_respuestas>

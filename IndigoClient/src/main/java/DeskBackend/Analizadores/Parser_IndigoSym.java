@@ -9,8 +9,8 @@ package DeskBackend.Analizadores;
 public class Parser_IndigoSym {
   /* terminals */
   public static final int ELIMINAR = 11;
-  public static final int TIPOCLASE = 62;
-  public static final int IDENTIFICADOR = 59;
+  public static final int TIPOCLASE = 61;
+  public static final int IDENTIFICADOR = 58;
   public static final int COMPONENTE = 14;
   public static final int TITULO = 36;
   public static final int SOLICITUD = 3;
@@ -21,12 +21,12 @@ public class Parser_IndigoSym {
   public static final int DIFERENTE = 53;
   public static final int TEMA = 38;
   public static final int PASSWORD = 31;
-  public static final int NUMERO = 57;
+  public static final int NUMERO = 56;
   public static final int OPCIONES = 27;
   public static final int LOGIN = 12;
   public static final int CAMPO = 19;
   public static final int ANTIGUO = 34;
-  public static final int NOT = 74;
+  public static final int NOT = 73;
   public static final int SOLICITUDES = 4;
   public static final int FILAS = 28;
   public static final int CREACION = 33;
@@ -34,7 +34,7 @@ public class Parser_IndigoSym {
   public static final int CREDENCIALES = 6;
   public static final int FORMULARIO = 16;
   public static final int TIPOREQUERIDO = 17;
-  public static final int SELECT = 66;
+  public static final int SELECT = 65;
   public static final int COMA = 42;
   public static final int IGUAL = 52;
   public static final int FECHA = 32;
@@ -42,47 +42,46 @@ public class Parser_IndigoSym {
   public static final int NOMBRE = 37;
   public static final int CIERREANGULAR = 45;
   public static final int DOSPUNTOS = 40;
-  public static final int CONSULTA = 71;
+  public static final int CONSULTA = 70;
   public static final int APERTURALLAVE = 46;
-  public static final int FORMATOFECHA = 58;
+  public static final int FORMATOFECHA = 57;
   public static final int FIN = 5;
-  public static final int TIPOALINEACION = 63;
+  public static final int TIPOALINEACION = 62;
   public static final int COLUMNAS = 29;
   public static final int VISIBLE = 24;
   public static final int AREA = 21;
   public static final int MENOS = 43;
   public static final int MENOR = 51;
   public static final int USUARIO = 9;
-  public static final int CONSULTAS = 70;
-  public static final int CONSULTAR = 64;
+  public static final int CONSULTAS = 69;
+  public static final int CONSULTAR = 63;
   public static final int URL = 30;
-  public static final int FORM = 68;
+  public static final int FORM = 67;
   public static final int EOF = 0;
-  public static final int WHERE = 69;
+  public static final int WHERE = 68;
   public static final int INI = 2;
   public static final int AGREGAR = 13;
   public static final int MENORIGUAL = 54;
-  public static final int OR = 73;
+  public static final int OR = 72;
   public static final int COMILLA = 48;
   public static final int error = 1;
   public static final int ID = 18;
-  public static final int SEPARADOR = 56;
   public static final int GUIONBAJO = 39;
   public static final int PARAMETROS = 7;
   public static final int MODIFICAR = 10;
   public static final int REQUERIDO = 26;
-  public static final int ALFANUMERICO = 60;
+  public static final int ALFANUMERICO = 59;
   public static final int MAYORIGUAL = 55;
   public static final int INDICE = 23;
   public static final int MODIFICACION = 35;
   public static final int ALINEACION = 25;
-  public static final int AND = 72;
-  public static final int TO = 67;
+  public static final int AND = 71;
+  public static final int TO = 66;
   public static final int ADMIRACION = 49;
-  public static final int TIPOTEMA = 61;
+  public static final int TIPOTEMA = 60;
   public static final int ASIGNAR = 41;
   public static final int NUEVO = 15;
-  public static final int DATOS = 65;
+  public static final int DATOS = 64;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -140,7 +139,6 @@ public class Parser_IndigoSym {
   "DIFERENTE",
   "MENORIGUAL",
   "MAYORIGUAL",
-  "SEPARADOR",
   "NUMERO",
   "FORMATOFECHA",
   "IDENTIFICADOR",

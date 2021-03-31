@@ -67,7 +67,7 @@ identificador =  (\$|_|-)({letra}|{numero}|_|-|\$)*
                 return 5;//el # de fin
             }
         }
-        return 60;//aquí el # que corresponde al alfa#
+        return 59;//aquí el # que corresponde al alfa#
     }
     
     public ManejadorErrores darManejadorErrores(){
@@ -124,14 +124,15 @@ identificador =  (\$|_|-)({letra}|{numero}|_|-|\$)*
     //  {comilla}(~{comilla})         {}/*SERÁ EIMINADA XD, porque sé que la solución SÍ funciona xD*/
 
    <VALORES>{//NO necestio concatenar, porque sé que cuando en la gramática reciba más de un superalfa# es porque terminó su clasificación debido a un caracter no definido en su regla, lo más probable, un tipo de espacio en blanco xD
-        \"                                                                                      {estaEnYYINITIAL = true; yybegin(YYINITIAL); }
-        \|                                                                                      {return simbolo(SEPARADOR);}//yo asumo que solo se puede salir de otros estados al indicarle explícitamente esto con un método y no al emplear un return... [mira el ejemplo de flex, hay uno más o menos así xD]
+        \"                                                                                      {estaEnYYINITIAL = true; yybegin(YYINITIAL); }       
 
-        {numero}+("."{numero}+)?                                                                {return simbolo(NUMERO);}
-        ({numero})({numero})({numero})({numero})-({numero})({numero})?-({numero})({numero})?    {return simbolo(FORMATOFECHA);}
+        {numero}+("."{numero}+)?                                                                {System.out.println(yytext());
+                                                                                                 return simbolo(NUMERO);}
+        ({numero})({numero})({numero})({numero})-({numero})({numero})?-({numero})({numero})?    {System.out.println(yytext());
+                                                                                                 return simbolo(FORMATOFECHA);}
         {identificador}                                                                         {System.out.println(yytext());
                                                                                                  return simbolo(IDENTIFICADOR);}
-        ({letra}|{numero}|_|:|\$|%|#|\!|¡|&|\/|\(|\)|\+|-|\*|\?|¿|'|\{|\}|\.|,|=|\]|\[)+	        {System.out.println(yytext());/*se agregó a :, por el eje del aux, espero no de problemas... no debería xD pero por lo que observé, los estados internos tb pueden emplear las palrbas iniciales del estado que los engloba... o esos : que aparecieron fueron porque estaban "errados"?... fmmm xD*/
+        ({letra}|{numero}|\||_|:|\$|%|#|\!|¡|&|\/|\(|\)|\+|-|\*|\?|¿|'|\{|\}|\.|,|=|\]|\[)+	        {System.out.println(yytext());/*se agregó a :, por el eje del aux, espero no de problemas... no debería xD pero por lo que observé, los estados internos tb pueden emplear las palrbas iniciales del estado que los engloba... o esos : que aparecieron fueron porque estaban "errados"?... fmmm xD*/
                                                                                                  return simbolo(darTipoAlfaNum());}//si no te da problemas incluyes el slaxh para que le user pueda ingresar los salos de linea corresp, que se entenderán como esto al leer el string concatenado en la axn de la gram correspondiente xD
         /*{espacioEnBlanco}+*/                                                                     /*{se ignora}*/
       
