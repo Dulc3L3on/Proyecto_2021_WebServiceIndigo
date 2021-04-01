@@ -138,6 +138,7 @@ public class IndigoTextEditor extends javax.swing.JFrame {
 
         IniciarSesion.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         IniciarSesion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconoLogin.png"))); // NOI18N
+        IniciarSesion.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         IniciarSesion.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 IniciarSesionMouseClicked(evt);
@@ -146,6 +147,7 @@ public class IndigoTextEditor extends javax.swing.JFrame {
 
         BloqueFormulario.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         BloqueFormulario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconoformulario.png"))); // NOI18N
+        BloqueFormulario.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         BloqueFormulario.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 BloqueFormularioMouseClicked(evt);
@@ -154,6 +156,7 @@ public class IndigoTextEditor extends javax.swing.JFrame {
 
         BloqueConsultas.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         BloqueConsultas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconoConsulta.png"))); // NOI18N
+        BloqueConsultas.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         BloqueConsultas.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 BloqueConsultasMouseClicked(evt);
@@ -162,6 +165,7 @@ public class IndigoTextEditor extends javax.swing.JFrame {
 
         cerrarSesion.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         cerrarSesion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconoLogout.png"))); // NOI18N
+        cerrarSesion.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cerrarSesion.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 cerrarSesionMouseClicked(evt);
@@ -179,6 +183,7 @@ public class IndigoTextEditor extends javax.swing.JFrame {
 
         AgregarComponente.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         AgregarComponente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconoAddElemento.png"))); // NOI18N
+        AgregarComponente.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         AgregarComponente.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 AgregarComponenteMouseClicked(evt);

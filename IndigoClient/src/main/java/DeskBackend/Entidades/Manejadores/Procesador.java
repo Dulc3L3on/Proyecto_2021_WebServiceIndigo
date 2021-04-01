@@ -7,31 +7,26 @@ package DeskBackend.Entidades.Manejadores;
 
 import DeskBackend.Analizadores.Lexer;
 import DeskBackend.Analizadores.Parser_Indigo;
-import java.io.FileNotFoundException;
+import DeskBackend.Entidades.Herramientas.DesktopAPI;
+import DeskBackend.Entidades.Intermediarias.Enlazador;
 import java.io.StringReader;
 import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpRequest.BodyPublishers;
-import java.nio.file.Paths;
-import java.time.Duration;
-import javax.swing.JOptionPane;
-
 
 /**
  *
  * @author phily
  */
 public class Procesador {//este se encargará de llamar al manejador que le corresponde trabajar la lista no vacía ecibida del parser...esto siempre y cuando no hayan habido errores de cualquier tipo  
-    private ManejadorArchivoRespuestaEntrada manejadorRespuestas;     
-    private ManejadorAtributos manejadorAxnConsultas;    
+    private ManejadorArchivoRespuestaEntrada manejadorRespuestas;           
+    private Enlazador enlazador;
     //encargados de realizar el aálisis a la entrada
     private Lexer lexer;
-    private Parser_Indigo parser;    
+    private Parser_Indigo parser;     
     
-    public Procesador(String especificacionesEntrada){
+    public Procesador(String especificacionesEntrada){        
         try {
             StringReader lectorEntrada = new StringReader(especificacionesEntrada);
+            enlazador = new Enlazador();            
             
             System.out.println("A punto de entrar a la fase de análisis...\n");
             lexer = new Lexer(lectorEntrada);
@@ -43,15 +38,11 @@ public class Procesador {//este se encargará de llamar al manejador que le corr
             System.out.println("A punto de entrar a la conexion\n");
             
             if(parser.darListadoErrores().isEmpty()){
-                try {
-                    //Se envía el nombre del archivo por medio del método de manipulador de arch de entrada, al JSO o servlet, por medo de las herramientas proporcionadas por el inge xD
-                    HttpClient cliente = HttpClient.newHttpClient();
-                    //yo asumo que ese set ContentType es para especificar que va a ser lo que se abrirá xD, en este caso un JSP, por eso coloqué este tipo xD... aunque quizá sea lo del archivo.... :v xD
-                    HttpRequest request = HttpRequest.newBuilder().uri(URI.create("http://localhost:8080//IndigoWebApp//IndigoForms.jsp")).timeout(Duration.ofMinutes(15)).header("Content-Type", "text/html; charset=UTF-8").POST(BodyPublishers.ofFile(Paths.get(manejadorRespuestas.darDireccionCompletaArchivo()))).build();//la otra diagonal servirá para establecer el header que será el quedistinga a cada archivo de los demás... xD
-                } catch (FileNotFoundException ex) {                
-                    JOptionPane.showMessageDialog(null, "El archivo: "+ manejadorRespuestas.darNombreArchivo() +" no existe");
-                }
+                //enlazador.linkWithIndigoFormsWeb();
+                DesktopAPI.browse(new URI("http://localhost:8080/IndigoWebApp/creadorComponentes"));
                 System.out.println("Acabando de salir de la conexion\n");
+            }else{
+                //Se muestra el listado de los errores
             }
         } catch (Exception ex) {
             System.out.println("Error al intentar ANALIZAR la entrada");

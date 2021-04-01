@@ -30,16 +30,16 @@ public class DistribuidorBloques {
     }
     
     private String darBloqueFrecuente(String tipoParametro){
-        return "<!ini_solicitud: \"TIPO_SOLICITUD\">\n\t{ \""+tipoParametro+"\":[{\n\t\t"
-                + "\"PARAMETRO_1\": \"valor_1\",\n\t\t\"PARAMETRO_2\": \"valor_2\""
-                + "\n\t\t}\n\t\t]\n\t}\n<fin_solicitud!>";
+        return "< ! ini _ solicitud : \"TIPO _ SOLICITUD \" >\n\t{ \" "+tipoParametro+" \" : [ {\n\t\t"
+                + "\" PARAMETRO _ 1 \" : \"valor_1\",\n\t\t\" PARAMETRO _ 2 \" : \"valor_2\""
+                + "\n\t\t}\n\t\t]\n\t}\n< fin _ solicitud ! >";
     }
     
     private String darBloqueConsultas(){
-        return "<!ini_solicitud: \"CONSULTAR_DATOS\">\n\t{ \"CONSULTAS\":[{\n\t\t\"CONSULTA-#\": "
-                + "\"SELECT TO FORM -> $identificadorFormulario [ID_campos]\",\n\t\t\t"
+        return "< ! ini _ solicitud : \" CONSULTAR _ DATOS \" >\n\t{ \" CONSULTAS \": [ {\n\t\t\" CONSULTA - # \" : "
+                + "\" SELECT TO FORM -> $identificadorFormulario [ ID_campos ]\",\n\t\t\t"
                 + "WHERE [ID_Campo tipoRelacion ValorComparacion]\n\t\t"
-                + "\"PARAMETRO_2\": \"valor_2\"\n\t\t}\n\t\t]\n\t}\n<fin_solicitud!>";
+                + "\" PARAMETRO _ 2 \" : \"valor_2\"\n\t\t}\n\t\t]\n\t}\n< fin _ solicitud ! >";
     }
     
 }

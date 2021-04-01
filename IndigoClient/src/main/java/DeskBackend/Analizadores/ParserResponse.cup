@@ -1,0 +1,203 @@
+package DeskBackend.Analizadores;
+import java_cup.runtime.*;
+
+import DeskBackend.Entidades.Herramientas.ListaEnlazada;
+import DeskBackend.Entidades.Token;
+
+class ParserResponse;
+
+parser code{:  
+    public ParserResponse (LexerResponse lexer){//a menos que lo sobreescribas, no es necesario colocarlo, puesto que ya existe este cnstrc y además el lexer hereda de Scanner...
+        super(lexer);                         
+    }        
+
+    protected int error_sync_size() {//este es para cb el # de tokens que el parser requiere para recuperarse de los errores
+        return 1;
+    }     
+:}
+
+terminal INI, RESPUESTA, RESPUESTAS, FIN;
+terminal CREACIONUSER, MODIFICACIONUSER, ELIMINACIONUSER, LOGINUSER, CREACIONFORM, ELIMINACIONFORM, MODIFICACIONFORM, ADDCOMPS, ELICOMP, MODIFCOMP;
+terminal USUARIO, NUEVO, FORMULARIO, ID, CAMPO, TEXTO, CLASE, INDICE, VISIBLE, ALINEACION, REQUERIDO, OPCIONES, FILAS, COLUMNAS, URL, PASSWORD, FECHA, CREACION, ANTIGUO, MODIFICACION, TITULO, NOMBRE, TEMA;
+terminal GUIONBAJO, DOSPUNTOS, COMILLA, ADMIRACION, MAYOR, MENOR/*, IGUAL, DIFERENTE, MENORIGUAL, MAYORIGUAL, APERTURALLAVE, CIERRELLAVEASIGNAR, APERTURAANGULAR, CIERREANGULAR, COMA, MENOS*/;
+terminal ALFANUMERICO;//Recuerda que identificador es el nombre que reciben las "variables" e ID es la palabra reservada que indica que el valor del parámetro que se encontrara es un identificador xD
+/*terminal CONSULTAR, DATOS, SELECT, TO, FORM, WHERE, CONSULTAS, CONSULTA, AND, OR, NOT;*/
+
+non terminal p, cuerpo, Cuerpo, opciones, ParamCreacion, param_creacion, ParamModifUser, param_modif_user, param_eli, ParamLogin, param_login, Param_Nuevo_Form, param_nuevo_form, param_eli_form, Param_Modif_Form, param_modif_form, Param_Add_Comp, param_add_comp, cadena, Param_Eli_Comp, param_eli_comp, Param_Modif_Comp, param_modif_comp/*, Serie_Consultas, serie_consultas, cuerpo_consultas, bloque_sqf, identificacion, cuerpo_consulta, seleccion, condicion, Condicion, comparacion, negacion, logico, relacional, valor*/;
+
+/*precedencia? hasta donde sé no es necesario que incluya eso :v xD*/
+
+start with p;
+
+p ::= MENOR ADMIRACION INI GUIONBAJO RESPUESTAS MAYOR cuerpo Cuerpo MENOR ADMIRACION FIN GUIONBAJO RESPUESTAS MAYOR                     /*se prepara la lista [bueno quizá no exactamente eso, pero talvez si otra axn, solo talvez xD*/
+    | cuerpo                                                                                                                            /*se prepara la lista [bueno quizá no exactamente eso, pero talvez si otra axn, solo talvez xD*/
+    ;
+
+cuerpo ::= MENOR ADMIRACION INI GUIONBAJO RESPUESTA DOSPUNTOS opciones MENOR FIN GUIONBAJO RESPUESTA ADMIRACION MAYOR
+        ;
+
+Cuerpo ::= Cuerpo cuerpo
+         | cuerpo
+         ;
+
+opciones ::= COMILLA CREACIONUSER COMILLA MAYOR ParamCreacion
+           | COMILLA MODIFICACIONUSER COMILLA MAYOR ParamModifUser
+           | COMILLA ELIMINACIONUSER COMILLA MAYOR param_eli
+           | COMILLA LOGINUSER COMILLA MAYOR ParamLogin
+           | COMILLA CREACIONFORM COMILLA MAYOR Param_Nuevo_Form
+           | COMILLA ELIMINACIONFORM COMILLA MAYOR param_eli_form
+           | COMILLA MODIFICACIONFORM COMILLA MAYOR Param_Modif_Form
+           | COMILLA ADDCOMPS COMILLA MAYOR Param_Add_Comp
+           | COMILLA ELICOMP COMILLA MAYOR Param_Eli_Comp
+           | COMILLA MODIFCOMP COMILLA MAYOR Param_Modif_Comp
+   /*        | COMILLA CONSULTAR GUIONBAJO DATOS COMILLA MAYOR*/
+           ;
+
+ParamCreacion ::= param_creacion ParamCreacion
+                 | param_creacion
+                 ;/*se peude hacer esto, puesto que la entrada original que el user ingresó ya fue analizada, por lo cual si llegó aquí es porque no hubo error alguno, entonces puedo generalizar con respecto a la producción de parámetros, pue sabreé que lo que recibo está completamente BIEN XD*/
+
+param_creacion ::= param_login                                                                                 /*el llamado al método del tipo de objeto correspondiente [al menos para el caso de los componentes xD*/
+                 | FECHA GUIONBAJO CREACION DOSPUNTOS ALFANUMERICO:fecha     
+                 ;
+
+ParamModifUser ::= param_modif_user ParamModifUser
+              | param_modif_user
+              ;/*peinso que NO habrá problemas al hacer esto porque por ser un LL1, cuando vea que el siguiente ya no encaja con esta producción, se saldrá a su superior y por lo tanto todo seguirá nice, porque en ella si estará definido lo que apreció xD*/
+
+param_modif_user ::= USUARIO GUIONBAJO ANTIGUO DOSPUNTOS ALFANUMERICO:nombre 
+              | USUARIO GUIONBAJO NUEVO DOSPUNTOS  ALFANUMERICO:nombre       
+              | NUEVO GUIONBAJO PASSWORD DOSPUNTOS  ALFANUMERICO:password    
+              | FECHA GUIONBAJO MODIFICACION DOSPUNTOS  ALFANUMERICO:fecha   
+              ;
+
+param_eli ::= USUARIO DOSPUNTOS ALFANUMERICO:nombre       
+            ;
+
+ParamLogin ::= param_login param_login
+             ;
+
+param_login ::= USUARIO DOSPUNTOS ALFANUMERICO:nombre         
+              | PASSWORD DOSPUNTOS ALFANUMERICO:password      
+              ; 
+
+Param_Nuevo_Form ::= param_nuevo_form Param_Nuevo_Form
+                   | param_nuevo_form
+                   ;
+
+param_nuevo_form ::= ID DOSPUNTOS ALFANUMERICO:id             
+                   | TITULO DOSPUNTOS cadena                  
+                   | NOMBRE DOSPUNTOS ALFANUMERICO:nombre       
+                   | TEMA DOSPUNTOS ALFANUMERICO:tema           
+                   | USUARIO GUIONBAJO CREACION DOSPUNTOS ALFANUMERICO:nombre 
+                   | FECHA GUIONBAJO CREACION DOSPUNTOS ALFANUMERICO:fecha    
+                   ;
+
+param_eli_form ::= ID DOSPUNTOS ALFANUMERICO:id        
+                ;   
+
+Param_Modif_Form ::= param_modif_form Param_Modif_Form
+                   | param_modif_form
+                   ;
+
+param_modif_form ::= ID DOSPUNTOS ALFANUMERICO:id      
+                   | TITULO DOSPUNTOS cadena           
+                   | NOMBRE DOSPUNTOS ALFANUMERICO:nombre           
+                   | TEMA DOSPUNTOS ALFANUMERICO:tema               
+                   ;
+
+Param_Add_Comp ::= param_add_comp Param_Add_Comp
+                 | param_add_comp                 
+                 ;
+
+param_add_comp ::= ID DOSPUNTOS ALFANUMERICO:id                     
+                 | NOMBRE GUIONBAJO CAMPO DOSPUNTOS ALFANUMERICO:nombre  
+                 | FORMULARIO DOSPUNTOS ALFANUMERICO:formulario          
+                 | CLASE DOSPUNTOS ALFANUMERICO:tipoComponente                        
+                 | TEXTO GUIONBAJO VISIBLE DOSPUNTOS cadena:texto        
+                 | ALINEACION DOSPUNTOS ALFANUMERICO:alineacion          
+                 | REQUERIDO DOSPUNTOS ALFANUMERICO:requerimiento        
+                 | OPCIONES DOSPUNTOS cadena                             
+                 | FILAS DOSPUNTOS ALFANUMERICO:filas                    
+                 | COLUMNAS DOSPUNTOS ALFANUMERICO:columnas              
+                 | URL DOSPUNTOS ALFANUMERICO:url              
+                 ;
+
+cadena ::= cadena ALFANUMERICO:texto                           
+         | ALFANUMERICO:texto                                  
+         ;//una de las 2 saldrá como no se desea, es decir con el orden al revés del que lo ingresó el usuario, mas creo que esta será la que se tenga que arreglar, por ser recursi a la der... xD
+
+Param_Eli_Comp ::= param_eli_comp param_eli_comp                
+                 ;
+
+param_eli_comp ::= ID DOSPUNTOS ALFANUMERICO:id                
+                 | FORMULARIO DOSPUNTOS ALFANUMERICO:formulario 
+                 ;
+
+Param_Modif_Comp ::= param_modif_comp Param_Modif_Comp
+                   | param_modif_comp                   
+                   ;
+
+param_modif_comp ::= param_add_comp                                                             
+                   | INDICE DOSPUNTOS ALFANUMERICO:indice       
+                   ;
+
+/*No se tocará nada de aquí aún, pues en realidad no se ha pensado en esto xD*/
+/*Serie_Consultas ::= APERTURALLAVE serie_consultas CIERRELLAVE
+                  ;
+
+serie_consultas ::= cuerpo_consultas COMA serie_consultas
+                  | cuerpo_consultas
+                  ;
+
+cuerpo_consultas ::= COMILLA CONSULTA MENOS NUMERO DOSPUNTOS COMILLA bloque_sqf COMILLA*/ /*NO creo que vaya a ser necesario colocar esta sintaxis, puesto que aquí se recibirán las series ordenadas, de manera similar a lo que se hizo con las series de las otras solicitudes xD*/
+                   /*;
+
+bloque_sqf ::= SELECT TO FORM ASIGNAR identificacion cuerpo_consulta
+             ;
+
+identificacion ::= IDENTIFICADOR
+                 | ALFANUMERICO
+                 ;
+
+cuerpo_consulta ::= APERTURAANGULAR seleccion CIERREANGULAR condicion
+                  | APERTURAANGULAR CIERREANGULAR
+                  ;
+
+seleccion ::= ALFANUMERICO COMA seleccion
+            | ALFANUMERICO
+            ;
+
+//Creo que con respecto a la produccion de la conidicón [o COndición xD, no recuerdo cual es exacatamente] habrá que cb la producción pues si no el orden en que el cliente especificó los elementos, no será el orden que visualice, es decir lo verá al revés o eso creo xD, revisa antes para afirmar o dicho con anterioridad xD
+
+condicion ::= WHERE APERTURAANGULAR negacion comparacion Condicion
+            ;
+
+Condicion ::= logico comparacion Condicion
+            | CIERREANGULAR
+            ;
+
+comparacion ::= IDENTIFICADOR relacional valor
+              ;*//*Según lo que veo en la gramática, debe ser el nombre del campo y no el identificador, puesto que NO inicia con $ en el ejemplo... xD*/
+
+/*negacion ::= NOT
+           | 
+           ;
+
+logico ::= AND
+         | OR
+         | NOT
+         ;
+        
+relacional ::= MENOR
+             | MAYOR
+             | IGUAL
+             | DIFERENTE
+             | MAYORIGUAL
+             | MENORIGUAL
+             ;
+
+valor ::= NUMERO
+        | COMILLA ALFANUMERICO COMILLA
+        | COMILLA FORMATOFECHA COMILLA
+        ;*/

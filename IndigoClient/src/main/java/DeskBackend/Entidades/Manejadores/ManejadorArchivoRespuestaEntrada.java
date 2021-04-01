@@ -19,6 +19,7 @@ import javax.swing.JOptionPane;
  */
 public class ManejadorArchivoRespuestaEntrada {
     private ListaEnlazada<Token> listadoAtributos;
+    private ListaEnlazada<String> listadoEspecificaciones;
     private FileWriter escritorArchivos;
     private BufferedWriter escritor;
     private File archivo;    
@@ -39,6 +40,7 @@ public class ManejadorArchivoRespuestaEntrada {
         try {
             manejadorErrores = elManejadorErrores;            
             listadoAtributos = new ListaEnlazada<>();            
+            listadoEspecificaciones = new ListaEnlazada<>();
             
             archivo = new File(path+nombreArchTemp);//el path, será una combinación del nombre del usuario y el nombre del formulario xD, así será fácil hallarlo al buscarlo xD                        
                 //se escribe el archivo y se envía a la web para que lo procese con sus analizadores y los muestre gráficamente xD                
@@ -76,16 +78,19 @@ public class ManejadorArchivoRespuestaEntrada {
     
     public void establecerTipoSolicitud(String elTipoSolicitud){
       tipoSolicitud = elTipoSolicitud;
-      escribirArchivo("iniSoli", elTipoSolicitud);  
+      //escribirArchivo("iniSoli", elTipoSolicitud); 
+      listadoEspecificaciones.add(" < ! ini _ respuesta : \" "+ elTipoSolicitud+" \">");
       
       if(claseComponente!=null){
-          escribirArchivo("clase", claseComponente);          
+          //escribirArchivo("clase", claseComponente);          
+          listadoEspecificaciones.add("clase: "+ claseComponente);
       }     
       
       ordenar();
       claseComponente = null;//para el siguiente componente si es que lo hubiera
       
-      escribirArchivo("finSoli", "");  
+      //escribirArchivo("finSoli", "");  
+      listadoEspecificaciones.add(" < fin _ respuesta ! >");
       numeroSolicitudes++;
     }     
     
@@ -114,8 +119,8 @@ public class ManejadorArchivoRespuestaEntrada {
                 
                 atributosEspecificados[atributosOrdenados]= true;
                 
-                if(!atributosEsperados[atributosOrdenados].equals("clase")){                       
-                   escribirArchivo(atributosEsperados[atributosOrdenados], Token.parseToken(listadoAtributos.get(datosImportantes[0])).darLexema());//Se escribe en el arch 
+                if(!atributosEsperados[atributosOrdenados].equals("clase")){                                          
+                   listadoEspecificaciones.add(atributosEsperados[atributosOrdenados]+":"+Token.parseToken(listadoAtributos.get(datosImportantes[0])).darLexema());                   
                 }//puesto que ya se ha agergado antes xD                             
                 
                 if(atributosEsperados[atributosOrdenados].equals("nombre") && (tipoSolicitud.equals("creacionFormulario") || tipoSolicitud.equals("modificacionFormulario"))){//supongo que se podrá trabajar igual que en el caso de la creación la modificación... xD
@@ -127,19 +132,17 @@ public class ManejadorArchivoRespuestaEntrada {
             }else if(atributosEsperados[atributosOrdenados].contains("fecha") || atributosEsperados[atributosOrdenados].equals("usuarioCreacion")){//Se puede hacer esto puesto que el error se establece en el método que se encarga de hallar si se cumplió con la obligatoriedad... xD
                 if(atributosEsperados[atributosOrdenados].contains("fecha")){//quiere decir que la primer ubic es -1, puesto que almacena las posi xD                    
                     //Se envía null, puesto que en realidad no estaba en el arch de entrada... auqnue podría addle el anterior último del listado, el cual se obtendría al pedir el Ultimo, puesto que en ese momento el listado no ha cambiado por el hecho de que está del lado izq y eso se exe antes que el der...
-                    listadoAtributos.add(new Token(atributosEsperados[atributosOrdenados], java.time.LocalDate.now().toString(), Token.parseToken(listadoAtributos.get(listadoAtributos.size()-1)), 0, 0));//yo me acuerdo que este separa con guiones... sino pues habrá una excepción conrespecto a este símbolo cuando se add automáticamente que cuando se add manualmente, por lo tnato habrá que add este variacion en ele otro parser al revisar el arch de respuesta... xD
-                    
+                    listadoAtributos.add(new Token(atributosEsperados[atributosOrdenados], java.time.LocalDate.now().toString(), Token.parseToken(listadoAtributos.get(listadoAtributos.size()-1)), 0, 0));//yo me acuerdo que este separa con guiones... sino pues habrá una excepción conrespecto a este símbolo cuando se add automáticamente que cuando se add manualmente, por lo tnato habrá que add este variacion en ele otro parser al revisar el arch de respuesta... xD                    
                 }else if(atributosEsperados[atributosOrdenados].equals("usuarioCreacion")){//quiere decir que la primer ubic es -1, puesto que almacena las posi xD
                     //se busca en el arch aquel user que diga logueado y se add
                     //SINO, entonces error, porque tendría que haberse logueado antes... xD
                 }
                 
-                 atributosEspecificados[atributosOrdenados]= true;
-                 escribirArchivo(atributosEsperados[atributosOrdenados], Token.parseToken(listadoAtributos.get(listadoAtributos.size()-1)).darLexema());//Se escribe en el arch 
+                 atributosEspecificados[atributosOrdenados]= true;                 
+                 listadoEspecificaciones.add(atributosEsperados[atributosOrdenados]+": "+Token.parseToken(listadoAtributos.get(listadoAtributos.size()-1)).darLexema());
             }//Si no es así entonces no se hace nada, pues eso le corresponde  la revisión de obligatoriedad xD...                                          
         }//NOTA: Habrá que revisarse [cuando ya se tenga el archivo en el que se alamcenarán los usuarios, si el usuario creador corresponde al logueado... sino ERROR xD
-        //ese if nenvolverá el if que add al ini el nombre del user? naa xD,, pues con un error, este archivo no se crea y por lo tanto no se envía a la sig fase que corresp a la webApp xD
-        
+        //ese if nenvolverá el if que add al ini el nombre del user? naa xD,, pues con un error, este archivo no se crea y por lo tanto no se envía a la sig fase que corresp a la webApp xD        
         
         revisarObligatoriedad(atributosEsperados, atributosEspecificados, tipoSolicitud);
     }      
@@ -151,6 +154,7 @@ public class ManejadorArchivoRespuestaEntrada {
         for (int atributoActual = 0; atributoActual < atributosEspecificados.length; atributoActual++) {
             if(arregloObligatoriedad[atributoActual]==1 && atributosEspecificados[atributoActual]==false){
                 //Add el error al manejador, debido a que no se especificó un campo obligatorio...
+                manejadorErrores.establecerErrorHallado("obligatorioFaltante",atributosEsperados[atributoActual], "");
             }else if(arregloObligatoriedad[atributoActual]==0 && atributosEspecificados[atributoActual]==true){//Se hace el onteo para los atributos "minimo 1"
                 numeroAtributosMinimosAdd++;
             }//soy libre de hacer eso, puesto que si hay un atributo == 0 entonces hay otros que tambien == 0... xD
@@ -176,8 +180,8 @@ public class ManejadorArchivoRespuestaEntrada {
                             if(datosImportantes[1]>1){
                                 manejadorErrores.establecerErrorHallado("atributoRepetido", atributosEseradosComponente[atributoActual],"");//Se establece el error por repitencia
                             }
-                            atributosEspecificados[atributoActual]= true;                                                                            
-                            escribirArchivo(atributosEseradosComponente[atributoActual], Token.parseToken(listadoAtributos.get(datosImportantes[0])).darLexema());//Se escribe en el arch... y aqui no iba el if para no escribir clase xD, puesto que en los atrib de los comp nunca estará este, pues a partir de este atrib es que se ibtiene el arreglo de los obligatorios de los comp corresp xD...                        
+                            atributosEspecificados[atributoActual]= true;
+                            listadoEspecificaciones.add(atributosEseradosComponente[atributoActual]+": "+Token.parseToken(listadoAtributos.get(datosImportantes[0])).darLexema());
                         }                                                                       
                 }
             }catch(IndexOutOfBoundsException e){
@@ -194,46 +198,30 @@ public class ManejadorArchivoRespuestaEntrada {
         }                              
     }  
     
-    private void escribirArchivo(String encabezado, String cuerpo){
-        try {
-            switch (encabezado) {
-                case "iniSoli":
-                    escritor.write("<!ini_respuesta: \""+cuerpo+"\">");
-                    escritor.newLine();
-                    break;
-                case "finSoli":
-                    escritor.write("<!fin_respuesta>");
-                    escritor.newLine();
-                    break;
-                default:
-                    escritor.write(encabezado+": "+ cuerpo);//vamos a ver si el fallo no se debía al append...
-                    escritor.newLine();            
-                    break;
+    private void escribirArchivo(){
+        for (int lineaActual = 0; lineaActual < listadoEspecificaciones.size(); lineaActual++) {
+            try {
+                escritor.write(String.valueOf(listadoEspecificaciones.get(lineaActual)));
+                escritor.newLine();
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, "Ha surgido un error al intentar\nescribir el archivo de reespuesta");
             }
-        } catch (IOException ex) {
-            JOptionPane.showMessageDialog(null, "Ocurrió un error al intentar escribir la respuesta a la solicitud");
-        }        
+        }
     }
     
     public void finalizarArchivo(){
         if(numeroSolicitudes>1){
-            try {
-                //esta forma de apendizar de abajo, no sirve para insertar en otra línea, solo sirve pra indicar lel tam de lo que se insertará--- :v xD
-                //escritor.append("<!ini_respuestas>", 0, 17);//para que se escriba al principio de todo el archivo xD, si no sale como quiero intenta nuevamente y si no, no lo coloques :v, de todos modos no te afecta al formar los tipo de componentes xD
-                escritor.newLine();
-                escritor.append("<!fin_respuestas>");
-                escritor.newLine();
-            } catch (IOException ex) {
-                JOptionPane.showMessageDialog(null, "Ha surgido un error al intentar\n terminar de escribir el archivo");
-            }
+            listadoEspecificaciones.add(0, "< ! ini _ respuestas >");
+            listadoEspecificaciones.add("< ! fin _ respuestas >");            
         }
         
         if(!manejadorErrores.hubieronErrores()){
             try {            
             //mientras tanto lo comentaré, pues no es de mi utilidad xD
-            //  archivo.renameTo(new File(path+nombreArchTemp));//YO SUPONGO que pasa el arch original completo a la ubicación especificada y NO lo vuelve a crear, es decir no lo deja en blanco... claramente esto no scederá porque NO TIENE SENTIDO que se llame renameTO... xD y tampoco tendría sentido la forma en que se renombra si lo que hiciera este métooo es rehacer el arch desde 0... xD
+            //archivo.renameTo(new File(path+nombreArchTemp));//YO SUPONGO que pasa el arch original completo a la ubicación especificada y NO lo vuelve a crear, es decir no lo deja en blanco... claramente esto no scederá porque NO TIENE SENTIDO que se llame renameTO... xD y tampoco tendría sentido la forma en que se renombra si lo que hiciera este métooo es rehacer el arch desde 0... xD            
+            escribirArchivo();
             escritor.close();
-            escritor.flush();
+            //escritor.flush();//no importa si lo comento, puesto que el manejador de respuestas se instancia en el CUP, por lo cual cada vez que se empleee dicho parser, se credaá una instancia nueva, puest oque al terminr el trabajo el parser, ya no tiene nada más que hacer xD, ADEMÁS tb comenté este método porque era el que adndaba dando errores xD
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(null, "Surgió un error al registrar\n el archivo de respuesta :(");
             }

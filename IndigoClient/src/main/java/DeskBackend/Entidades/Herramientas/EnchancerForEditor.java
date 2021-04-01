@@ -50,7 +50,7 @@ public class EnchancerForEditor {//creo que dejará de existir, puesto que no ti
         filaActual = areaTexto.getLineOfOffset(posicionActualCursor);        
         columnaActual = posicionActualCursor - areaTexto.getLineStartOffset(filaActual);
         
-        barraPosicion.setText("Fila: "+ filaActual + "  Columna: " + columnaActual);        
+        barraPosicion.setText("Fila: "+ (filaActual+1) + "  Columna: " + columnaActual);//la columna a mi pensar no necesita esto pues, la columna debería ser la que está después de lo que abarque un primer caracter xD        
         } catch (BadLocationException ex) {
             JOptionPane.showMessageDialog(areaTexto, "posición del cursor fuera del área");
         }
