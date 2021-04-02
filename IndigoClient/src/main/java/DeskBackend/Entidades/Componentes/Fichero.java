@@ -9,6 +9,6 @@ package DeskBackend.Entidades.Componentes;
  *
  * @author phily
  */
-public class Fichero {//no se de quien debería heredar porquee no menciona que tipo de atrubutos debería tener...
+public class Fichero extends Componente{//no se de quien debería heredar porquee no menciona que tipo de atrubutos debería tener...
     
 }

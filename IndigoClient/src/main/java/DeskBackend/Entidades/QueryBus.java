@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package DeskBackend.Entidades.Intermediarias;
+package DeskBackend.Entidades;
 
 import java.util.LinkedList;
 

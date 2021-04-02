@@ -1,8 +1,8 @@
 /*primer sección: imports*/
-package DeskBackend.Analizadores;
+package Analizadores;
 import java_cup.runtime.*;
-import static DeskBackend.Analizadores.ParserResponseSym.*;
-import DeskBackend.Entidades.Token;
+import static Analizadores.ParserResponseSym.*;
+import Entidades.Token;
 
 %%
 /*segunda sección: settings*/

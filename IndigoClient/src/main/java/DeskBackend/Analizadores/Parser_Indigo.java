@@ -639,11 +639,7 @@ public class Parser_Indigo extends java_cup.runtime.lr_parser {
 
     public ListaEnlazada<EntidadError> darListadoErrores(){
         return manejadorErrores.darListadoErrores();
-    }
-
-    public String darNombreArchivoRespuesta(){
-        return manejadorRespuestas.darNombreArchivo();//o dará problema hacer esto, pues se revisa si el listado de errores está vacío para así enviarlo a dicho servlet o JSP xD
-    }
+    }  
 
 
 /** Cup generated class to encapsulate user supplied action code.*/

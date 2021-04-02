@@ -1,8 +1,5 @@
-package DeskBackend.Analizadores;
+package Analizadores;
 import java_cup.runtime.*;
-
-import DeskBackend.Entidades.Herramientas.ListaEnlazada;
-import DeskBackend.Entidades.Token;
 
 class ParserResponse;
 

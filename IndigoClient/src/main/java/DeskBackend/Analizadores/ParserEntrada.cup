@@ -28,11 +28,7 @@ parser code{:
 
     public ListaEnlazada<EntidadError> darListadoErrores(){
         return manejadorErrores.darListadoErrores();
-    }
-
-    public String darNombreArchivoRespuesta(){
-        return manejadorRespuestas.darNombreArchivo();//o dará problema hacer esto, pues se revisa si el listado de errores está vacío para así enviarlo a dicho servlet o JSP xD
-    }
+    }  
 :}
 
 terminal INI, SOLICITUD, SOLICITUDES, FIN;
@@ -55,6 +51,7 @@ p ::= MENOR ADMIRACION INI GUIONBAJO SOLICITUDES MAYOR cuerpo Cuerpo MENOR ADMIR
     ;
 
 cuerpo ::= MENOR ADMIRACION INI GUIONBAJO SOLICITUD DOSPUNTOS opciones MENOR FIN GUIONBAJO SOLICITUD ADMIRACION MAYOR
+        | error                                                                                                                         {:manejadorErrores.establecerErrorHallado("atributosInsuficientes", "", "");:}
         ;
 
 Cuerpo ::= Cuerpo cuerpo

@@ -5,6 +5,9 @@
  */
 package DeskBackend.Entidades.Herramientas;
 
+import DeskBackend.Entidades.EntidadError;
+import javax.swing.DefaultListModel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -20,6 +23,7 @@ public class EnchancerForEditor {//creo que dejará de existir, puesto que no ti
     private JTextArea areaTexto;
     private JTextArea areaNumeracion;
     private JTextField barraPosicion;
+    private JList areaErrores;
     private int filaActual, columnaActual, posicionActualCursor;
     private DistribuidorBloques distribuidor;
     
@@ -60,6 +64,18 @@ public class EnchancerForEditor {//creo que dejará de existir, puesto que no ti
         areaTexto.insert(distribuidor.darTipoBloque(tipo), areaTexto.getCaretPosition());                
     }
     
+    public void mostrarReportes(ListaEnlazada<EntidadError> listadoErrores){
+        DefaultListModel<EntidadError> listaModelo = new DefaultListModel<>();        
+        
+        for (int reporteActual = 0; reporteActual < listadoErrores.size(); reporteActual++) {            
+            listaModelo.add(reporteActual,(EntidadError)listadoErrores.get(reporteActual));            
+        }       
+        
+        areaErrores.setModel(listaModelo);
+    }
     
     
+    public void limpiarListadoErrores(){
+        areaErrores.removeAll();
+    }
 }

@@ -338,10 +338,12 @@ public class IndigoTextEditor extends javax.swing.JFrame {
         //en el caso de los mnItem, el listener deben ser los mouse pressed, because the mouse clicked it's used on the complete menu xD
         System.out.println("En el clicked listener...");
         procesador = new Procesador(EditArea.getText());//Ahí decides si esto lo vuelves un método para no tener que estar instanciando cada vez este objeto, eso sí, si haces eso, tendrás que imple un método donde se llame el método limpiar lista para cad una de las existentes...
+        
+        if(procesador.darListadoErrores()!=null){
+        
+        }
     }//GEN-LAST:event_itemRevisarMousePressed
-
- 
-
+      
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel AgregarComponente;
     private javax.swing.JLabel BloqueConsultas;

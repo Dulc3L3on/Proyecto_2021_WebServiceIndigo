@@ -9,7 +9,7 @@ package DeskBackend.Entidades.Componentes;
  *
  * @author phily
  */
-public class Imagen extends Campo_Texto{
+public class Imagen extends Componente{
     private String URL;    
     
     public void establecerURL(String laURL){

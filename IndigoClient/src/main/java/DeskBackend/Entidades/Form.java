@@ -3,25 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package DeskBackend.Entidades.Intermediarias;
+package DeskBackend.Entidades;
 
 /**
  *
  * @author phily
  */
-public class FormBus {
-    private String tipoAccion = null;
+public class Form {    
     private String ID = null;
     private String titulo = null;
     private String nombre = null;
     private String tema = null;
     private String creador = null;
-    private String fecha = null;
-    
-    public void establecerTipoAccion(String laAccion){
-        tipoAccion = laAccion;
-    }
-    
+    private String fechaCreacion = null;
+    private String fechaModificacion = null;
+        
     public void establecerID(String elID){
         ID = elID;
     }   
@@ -42,13 +38,13 @@ public class FormBus {
         creador = elCreador;
     }
     
-    public void establecerFecha(String laFecha){
-        fecha = laFecha;
+    public void establecerFechaCreacion(String laFecha){
+        fechaModificacion = laFecha;
     }
     
-    public String darTipoAccion(){
-        return tipoAccion;
-    }
+    public void establecerFechaModificacion(String laFecha){
+        fechaCreacion = laFecha;
+    } 
     
     public String darID(){
         return ID;
@@ -70,7 +66,11 @@ public class FormBus {
         return creador;
     }
     
-    public String darFecha(){
-        return fecha;
+    public String darFechaCreacion(){
+        return fechaCreacion;
     }   
+    
+    public String darFechaModificacion(){
+        return fechaModificacion;
+    }
 }

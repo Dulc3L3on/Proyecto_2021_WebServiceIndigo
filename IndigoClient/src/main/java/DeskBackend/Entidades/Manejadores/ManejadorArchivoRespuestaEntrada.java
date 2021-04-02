@@ -7,11 +7,6 @@ package DeskBackend.Entidades.Manejadores;
 
 import DeskBackend.Entidades.Herramientas.ListaEnlazada;
 import DeskBackend.Entidades.Token;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -20,37 +15,23 @@ import javax.swing.JOptionPane;
 public class ManejadorArchivoRespuestaEntrada {
     private ListaEnlazada<Token> listadoAtributos;
     private ListaEnlazada<String> listadoEspecificaciones;
-    private FileWriter escritorArchivos;
-    private BufferedWriter escritor;
-    private File archivo;    
-    private String nombreArchTemp = "ArchivoRespuesta.txt";
-    private String path = "/home/phily/Documentos/Carpeta_estudios/2021/5toSemestre/Compi_1"
-            + "/Laboratorio/tareas/pra-proy/Proyecto1/Proyecto_2021_WebServiceIndigo/IndigoWebApp/src/"
-            + "main/webapp/resources/Archivos/";//el nombre del arch cb según el nombre del user y el del componente, por lo cual para tener acceso a él, se almacenará a una var para que se pueda recuperar el dato cuando se requiera xD    
+  
     private String tipoSolicitud;
-    private String claseComponente = null;
-    private String nombreArchivo ="";
+    private String claseComponente = null;    
     private ManejadorAtributos manejadorAtributos = new ManejadorAtributos();    
     private ManejadorErrores manejadorErrores;    
     private int atributosOrdenados = 0;
-    private int numeroSolicitudes = 0;   
+    private int numeroSolicitudes;   
     private Token tokenAuxiliar = null;
+    private ManejadorRegistroRespuestaAnalisis manejadorRegistroRespuesta;
     
-    public ManejadorArchivoRespuestaEntrada(ManejadorErrores elManejadorErrores){
-        try {
-            manejadorErrores = elManejadorErrores;            
-            listadoAtributos = new ListaEnlazada<>();            
-            listadoEspecificaciones = new ListaEnlazada<>();
-            
-            archivo = new File(path+nombreArchTemp);//el path, será una combinación del nombre del usuario y el nombre del formulario xD, así será fácil hallarlo al buscarlo xD                        
-                //se escribe el archivo y se envía a la web para que lo procese con sus analizadores y los muestre gráficamente xD                
-            archivo.createNewFile();
-            escritorArchivos = new FileWriter(archivo);
-            escritor = new BufferedWriter(escritorArchivos);
-        } catch (IOException ex) {
-            JOptionPane.showMessageDialog(null, "Error al intentar CREAR el archivo de respuesta");
-            System.out.println("msje:"+ex.getMessage());
-        }       
+    
+    public ManejadorArchivoRespuestaEntrada(ManejadorErrores elManejadorErrores){       
+        this.numeroSolicitudes = 0;
+        manejadorErrores = elManejadorErrores;            
+        listadoAtributos = new ListaEnlazada<>();            
+        listadoEspecificaciones = new ListaEnlazada<>(); 
+        manejadorRegistroRespuesta = new ManejadorRegistroRespuestaAnalisis();
     }    
     
     public void agregarAtributo(String nombreAtributo, Token token){//con atributos me refiero a "usuario" "fechaMOdificacion", "fechaCreacion"... y así xD        
@@ -104,7 +85,7 @@ public class ManejadorArchivoRespuestaEntrada {
         listadoAtributos.clear();        
     }    
     
-   private void ordenarAtributosGenerales(){
+    private void ordenarAtributosGenerales(){
         String[] atributosEsperados = manejadorAtributos.darAtributosCorrespondientes(tipoSolicitud);
         boolean[] atributosEspecificados = new boolean[atributosEsperados.length];               
         int[] datosImportantes;               
@@ -124,10 +105,10 @@ public class ManejadorArchivoRespuestaEntrada {
                 }//puesto que ya se ha agergado antes xD                             
                 
                 if(atributosEsperados[atributosOrdenados].equals("nombre") && (tipoSolicitud.equals("creacionFormulario") || tipoSolicitud.equals("modificacionFormulario"))){//supongo que se podrá trabajar igual que en el caso de la creación la modificación... xD
-                    nombreArchivo += Token.parseToken(listadoAtributos.get(datosImportantes[0])).darLexema();
+                    manejadorRegistroRespuesta.establecerNombreArchivo(manejadorRegistroRespuesta.darNombreArchivo()+ Token.parseToken(listadoAtributos.get(datosImportantes[0])).darLexema());
                 }
                 else if(atributosEsperados[atributosOrdenados].equals("usuarioCreacion")){//supongo que se podrá trabajar igual que en el caso de la creación la modificación... xD
-                    nombreArchivo = Token.parseToken(listadoAtributos.get(datosImportantes[0])).darLexema() + nombreArchivo;
+                    manejadorRegistroRespuesta.establecerNombreArchivo(Token.parseToken(listadoAtributos.get(datosImportantes[0])).darLexema() + manejadorRegistroRespuesta.darNombreArchivo());                    
                 }//puesto que si no se halló ese atributo en el listado, se generaría un error de tipo IndexOutOfBounds...               
             }else if(atributosEsperados[atributosOrdenados].contains("fecha") || atributosEsperados[atributosOrdenados].equals("usuarioCreacion")){//Se puede hacer esto puesto que el error se establece en el método que se encarga de hallar si se cumplió con la obligatoriedad... xD
                 if(atributosEsperados[atributosOrdenados].contains("fecha")){//quiere decir que la primer ubic es -1, puesto que almacena las posi xD                    
@@ -198,46 +179,8 @@ public class ManejadorArchivoRespuestaEntrada {
         }                              
     }  
     
-    private void escribirArchivo(){
-        for (int lineaActual = 0; lineaActual < listadoEspecificaciones.size(); lineaActual++) {
-            try {
-                escritor.write(String.valueOf(listadoEspecificaciones.get(lineaActual)));
-                escritor.newLine();
-            } catch (IOException ex) {
-                JOptionPane.showMessageDialog(null, "Ha surgido un error al intentar\nescribir el archivo de reespuesta");
-            }
-        }
-    }
-    
     public void finalizarArchivo(){
-        if(numeroSolicitudes>1){
-            listadoEspecificaciones.add(0, "< ! ini _ respuestas >");
-            listadoEspecificaciones.add("< ! fin _ respuestas >");            
-        }
-        
-        if(!manejadorErrores.hubieronErrores()){
-            try {            
-            //mientras tanto lo comentaré, pues no es de mi utilidad xD
-            //archivo.renameTo(new File(path+nombreArchTemp));//YO SUPONGO que pasa el arch original completo a la ubicación especificada y NO lo vuelve a crear, es decir no lo deja en blanco... claramente esto no scederá porque NO TIENE SENTIDO que se llame renameTO... xD y tampoco tendría sentido la forma en que se renombra si lo que hiciera este métooo es rehacer el arch desde 0... xD            
-            escribirArchivo();
-            escritor.close();
-            //escritor.flush();//no importa si lo comento, puesto que el manejador de respuestas se instancia en el CUP, por lo cual cada vez que se empleee dicho parser, se credaá una instancia nueva, puest oque al terminr el trabajo el parser, ya no tiene nada más que hacer xD, ADEMÁS tb comenté este método porque era el que adndaba dando errores xD
-            } catch (IOException ex) {
-                JOptionPane.showMessageDialog(null, "Surgió un error al registrar\n el archivo de respuesta :(");
-            }
-        }else{
-            System.out.println("Se borro el archivo");
-            archivo.delete();//que bueno que almacena el nombre hasta ser limpiado xD
-        }
-    }
-    
-    public String darNombreArchivo(){
-        return nombreArchivo;
-    }
-    
-    public String darDireccionCompletaArchivo(){//están formados por un nombre de usuario y el nombre del frmulario detal forma que se pueda hacer una revsión en or
-        return path+nombreArchivo;
-    }      
-    
+        manejadorRegistroRespuesta.finalizarArchivoRespuesta(listadoEspecificaciones, numeroSolicitudes, manejadorErrores.hubieronErrores());
+    }  
     //deberás pensar como le harás cuando los bloques que se requeiren estań presenrtes pero no el orden que debería [como crear form y add componentes, que viniera antes lo de los compoentes y después del form :v, usarás lo que el inge dijo es decir descarar hasta encontrar lo que se busca o harás otra cosa, como buscarlo hasta hallarlo??? xD
 }
